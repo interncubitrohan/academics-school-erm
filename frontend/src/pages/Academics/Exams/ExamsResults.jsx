@@ -61,64 +61,66 @@ const ExamsResults = () => {
                 </Link>
             </div>
 
-            <div className="overflow-hidden rounded-xl border border-gray-200 bg-white dark:border-white/[0.05] dark:bg-white/[0.03]">
-                <Table>
-                    <TableHeader className="border-b border-gray-100 dark:border-white/[0.05]">
-                        <TableRow>
-                            <TableCell isHeader className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400">Exam Title</TableCell>
-                            <TableCell isHeader className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400">Type</TableCell>
-                            <TableCell isHeader className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400">Dates</TableCell>
-                            <TableCell isHeader className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400">Classes</TableCell>
-                            <TableCell isHeader className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400">Status</TableCell>
-                            <TableCell isHeader className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400">Actions</TableCell>
-                        </TableRow>
-                    </TableHeader>
-                    <TableBody className="divide-y divide-gray-100 dark:divide-white/[0.05]">
-                        {exams.map((exam) => (
-                            <TableRow key={exam.id}>
-                                <TableCell className="px-5 py-4 text-start font-medium text-gray-800 dark:text-white">
-                                    {exam.title}
-                                </TableCell>
-                                <TableCell className="px-5 py-4 text-start text-gray-500 dark:text-gray-400">
-                                    <Badge color="light">{exam.type}</Badge>
-                                </TableCell>
-                                <TableCell className="px-5 py-4 text-start text-gray-500 dark:text-gray-400">
-                                    <div className="text-sm">{exam.startDate}</div>
-                                    <div className="text-xs text-gray-400">to {exam.endDate}</div>
-                                </TableCell>
-                                <TableCell className="px-5 py-4 text-start text-gray-500 dark:text-gray-400">
-                                    {exam.selectedClasses ? exam.selectedClasses.length : 0} Classes
-                                </TableCell>
-                                <TableCell className="px-5 py-4 text-start">
-                                    <Badge color="success">{exam.status}</Badge>
-                                </TableCell>
-                                <TableCell className="px-5 py-4 text-start">
-                                    <div className="flex gap-2">
-                                        <Link
-                                            to="/academics/exams/marks"
-                                            className="text-brand-500 hover:text-brand-700 text-sm font-medium"
-                                        >
-                                            Enter Marks
-                                        </Link>
-                                        <button
-                                            onClick={() => handleDelete(exam.id)}
-                                            className="text-red-500 hover:text-red-700 text-sm font-medium"
-                                        >
-                                            Delete
-                                        </button>
-                                    </div>
-                                </TableCell>
+            <div className="rounded-sm border border-gray-200 bg-white px-5 pt-6 pb-2.5 shadow-default dark:border-gray-700 dark:bg-gray-800 sm:px-7.5 xl:pb-1">
+                <div className="max-w-full overflow-x-auto">
+                    <Table>
+                        <TableHeader>
+                            <TableRow className="bg-gray-50 dark:bg-gray-700 text-left">
+                                <TableCell isHeader className="min-w-[150px] py-4 px-4 font-medium text-black dark:text-white xl:pl-11">Exam Title</TableCell>
+                                <TableCell isHeader className="min-w-[120px] py-4 px-4 font-medium text-black dark:text-white">Type</TableCell>
+                                <TableCell isHeader className="min-w-[150px] py-4 px-4 font-medium text-black dark:text-white">Dates</TableCell>
+                                <TableCell isHeader className="min-w-[120px] py-4 px-4 font-medium text-black dark:text-white">Classes</TableCell>
+                                <TableCell isHeader className="min-w-[120px] py-4 px-4 font-medium text-black dark:text-white">Status</TableCell>
+                                <TableCell isHeader className="py-4 px-4 font-medium text-black dark:text-white">Actions</TableCell>
                             </TableRow>
-                        ))}
-                        {exams.length === 0 && (
-                            <TableRow>
-                                <TableCell colSpan={6} className="px-5 py-8 text-center text-gray-500 dark:text-gray-400">
-                                    No exams scheduled yet.
-                                </TableCell>
-                            </TableRow>
-                        )}
-                    </TableBody>
-                </Table>
+                        </TableHeader>
+                        <TableBody>
+                            {exams.map((exam) => (
+                                <TableRow key={exam.id} className="hover:bg-gray-50 dark:hover:bg-gray-700/50">
+                                    <TableCell className="border-b border-[#eee] py-5 px-4 dark:border-gray-700 xl:pl-11 font-medium text-black dark:text-white">
+                                        {exam.title}
+                                    </TableCell>
+                                    <TableCell className="border-b border-[#eee] py-5 px-4 dark:border-gray-700">
+                                        <Badge color="light">{exam.type}</Badge>
+                                    </TableCell>
+                                    <TableCell className="border-b border-[#eee] py-5 px-4 dark:border-gray-700">
+                                        <div className="text-sm text-black dark:text-white">{exam.startDate}</div>
+                                        <div className="text-xs text-gray-500">to {exam.endDate}</div>
+                                    </TableCell>
+                                    <TableCell className="border-b border-[#eee] py-5 px-4 dark:border-gray-700">
+                                        <p className="text-black dark:text-white">{exam.selectedClasses ? exam.selectedClasses.length : 0} Classes</p>
+                                    </TableCell>
+                                    <TableCell className="border-b border-[#eee] py-5 px-4 dark:border-gray-700">
+                                        <Badge color="success">{exam.status}</Badge>
+                                    </TableCell>
+                                    <TableCell className="border-b border-[#eee] py-5 px-4 dark:border-gray-700">
+                                        <div className="flex gap-2">
+                                            <Link
+                                                to="/academics/exams/marks"
+                                                className="text-primary hover:underline text-sm font-medium"
+                                            >
+                                                Enter Marks
+                                            </Link>
+                                            <button
+                                                onClick={() => handleDelete(exam.id)}
+                                                className="hover:text-red-500 text-sm font-medium"
+                                            >
+                                                Delete
+                                            </button>
+                                        </div>
+                                    </TableCell>
+                                </TableRow>
+                            ))}
+                            {exams.length === 0 && (
+                                <TableRow>
+                                    <TableCell colSpan={6} className="border-b border-[#eee] py-5 px-4 text-center dark:border-gray-700">
+                                        <span className="text-gray-500 dark:text-gray-400">No exams scheduled yet.</span>
+                                    </TableCell>
+                                </TableRow>
+                            )}
+                        </TableBody>
+                    </Table>
+                </div>
             </div>
         </div>
     );

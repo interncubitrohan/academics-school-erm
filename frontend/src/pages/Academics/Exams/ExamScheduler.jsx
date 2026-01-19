@@ -254,59 +254,61 @@ const ExamScheduler = () => {
                 {currentStep === 4 && (
                     <div className="space-y-4">
                         <h2 className="text-lg font-bold text-gray-800 dark:text-white mb-4">Define Papers & Schedule</h2>
-                        <div className="overflow-x-auto rounded-lg border border-gray-200 dark:border-gray-700">
-                            <Table>
-                                <TableHeader className="bg-gray-50 dark:bg-gray-800">
-                                    <TableRow>
-                                        <TableCell isHeader className="p-3 w-1/4">Subject</TableCell>
-                                        <TableCell isHeader className="p-3">Paper Date</TableCell>
-                                        <TableCell isHeader className="p-3">Start Time</TableCell>
-                                        <TableCell isHeader className="p-3 max-w-[100px]">Duration (Hrs)</TableCell>
-                                        <TableCell isHeader className="p-3 max-w-[100px]">Max Marks</TableCell>
-                                    </TableRow>
-                                </TableHeader>
-                                <TableBody>
-                                    {MOCK_SUBJECTS.map(subject => (
-                                        <TableRow key={subject.id}>
-                                            <TableCell className="p-3 font-medium text-gray-800 dark:text-white">
-                                                {subject.name}
-                                            </TableCell>
-                                            <TableCell className="p-2">
-                                                <input
-                                                    type="date"
-                                                    value={getPaperValue(subject.id, "date") || ""}
-                                                    onChange={(e) => updatePaper(subject.id, "date", e.target.value)}
-                                                    className="w-full px-2 py-1 text-sm border border-gray-300 rounded focus:border-brand-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
-                                                />
-                                            </TableCell>
-                                            <TableCell className="p-2">
-                                                <input
-                                                    type="time"
-                                                    value={getPaperValue(subject.id, "time") || ""}
-                                                    onChange={(e) => updatePaper(subject.id, "time", e.target.value)}
-                                                    className="w-full px-2 py-1 text-sm border border-gray-300 rounded focus:border-brand-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
-                                                />
-                                            </TableCell>
-                                            <TableCell className="p-2">
-                                                <input
-                                                    type="number"
-                                                    value={getPaperValue(subject.id, "duration") || "2"}
-                                                    onChange={(e) => updatePaper(subject.id, "duration", e.target.value)}
-                                                    className="w-full px-2 py-1 text-sm border border-gray-300 rounded focus:border-brand-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
-                                                />
-                                            </TableCell>
-                                            <TableCell className="p-2">
-                                                <input
-                                                    type="number"
-                                                    value={getPaperValue(subject.id, "maxMarks") || "100"}
-                                                    onChange={(e) => updatePaper(subject.id, "maxMarks", e.target.value)}
-                                                    className="w-full px-2 py-1 text-sm border border-gray-300 rounded focus:border-brand-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
-                                                />
-                                            </TableCell>
+                        <div className="rounded-sm border border-gray-200 bg-white px-5 pt-6 pb-2.5 shadow-default dark:border-gray-700 dark:bg-gray-800 sm:px-7.5 xl:pb-1">
+                            <div className="max-w-full overflow-x-auto">
+                                <Table>
+                                    <TableHeader>
+                                        <TableRow className="bg-gray-50 dark:bg-gray-700 text-left">
+                                            <TableCell isHeader className="min-w-[150px] py-4 px-4 font-medium text-black dark:text-white xl:pl-11">Subject</TableCell>
+                                            <TableCell isHeader className="min-w-[150px] py-4 px-4 font-medium text-black dark:text-white">Paper Date</TableCell>
+                                            <TableCell isHeader className="min-w-[150px] py-4 px-4 font-medium text-black dark:text-white">Start Time</TableCell>
+                                            <TableCell isHeader className="min-w-[120px] py-4 px-4 font-medium text-black dark:text-white">Duration (Hrs)</TableCell>
+                                            <TableCell isHeader className="min-w-[120px] py-4 px-4 font-medium text-black dark:text-white">Max Marks</TableCell>
                                         </TableRow>
-                                    ))}
-                                </TableBody>
-                            </Table>
+                                    </TableHeader>
+                                    <TableBody>
+                                        {MOCK_SUBJECTS.map(subject => (
+                                            <TableRow key={subject.id} className="hover:bg-gray-50 dark:hover:bg-gray-700/50">
+                                                <TableCell className="border-b border-[#eee] py-5 px-4 dark:border-gray-700 xl:pl-11 font-medium text-black dark:text-white">
+                                                    {subject.name}
+                                                </TableCell>
+                                                <TableCell className="border-b border-[#eee] py-5 px-4 dark:border-gray-700">
+                                                    <input
+                                                        type="date"
+                                                        value={getPaperValue(subject.id, "date") || ""}
+                                                        onChange={(e) => updatePaper(subject.id, "date", e.target.value)}
+                                                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500/50 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                                                    />
+                                                </TableCell>
+                                                <TableCell className="border-b border-[#eee] py-5 px-4 dark:border-gray-700">
+                                                    <input
+                                                        type="time"
+                                                        value={getPaperValue(subject.id, "time") || ""}
+                                                        onChange={(e) => updatePaper(subject.id, "time", e.target.value)}
+                                                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500/50 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                                                    />
+                                                </TableCell>
+                                                <TableCell className="border-b border-[#eee] py-5 px-4 dark:border-gray-700">
+                                                    <input
+                                                        type="number"
+                                                        value={getPaperValue(subject.id, "duration") || "2"}
+                                                        onChange={(e) => updatePaper(subject.id, "duration", e.target.value)}
+                                                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500/50 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                                                    />
+                                                </TableCell>
+                                                <TableCell className="border-b border-[#eee] py-5 px-4 dark:border-gray-700">
+                                                    <input
+                                                        type="number"
+                                                        value={getPaperValue(subject.id, "maxMarks") || "100"}
+                                                        onChange={(e) => updatePaper(subject.id, "maxMarks", e.target.value)}
+                                                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500/50 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                                                    />
+                                                </TableCell>
+                                            </TableRow>
+                                        ))}
+                                    </TableBody>
+                                </Table>
+                            </div>
                         </div>
                     </div>
                 )}

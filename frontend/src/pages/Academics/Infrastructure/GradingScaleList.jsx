@@ -11,9 +11,9 @@ import Badge from "../../../components/ui/badge/Badge";
 const GradingScaleList = ({ scales, onEdit, onDelete, onCreate }) => {
     return (
         <div className="space-y-6">
-            <div className="overflow-hidden rounded-xl border border-gray-200 bg-white dark:border-white/[0.05] dark:bg-white/[0.03] p-4">
+            <div className="rounded-sm border border-gray-200 bg-white px-5 pt-6 pb-2.5 shadow-default dark:border-gray-700 dark:bg-gray-800 sm:px-7.5 xl:pb-1">
                 <div className="flex flex-col sm:flex-row justify-between items-center mb-4 gap-4">
-                    <h3 className="text-lg font-bold text-gray-800 dark:text-white">
+                    <h3 className="text-xl font-semibold text-black dark:text-white">
                         Active Grading Scales
                     </h3>
                     <button
@@ -26,31 +26,31 @@ const GradingScaleList = ({ scales, onEdit, onDelete, onCreate }) => {
 
                 <div className="max-w-full overflow-x-auto">
                     <Table>
-                        <TableHeader className="border-b border-gray-100 dark:border-white/[0.05]">
-                            <TableRow>
-                                <TableCell isHeader className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400">
+                        <TableHeader>
+                            <TableRow className="bg-gray-50 dark:bg-gray-700 text-left">
+                                <TableCell isHeader className="min-w-[150px] py-4 px-4 font-medium text-black dark:text-white xl:pl-11">
                                     Scale Name
                                 </TableCell>
-                                <TableCell isHeader className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400">
+                                <TableCell isHeader className="min-w-[120px] py-4 px-4 font-medium text-black dark:text-white">
                                     Type
                                 </TableCell>
-                                <TableCell isHeader className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400">
+                                <TableCell isHeader className="min-w-[120px] py-4 px-4 font-medium text-black dark:text-white">
                                     Rules Count
                                 </TableCell>
-                                <TableCell isHeader className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400">
+                                <TableCell isHeader className="py-4 px-4 font-medium text-black dark:text-white">
                                     Actions
                                 </TableCell>
                             </TableRow>
                         </TableHeader>
-                        <TableBody className="divide-y divide-gray-100 dark:divide-white/[0.05]">
+                        <TableBody>
                             {scales.map((scale) => (
-                                <TableRow key={scale.id}>
-                                    <TableCell className="px-5 py-4 text-start text-theme-sm dark:text-gray-400">
-                                        <div className="font-medium text-gray-800 dark:text-white">
+                                <TableRow key={scale.id} className="hover:bg-gray-50 dark:hover:bg-gray-700/50">
+                                    <TableCell className="border-b border-[#eee] py-5 px-4 dark:border-gray-700 xl:pl-11">
+                                        <div className="font-medium text-black dark:text-white">
                                             {scale.name}
                                         </div>
                                     </TableCell>
-                                    <TableCell className="px-4 py-3 text-start">
+                                    <TableCell className="border-b border-[#eee] py-5 px-4 dark:border-gray-700">
                                         <Badge
                                             size="sm"
                                             color={
@@ -64,20 +64,20 @@ const GradingScaleList = ({ scales, onEdit, onDelete, onCreate }) => {
                                             {scale.type}
                                         </Badge>
                                     </TableCell>
-                                    <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                                        {scale.rules?.length || 0} Rules
+                                    <TableCell className="border-b border-[#eee] py-5 px-4 dark:border-gray-700">
+                                        <p className="text-black dark:text-white">{scale.rules?.length || 0} Rules</p>
                                     </TableCell>
-                                    <TableCell className="px-4 py-3 text-start">
+                                    <TableCell className="border-b border-[#eee] py-5 px-4 dark:border-gray-700">
                                         <div className="flex gap-2">
                                             <button
                                                 onClick={() => onEdit(scale)}
-                                                className="text-blue-500 hover:text-blue-700 text-sm font-medium"
+                                                className="hover:text-primary text-sm font-medium"
                                             >
                                                 Edit
                                             </button>
                                             <button
                                                 onClick={() => onDelete(scale.id)}
-                                                className="text-red-500 hover:text-red-700 text-sm font-medium"
+                                                className="hover:text-red-500 text-sm font-medium"
                                             >
                                                 Delete
                                             </button>
@@ -87,8 +87,8 @@ const GradingScaleList = ({ scales, onEdit, onDelete, onCreate }) => {
                             ))}
                             {scales.length === 0 && (
                                 <TableRow>
-                                    <TableCell colSpan={4} className="px-5 py-8 text-center text-gray-500 dark:text-gray-400">
-                                        No grading scales found. Create one to get started.
+                                    <TableCell colSpan={4} className="border-b border-[#eee] py-5 px-4 text-center dark:border-gray-700">
+                                        <span className="text-gray-500 dark:text-gray-400">No grading scales found. Create one to get started.</span>
                                     </TableCell>
                                 </TableRow>
                             )}

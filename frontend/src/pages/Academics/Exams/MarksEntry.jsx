@@ -30,6 +30,8 @@ const MarksEntry = () => {
 
     // Derived state
     const selectedExam = scheduledExams.find(e => e.id.toString() === selectedExamId);
+    const selectedPaper = selectedExam?.papers?.find(p => p.subjectId === selectedSubjectId);
+    const maxMarks = selectedPaper ? parseInt(selectedPaper.maxMarks) : 100;
 
     // Load scheduled exams
     useEffect(() => {
@@ -51,6 +53,13 @@ const MarksEntry = () => {
 
     const handleMarkChange = (studentId, value) => {
         if (isFinalized) return;
+
+        // Validation: Check against Max Marks
+        const numValue = parseFloat(value);
+        if (value !== "" && !isNaN(numValue) && numValue > maxMarks) {
+            alert(`Marks cannot exceed the maximum marks of ${maxMarks}`);
+            return;
+        }
 
         const newMarks = { ...marksData, [studentId]: value };
         setMarksData(newMarks);
@@ -147,10 +156,13 @@ const MarksEntry = () => {
 
             {/* Grids */}
             {selectedExamId && selectedClassId && selectedSubjectId ? (
-                <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 overflow-hidden">
-                    <div className="p-4 border-b border-gray-100 dark:border-gray-700 flex justify-between items-center bg-gray-50 dark:bg-gray-900/50">
+                <div className="rounded-sm border border-gray-200 bg-white shadow-default dark:border-gray-700 dark:bg-gray-800">
+                    <div className="p-4 border-b border-gray-100 dark:border-gray-700 flex justify-between items-center bg-gray-50 dark:bg-gray-700/50">
                         <div className="flex items-center gap-2">
-                            <h3 className="font-semibold text-gray-800 dark:text-white">Student List</h3>
+                            <h3 className="font-semibold text-black dark:text-white">Student List</h3>
+                            <span className="text-sm text-gray-500 dark:text-gray-400">
+                                (Max Marks: {maxMarks})
+                            </span>
                             {isSaving && <span className="text-xs text-gray-500 italic">Saving...</span>}
                             {!isSaving && !isFinalized && <span className="text-xs text-green-500">Saved</span>}
                         </div>
@@ -166,45 +178,51 @@ const MarksEntry = () => {
                         )}
                     </div>
 
-                    <Table>
-                        <TableHeader>
-                            <TableRow>
-                                <TableCell isHeader className="p-4">Roll No</TableCell>
-                                <TableCell isHeader className="p-4">Student Name</TableCell>
-                                <TableCell isHeader className="p-4 w-32">Marks Obtained</TableCell>
-                                <TableCell isHeader className="p-4">Status</TableCell>
-                            </TableRow>
-                        </TableHeader>
-                        <TableBody>
-                            {MOCK_STUDENTS.map(student => (
-                                <TableRow key={student.id}>
-                                    <TableCell className="p-4 font-medium">{student.rollNo}</TableCell>
-                                    <TableCell className="p-4 text-gray-600 dark:text-gray-300">{student.name}</TableCell>
-                                    <TableCell className="p-2">
-                                        <input
-                                            type="number"
-                                            min="0"
-                                            max="100"
-                                            value={marksData[student.id] || ""}
-                                            onChange={(e) => handleMarkChange(student.id, e.target.value)}
-                                            disabled={isFinalized}
-                                            className={`w-full p-2 border rounded text-center font-medium focus:ring-2 focus:ring-brand-500 outline-none
-                                                ${isFinalized ? "bg-gray-100 dark:bg-gray-700 text-gray-500 cursor-not-allowed" : "bg-white dark:bg-gray-800 dark:text-white"}
-                                            `}
-                                        />
-                                    </TableCell>
-                                    <TableCell className="p-4">
-                                        <Badge
-                                            color={getStatus(marksData[student.id]) === "Pass" ? "success" :
-                                                getStatus(marksData[student.id]) === "Fail" ? "error" : "light"}
-                                        >
-                                            {getStatus(marksData[student.id])}
-                                        </Badge>
-                                    </TableCell>
+                    <div className="max-w-full overflow-x-auto">
+                        <Table>
+                            <TableHeader>
+                                <TableRow className="bg-gray-50 dark:bg-gray-700 text-left">
+                                    <TableCell isHeader className="min-w-[120px] py-4 px-4 font-medium text-black dark:text-white xl:pl-11">Roll No</TableCell>
+                                    <TableCell isHeader className="min-w-[150px] py-4 px-4 font-medium text-black dark:text-white">Student Name</TableCell>
+                                    <TableCell isHeader className="min-w-[120px] py-4 px-4 font-medium text-black dark:text-white w-32">Marks ({maxMarks})</TableCell>
+                                    <TableCell isHeader className="py-4 px-4 font-medium text-black dark:text-white">Status</TableCell>
                                 </TableRow>
-                            ))}
-                        </TableBody>
-                    </Table>
+                            </TableHeader>
+                            <TableBody>
+                                {MOCK_STUDENTS.map(student => (
+                                    <TableRow key={student.id} className="hover:bg-gray-50 dark:hover:bg-gray-700/50">
+                                        <TableCell className="border-b border-[#eee] py-5 px-4 dark:border-gray-700 xl:pl-11 font-medium text-black dark:text-white">
+                                            {student.rollNo}
+                                        </TableCell>
+                                        <TableCell className="border-b border-[#eee] py-5 px-4 dark:border-gray-700 text-black dark:text-white">
+                                            {student.name}
+                                        </TableCell>
+                                        <TableCell className="border-b border-[#eee] py-5 px-4 dark:border-gray-700 p-2">
+                                            <input
+                                                type="number"
+                                                min="0"
+                                                max={maxMarks}
+                                                value={marksData[student.id] || ""}
+                                                onChange={(e) => handleMarkChange(student.id, e.target.value)}
+                                                disabled={isFinalized}
+                                                className={`w-full p-2 border rounded text-center font-medium focus:ring-2 focus:ring-brand-500 outline-none
+                                                    ${isFinalized ? "bg-gray-100 dark:bg-gray-700 text-gray-500 cursor-not-allowed" : "bg-white dark:bg-gray-800 dark:text-white border-gray-300 dark:border-gray-600"}
+                                                `}
+                                            />
+                                        </TableCell>
+                                        <TableCell className="border-b border-[#eee] py-5 px-4 dark:border-gray-700">
+                                            <Badge
+                                                color={getStatus(marksData[student.id]) === "Pass" ? "success" :
+                                                    getStatus(marksData[student.id]) === "Fail" ? "error" : "light"}
+                                            >
+                                                {getStatus(marksData[student.id])}
+                                            </Badge>
+                                        </TableCell>
+                                    </TableRow>
+                                ))}
+                            </TableBody>
+                        </Table>
+                    </div>
                 </div>
             ) : (
                 <div className="text-center py-20 bg-white dark:bg-gray-800 rounded-xl border border-dashed border-gray-300 dark:border-gray-700">

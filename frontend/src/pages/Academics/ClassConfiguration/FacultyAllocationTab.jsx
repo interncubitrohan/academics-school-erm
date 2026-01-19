@@ -8,16 +8,16 @@ import {
 } from "../../../components/ui/table";
 import Badge from "../../../components/ui/badge/Badge";
 
-// Mock Faculty Data
+// Mock Faculty Data with Workload
 const mockFaculty = [
-    { id: 1, name: "Sarah Williams", department: "Mathematics" },
-    { id: 2, name: "John Doe", department: "Science" },
-    { id: 3, name: "Emily Davis", department: "Languages" },
-    { id: 4, name: "Michael Brown", department: "Social Studies" },
-    { id: 5, name: "Jessica Garcia", department: "Science" },
-    { id: 6, name: "David Miller", department: "Mathematics" },
-    { id: 7, name: "Robert Wilson", department: "Arts" },
-    { id: 8, name: "Linda Martinez", department: "Physical Education" },
+    { id: 1, name: "Sarah Williams", department: "Mathematics", currentLoad: 18 },
+    { id: 2, name: "John Doe", department: "Science", currentLoad: 25 },
+    { id: 3, name: "Emily Davis", department: "Languages", currentLoad: 12 },
+    { id: 4, name: "Michael Brown", department: "Social Studies", currentLoad: 28 },
+    { id: 5, name: "Jessica Garcia", department: "Science", currentLoad: 32 }, // Overloaded
+    { id: 6, name: "David Miller", department: "Mathematics", currentLoad: 20 },
+    { id: 7, name: "Robert Wilson", department: "Arts", currentLoad: 5 },
+    { id: 8, name: "Linda Martinez", department: "Physical Education", currentLoad: 15 },
 ];
 
 const FacultyAllocationTab = ({ subjects = [] }) => {
@@ -60,6 +60,12 @@ const FacultyAllocationTab = ({ subjects = [] }) => {
         return department;
     };
 
+    const getWorkloadColor = (load) => {
+        if (load < 20) return "text-green-600 dark:text-green-400";
+        if (load < 30) return "text-yellow-600 dark:text-yellow-400";
+        return "text-red-600 dark:text-red-400";
+    };
+
     const handleSave = () => {
         setIsSaving(true);
         // Simulate API call
@@ -85,71 +91,83 @@ const FacultyAllocationTab = ({ subjects = [] }) => {
                 </button>
             </div>
 
-            <div className="overflow-hidden rounded-xl border border-gray-200 bg-white dark:border-white/[0.05] dark:bg-white/[0.03]">
-                <Table>
-                    <TableHeader className="border-b border-gray-100 dark:border-white/[0.05]">
-                        <TableRow>
-                            <TableCell isHeader className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400">Subject</TableCell>
-                            <TableCell isHeader className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400">Department</TableCell>
-                            <TableCell isHeader className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400">Assigned Faculty</TableCell>
-                            <TableCell isHeader className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400">Status</TableCell>
-                        </TableRow>
-                    </TableHeader>
-                    <TableBody className="divide-y divide-gray-100 dark:divide-white/[0.05]">
-                        {subjects.map((subject) => {
-                            const dept = getRecommendedFaculty(subject.name);
-                            // Filter faculty: Show department matches first, then others (or just all for flexibility)
-                            // For this UI, let's show all but maybe group them or just list them. 
-                            // Requirements said "Filter faculty by department (basic logic)".
-                            // Let's sort: Department matches come first.
-                            const sortedFaculty = [...mockFaculty].sort((a, b) => {
-                                if (a.department === dept && b.department !== dept) return -1;
-                                if (a.department !== dept && b.department === dept) return 1;
-                                return 0;
-                            });
+            <div className="rounded-sm border border-gray-200 bg-white px-5 pt-6 pb-2.5 shadow-default dark:border-gray-700 dark:bg-gray-800 sm:px-7.5 xl:pb-1">
+                <div className="max-w-full overflow-x-auto">
+                    <Table>
+                        <TableHeader>
+                            <TableRow className="bg-gray-50 dark:bg-gray-700 text-left">
+                                <TableCell isHeader className="min-w-[150px] py-4 px-4 font-medium text-black dark:text-white xl:pl-11">Subject</TableCell>
+                                <TableCell isHeader className="min-w-[120px] py-4 px-4 font-medium text-black dark:text-white">Department</TableCell>
+                                <TableCell isHeader className="min-w-[200px] py-4 px-4 font-medium text-black dark:text-white">Assigned Faculty</TableCell>
+                                <TableCell isHeader className="py-4 px-4 font-medium text-black dark:text-white">Status</TableCell>
+                            </TableRow>
+                        </TableHeader>
+                        <TableBody>
+                            {subjects.map((subject) => {
+                                const dept = getRecommendedFaculty(subject.name);
+                                // Sort: Department matches first
+                                const sortedFaculty = [...mockFaculty].sort((a, b) => {
+                                    if (a.department === dept && b.department !== dept) return -1;
+                                    if (a.department !== dept && b.department === dept) return 1;
+                                    return 0;
+                                });
 
-                            return (
-                                <TableRow key={subject.id}>
-                                    <TableCell className="px-5 py-4 text-start font-medium text-gray-800 dark:text-white">
-                                        <div>{subject.name}</div>
-                                        <div className="text-xs text-gray-500 font-normal">{subject.type} • {subject.sessions} Sessions/Week</div>
-                                    </TableCell>
-                                    <TableCell className="px-5 py-4 text-start text-gray-500 dark:text-gray-400">
-                                        <Badge color="light" size="sm">{dept || "General"}</Badge>
-                                    </TableCell>
-                                    <TableCell className="px-5 py-4 text-start text-gray-500 dark:text-gray-400">
-                                        <select
-                                            className="w-full max-w-xs px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500/50 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
-                                            value={allocations[subject.id] || ""}
-                                            onChange={(e) => handleAllocationChange(subject.id, e.target.value)}
-                                        >
-                                            <option value="">Select Faculty</option>
-                                            {sortedFaculty.map(f => (
-                                                <option key={f.id} value={f.id}>
-                                                    {f.name} {f.department === dept ? "⭐" : ""} ({f.department})
-                                                </option>
-                                            ))}
-                                        </select>
-                                    </TableCell>
-                                    <TableCell className="px-5 py-4 text-start">
-                                        {allocations[subject.id] ? (
-                                            <Badge color="success" size="sm">Assigned</Badge>
-                                        ) : (
-                                            <Badge color="warning" size="sm">Pending</Badge>
-                                        )}
+                                const allocatedTeacherId = allocations[subject.id];
+                                const assignedTeacher = mockFaculty.find(f => f.id === allocatedTeacherId);
+                                const isOverloaded = assignedTeacher && assignedTeacher.currentLoad >= 30;
+
+                                return (
+                                    <TableRow key={subject.id} className="hover:bg-gray-50 dark:hover:bg-gray-700/50">
+                                        <TableCell className="border-b border-[#eee] py-5 px-4 dark:border-gray-700 xl:pl-11 text-start font-medium text-black dark:text-white">
+                                            <div>{subject.name}</div>
+                                            <div className="text-xs text-gray-500 font-normal">{subject.type} • {subject.sessions} Sessions/Week</div>
+                                        </TableCell>
+                                        <TableCell className="border-b border-[#eee] py-5 px-4 dark:border-gray-700 text-start text-black dark:text-white">
+                                            <Badge color="light" size="sm">{dept || "General"}</Badge>
+                                        </TableCell>
+                                        <TableCell className="border-b border-[#eee] py-5 px-4 dark:border-gray-700 text-start text-black dark:text-white">
+                                            <div className="flex flex-col gap-1">
+                                                <select
+                                                    className={`w-full max-w-xs px-3 py-2 text-sm border rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500/50 dark:bg-gray-700 dark:text-white ${isOverloaded ? 'border-red-300 ring-red-200' : 'border-gray-300'}`}
+                                                    value={allocations[subject.id] || ""}
+                                                    onChange={(e) => handleAllocationChange(subject.id, e.target.value)}
+                                                >
+                                                    <option value="">Select Faculty</option>
+                                                    {sortedFaculty.map(f => (
+                                                        <option key={f.id} value={f.id}>
+                                                            {f.name} {f.department === dept ? "⭐" : ""} - {f.currentLoad}h/wk
+                                                        </option>
+                                                    ))}
+                                                </select>
+                                                {isOverloaded && (
+                                                    <span className="text-xs text-red-500 flex items-center gap-1">
+                                                        ⚠️ High Workload ({assignedTeacher.currentLoad} hrs)
+                                                    </span>
+                                                )}
+                                            </div>
+                                        </TableCell>
+                                        <TableCell className="border-b border-[#eee] py-5 px-4 dark:border-gray-700 text-start">
+                                            {allocations[subject.id] ? (
+                                                isOverloaded ?
+                                                    <Badge color="warning" size="sm">Review</Badge> :
+                                                    <Badge color="success" size="sm">Assigned</Badge>
+                                            ) : (
+                                                <Badge color="error" size="sm">Pending</Badge>
+                                            )}
+                                        </TableCell>
+                                    </TableRow>
+                                );
+                            })}
+                            {subjects.length === 0 && (
+                                <TableRow>
+                                    <TableCell colSpan={4} className="border-b border-[#eee] py-5 px-4 text-center dark:border-gray-700">
+                                        <span className="text-gray-500 dark:text-gray-400">No subjects found. Please define curriculum first.</span>
                                     </TableCell>
                                 </TableRow>
-                            );
-                        })}
-                        {subjects.length === 0 && (
-                            <TableRow>
-                                <TableCell colSpan={4} className="px-5 py-8 text-center text-gray-500 dark:text-gray-400">
-                                    No subjects found. Please define curriculum first.
-                                </TableCell>
-                            </TableRow>
-                        )}
-                    </TableBody>
-                </Table>
+                            )}
+                        </TableBody>
+                    </Table>
+                </div>
             </div>
         </div>
     );

@@ -4,7 +4,7 @@ const GradingScaleBuilder = ({ onSave, onCancel, initialData }) => {
     const [scaleName, setScaleName] = useState("");
     const [scaleType, setScaleType] = useState("Percentage"); // Percentage, GPA, Grade-only
     const [rules, setRules] = useState([
-        { id: Date.now(), grade: "A", min: 90, max: 100, points: 4.0 },
+        { id: Date.now(), grade: "A", min: 90, max: 100, points: 4.0, remarks: "Excellent" },
     ]);
 
     useEffect(() => {
@@ -18,7 +18,7 @@ const GradingScaleBuilder = ({ onSave, onCancel, initialData }) => {
     const handleAddRule = () => {
         setRules([
             ...rules,
-            { id: Date.now(), grade: "", min: 0, max: 0, points: 0 },
+            { id: Date.now(), grade: "", min: 0, max: 0, points: 0, remarks: "" },
         ]);
     };
 
@@ -38,6 +38,21 @@ const GradingScaleBuilder = ({ onSave, onCancel, initialData }) => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
+
+        // Validation
+        for (const rule of rules) {
+            if (scaleType === "Percentage" || scaleType === "GPA") {
+                if (Number(rule.min) >= Number(rule.max)) {
+                    alert(`Invalid range for grade ${rule.grade}: Min must be less than Max`);
+                    return;
+                }
+            }
+            if (!rule.grade) {
+                alert("All rules must have a Grade Label");
+                return;
+            }
+        }
+
         onSave({
             name: scaleName,
             type: scaleType,
@@ -102,7 +117,7 @@ const GradingScaleBuilder = ({ onSave, onCancel, initialData }) => {
                                 key={rule.id}
                                 className="flex flex-col md:flex-row gap-3 items-end p-4 bg-gray-50 dark:bg-white/[0.03] rounded-lg border border-gray-100 dark:border-white/[0.05]"
                             >
-                                <div className="flex-1">
+                                <div className="w-24">
                                     <label className="block text-xs text-gray-500 dark:text-gray-400 mb-1">
                                         Grade Label
                                     </label>
@@ -167,6 +182,20 @@ const GradingScaleBuilder = ({ onSave, onCancel, initialData }) => {
                                         />
                                     </div>
                                 )}
+                                <div className="flex-1">
+                                    <label className="block text-xs text-gray-500 dark:text-gray-400 mb-1">
+                                        Remarks
+                                    </label>
+                                    <input
+                                        type="text"
+                                        placeholder="e.g. Outstanding"
+                                        value={rule.remarks || ""}
+                                        onChange={(e) =>
+                                            handleRuleChange(rule.id, "remarks", e.target.value)
+                                        }
+                                        className="w-full px-3 py-2 text-sm border rounded hover:border-brand-500 focus:outline-none focus:ring-1 focus:ring-brand-500 dark:bg-gray-800 dark:border-gray-700 dark:text-white"
+                                    />
+                                </div>
                                 <div className="pb-1">
                                     <button
                                         type="button"

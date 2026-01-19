@@ -13,11 +13,11 @@ import PageMeta from "../../../components/common/PageMeta";
 
 // Mock Data
 const initialRooms = [
-    { id: 1, name: "101-A", type: "Classroom", capacity: 40 },
-    { id: 2, name: "Chemistry Lab", type: "Lab", capacity: 25 },
-    { id: 3, name: "Main Library", type: "Library", capacity: 100 },
-    { id: 4, name: "Auditorium", type: "Hall", capacity: 200 },
-    { id: 5, name: "102-B", type: "Classroom", capacity: 35 },
+    { id: 1, name: "101-A", type: "Classroom", capacity: 40, floor: 1, building: "Main Block", status: "Active", facilities: ["Projector", "AC"] },
+    { id: 2, name: "Chemistry Lab", type: "Lab", capacity: 25, floor: 2, building: "Science Wing", status: "Under Maintenance", facilities: ["Lab Equipment", "Wash Basin"] },
+    { id: 3, name: "Main Library", type: "Library", capacity: 100, floor: 1, building: "Main Block", status: "Active", facilities: ["WiFi", "Computers"] },
+    { id: 4, name: "Auditorium", type: "Hall", capacity: 200, floor: 0, building: "Auditorium Block", status: "Active", facilities: ["Stage", "Sound System"] },
+    { id: 5, name: "102-B", type: "Classroom", capacity: 35, floor: 1, building: "Main Block", status: "Active", facilities: ["Whiteboard"] },
 ];
 
 const Rooms = () => {
@@ -63,9 +63,9 @@ const Rooms = () => {
             <PageBreadcrumb pageTitle="Rooms Management" />
 
             <div className="space-y-6">
-                <div className="overflow-hidden rounded-xl border border-gray-200 bg-white dark:border-white/[0.05] dark:bg-white/[0.03] p-4">
+                <div className="rounded-sm border border-gray-200 bg-white px-5 pt-6 pb-2.5 shadow-default dark:border-gray-700 dark:bg-gray-800 sm:px-7.5 xl:pb-1">
                     <div className="flex justify-between items-center mb-4">
-                        <h3 className="text-lg font-semibold text-gray-800 dark:text-white">Room List</h3>
+                        <h3 className="text-xl font-semibold text-black dark:text-white">Room List</h3>
                         <button
                             onClick={handleAddRoom}
                             className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700"
@@ -75,29 +75,37 @@ const Rooms = () => {
                     </div>
                     <div className="max-w-full overflow-x-auto">
                         <Table>
-                            <TableHeader className="border-b border-gray-100 dark:border-white/[0.05]">
-                                <TableRow>
-                                    <TableCell isHeader className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400">
+                            <TableHeader>
+                                <TableRow className="bg-gray-50 dark:bg-gray-700 text-left">
+                                    <TableCell isHeader className="min-w-[120px] py-4 px-4 font-medium text-black dark:text-white xl:pl-11">
                                         Room Name
                                     </TableCell>
-                                    <TableCell isHeader className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400">
+                                    <TableCell isHeader className="min-w-[120px] py-4 px-4 font-medium text-black dark:text-white">
                                         Type
                                     </TableCell>
-                                    <TableCell isHeader className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400">
+                                    <TableCell isHeader className="min-w-[100px] py-4 px-4 font-medium text-black dark:text-white">
                                         Capacity
                                     </TableCell>
-                                    <TableCell isHeader className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400">
+                                    <TableCell isHeader className="min-w-[150px] py-4 px-4 font-medium text-black dark:text-white">
+                                        Building / Floor
+                                    </TableCell>
+                                    <TableCell isHeader className="min-w-[100px] py-4 px-4 font-medium text-black dark:text-white">
+                                        Status
+                                    </TableCell>
+                                    <TableCell isHeader className="py-4 px-4 font-medium text-black dark:text-white">
                                         Actions
                                     </TableCell>
                                 </TableRow>
                             </TableHeader>
-                            <TableBody className="divide-y divide-gray-100 dark:divide-white/[0.05]">
+                            <TableBody>
                                 {rooms.map((room) => (
-                                    <TableRow key={room.id}>
-                                        <TableCell className="px-5 py-4 sm:px-6 text-start text-theme-sm dark:text-gray-400">
-                                            {room.name}
+                                    <TableRow key={room.id} className="hover:bg-gray-50 dark:hover:bg-gray-700/50">
+                                        <TableCell className="border-b border-[#eee] py-5 px-4 dark:border-gray-700 xl:pl-11">
+                                            <h5 className="font-medium text-black dark:text-white">
+                                                {room.name}
+                                            </h5>
                                         </TableCell>
-                                        <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
+                                        <TableCell className="border-b border-[#eee] py-5 px-4 dark:border-gray-700">
                                             <Badge
                                                 size="sm"
                                                 color={
@@ -113,20 +121,33 @@ const Rooms = () => {
                                                 {room.type}
                                             </Badge>
                                         </TableCell>
-                                        <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                                            {room.capacity}
+                                        <TableCell className="border-b border-[#eee] py-5 px-4 dark:border-gray-700">
+                                            <p className="text-black dark:text-white">{room.capacity}</p>
                                         </TableCell>
-                                        <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                                            <div className="flex gap-2">
+                                        <TableCell className="border-b border-[#eee] py-5 px-4 dark:border-gray-700">
+                                            <p className="text-black dark:text-white">
+                                                {room.building} <span className="text-sm text-gray-500">({room.floor})</span>
+                                            </p>
+                                        </TableCell>
+                                        <TableCell className="border-b border-[#eee] py-5 px-4 dark:border-gray-700">
+                                            <Badge
+                                                size="sm"
+                                                color={room.status === "Active" ? "success" : "error"}
+                                            >
+                                                {room.status}
+                                            </Badge>
+                                        </TableCell>
+                                        <TableCell className="border-b border-[#eee] py-5 px-4 dark:border-gray-700">
+                                            <div className="flex items-center space-x-3.5">
                                                 <button
                                                     onClick={() => handleEditRoom(room)}
-                                                    className="text-blue-500 hover:text-blue-700"
+                                                    className="hover:text-primary"
                                                 >
                                                     Edit
                                                 </button>
                                                 <button
                                                     onClick={() => handleDeleteRoom(room.id)}
-                                                    className="text-red-500 hover:text-red-700"
+                                                    className="hover:text-red-500"
                                                 >
                                                     Delete
                                                 </button>
@@ -136,7 +157,7 @@ const Rooms = () => {
                                 ))}
                                 {rooms.length === 0 && (
                                     <TableRow>
-                                        <TableCell colSpan={4} className="px-5 py-4 text-center text-gray-500 dark:text-gray-400">
+                                        <TableCell colSpan={6} className="border-b border-[#eee] py-5 px-4 text-center dark:border-gray-700">
                                             No rooms found.
                                         </TableCell>
                                     </TableRow>

@@ -13,11 +13,11 @@ import SubjectForm from "./SubjectForm";
 
 // Mock Data
 const initialSubjects = [
-    { id: 1, name: "Mathematics", code: "MATH101", type: "Theory", department: "Science" },
-    { id: 2, name: "Physics Lab", code: "PHYLAB", type: "Practical", department: "Science" },
-    { id: 3, name: "English Literature", code: "ENG202", type: "Theory", department: "Arts" },
-    { id: 4, name: "Physical Education", code: "PE101", type: "Co-Scholastic", department: "Sports" },
-    { id: 5, name: "Chemistry", code: "CHEM101", type: "Theory", department: "Science" },
+    { id: 1, name: "Mathematics", code: "MATH101", type: "Theory", department: "Science", creditHours: 4, boards: ["CBSE", "IGCSE"] },
+    { id: 2, name: "Physics Lab", code: "PHYLAB", type: "Practical", department: "Science", creditHours: 2, boards: ["CBSE"] },
+    { id: 3, name: "English Literature", code: "ENG202", type: "Theory", department: "Arts", creditHours: 3, boards: ["CBSE", "IGCSE", "IB"] },
+    { id: 4, name: "Physical Education", code: "PE101", type: "Co-Scholastic", department: "Sports", creditHours: 2, boards: ["CBSE"] },
+    { id: 5, name: "Chemistry", code: "CHEM101", type: "Theory", department: "Science", creditHours: 4, boards: ["CBSE"] },
 ];
 
 const SubjectList = () => {
@@ -70,7 +70,7 @@ const SubjectList = () => {
             <PageBreadcrumb pageTitle="Subjects Master" />
 
             <div className="space-y-6">
-                <div className="overflow-hidden rounded-xl border border-gray-200 bg-white dark:border-white/[0.05] dark:bg-white/[0.03] p-4">
+                <div className="rounded-sm border border-gray-200 bg-white px-5 pt-6 pb-2.5 shadow-default dark:border-gray-700 dark:bg-gray-800 sm:px-7.5 xl:pb-1">
                     <div className="flex flex-col sm:flex-row justify-between items-center mb-4 gap-4">
                         <div className="relative w-full sm:w-64">
                             <input
@@ -78,7 +78,7 @@ const SubjectList = () => {
                                 placeholder="Search by name or code..."
                                 value={searchTerm}
                                 onChange={(e) => setSearchTerm(e.target.value)}
-                                className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500 dark:bg-gray-800 dark:border-gray-700 dark:text-white"
+                                className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
                             />
                         </div>
                         <button
@@ -90,35 +90,40 @@ const SubjectList = () => {
                     </div>
                     <div className="max-w-full overflow-x-auto">
                         <Table>
-                            <TableHeader className="border-b border-gray-100 dark:border-white/[0.05]">
-                                <TableRow>
-                                    <TableCell isHeader className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400">
+                            <TableHeader>
+                                <TableRow className="bg-gray-50 dark:bg-gray-700 text-left">
+                                    <TableCell isHeader className="min-w-[100px] py-4 px-4 font-medium text-black dark:text-white xl:pl-11">
                                         Subject Code
                                     </TableCell>
-                                    <TableCell isHeader className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400">
+                                    <TableCell isHeader className="min-w-[150px] py-4 px-4 font-medium text-black dark:text-white">
                                         Subject Name
                                     </TableCell>
-                                    <TableCell isHeader className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400">
+                                    <TableCell isHeader className="min-w-[120px] py-4 px-4 font-medium text-black dark:text-white">
                                         Type
                                     </TableCell>
-                                    <TableCell isHeader className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400">
+                                    <TableCell isHeader className="min-w-[100px] py-4 px-4 font-medium text-black dark:text-white">
+                                        Credits
+                                    </TableCell>
+                                    <TableCell isHeader className="min-w-[120px] py-4 px-4 font-medium text-black dark:text-white">
                                         Department
                                     </TableCell>
-                                    <TableCell isHeader className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400">
+                                    <TableCell isHeader className="py-4 px-4 font-medium text-black dark:text-white">
                                         Actions
                                     </TableCell>
                                 </TableRow>
                             </TableHeader>
-                            <TableBody className="divide-y divide-gray-100 dark:divide-white/[0.05]">
+                            <TableBody>
                                 {filteredSubjects.map((subject) => (
-                                    <TableRow key={subject.id}>
-                                        <TableCell className="px-5 py-4 sm:px-6 text-start text-theme-sm dark:text-gray-400 font-mono">
+                                    <TableRow key={subject.id} className="hover:bg-gray-50 dark:hover:bg-gray-700/50">
+                                        <TableCell className="border-b border-[#eee] py-5 px-4 dark:border-gray-700 xl:pl-11 font-mono text-black dark:text-white">
                                             {subject.code}
                                         </TableCell>
-                                        <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                                            {subject.name}
+                                        <TableCell className="border-b border-[#eee] py-5 px-4 dark:border-gray-700">
+                                            <h5 className="font-medium text-black dark:text-white">
+                                                {subject.name}
+                                            </h5>
                                         </TableCell>
-                                        <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
+                                        <TableCell className="border-b border-[#eee] py-5 px-4 dark:border-gray-700">
                                             <Badge
                                                 size="sm"
                                                 color={
@@ -132,20 +137,23 @@ const SubjectList = () => {
                                                 {subject.type}
                                             </Badge>
                                         </TableCell>
-                                        <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                                            {subject.department || "-"}
+                                        <TableCell className="border-b border-[#eee] py-5 px-4 dark:border-gray-700">
+                                            <p className="text-black dark:text-white">{subject.creditHours}</p>
                                         </TableCell>
-                                        <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                                            <div className="flex gap-2">
+                                        <TableCell className="border-b border-[#eee] py-5 px-4 dark:border-gray-700">
+                                            <p className="text-black dark:text-white">{subject.department || "-"}</p>
+                                        </TableCell>
+                                        <TableCell className="border-b border-[#eee] py-5 px-4 dark:border-gray-700">
+                                            <div className="flex items-center space-x-3.5">
                                                 <button
                                                     onClick={() => handleEditSubject(subject)}
-                                                    className="text-blue-500 hover:text-blue-700"
+                                                    className="hover:text-primary"
                                                 >
                                                     Edit
                                                 </button>
                                                 <button
                                                     onClick={() => handleDeleteSubject(subject.id)}
-                                                    className="text-red-500 hover:text-red-700"
+                                                    className="hover:text-red-500"
                                                 >
                                                     Delete
                                                 </button>
@@ -155,7 +163,7 @@ const SubjectList = () => {
                                 ))}
                                 {filteredSubjects.length === 0 && (
                                     <TableRow>
-                                        <TableCell colSpan={5} className="px-5 py-4 text-center text-gray-500 dark:text-gray-400">
+                                        <TableCell colSpan={6} className="border-b border-[#eee] py-5 px-4 text-center dark:border-gray-700">
                                             No subjects found.
                                         </TableCell>
                                     </TableRow>

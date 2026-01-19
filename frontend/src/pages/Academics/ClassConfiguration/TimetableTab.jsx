@@ -115,47 +115,49 @@ const TimetableTab = ({ subjects = [] }) => {
                 </button>
             </div>
 
-            <div className="overflow-x-auto rounded-xl border border-gray-200 bg-white dark:border-white/[0.05] dark:bg-white/[0.03]">
-                <table className="w-full min-w-[800px] border-collapse">
-                    <thead>
-                        <tr className="bg-gray-50 dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
-                            <th className="p-4 text-left font-medium text-gray-500 text-sm w-32 sticky left-0 bg-gray-50 dark:bg-gray-800 z-10">Time / Day</th>
-                            {DAYS.map(day => (
-                                <th key={day} className="p-4 text-center font-medium text-gray-800 dark:text-white text-sm border-l border-gray-200 dark:border-gray-700 w-1/5">
-                                    {day}
-                                </th>
-                            ))}
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {PERIODS.map(period => (
-                            <tr key={period.id} className="border-b border-gray-100 dark:border-gray-700 last:border-0">
-                                <td className="p-4 text-left font-medium text-gray-500 text-xs w-32 sticky left-0 bg-white dark:bg-gray-900 border-r border-gray-100 dark:border-gray-700">
-                                    {period.label}
-                                </td>
-                                {period.type === "break" ? (
-                                    <td colSpan={5} className="bg-gray-100 dark:bg-gray-800/50 p-2 text-center text-xs font-bold text-gray-400 tracking-widest uppercase">
-                                        {period.name}
-                                    </td>
-                                ) : (
-                                    DAYS.map(day => (
-                                        <td
-                                            key={`${day}-${period.id}`}
-                                            onClick={() => handleSlotClick(day, period)}
-                                            className="p-2 border-l border-gray-100 dark:border-gray-700 h-24 hover:bg-gray-50 dark:hover:bg-gray-800 cursor-pointer transition-colors relative group"
-                                        >
-                                            <div className="h-full w-full flex items-center justify-center p-1 rounded-lg">
-                                                {getSlotContent(day, period.id) || (
-                                                    <span className="opacity-0 group-hover:opacity-100 text-gray-300 text-2xl font-light">+</span>
-                                                )}
-                                            </div>
-                                        </td>
-                                    ))
-                                )}
+            <div className="rounded-sm border border-gray-200 bg-white px-5 pt-6 pb-2.5 shadow-default dark:border-gray-700 dark:bg-gray-800 sm:px-7.5 xl:pb-1">
+                <div className="max-w-full overflow-x-auto">
+                    <table className="w-full table-auto">
+                        <thead>
+                            <tr className="bg-gray-50 text-left dark:bg-gray-700">
+                                <th className="min-w-[150px] py-4 px-4 font-medium text-black dark:text-white xl:pl-11">Time / Day</th>
+                                {DAYS.map(day => (
+                                    <th key={day} className="min-w-[150px] py-4 px-4 font-medium text-black dark:text-white text-center">
+                                        {day}
+                                    </th>
+                                ))}
                             </tr>
-                        ))}
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                            {PERIODS.map(period => (
+                                <tr key={period.id}>
+                                    <td className="border-b border-[#eee] py-5 px-4 pl-9 dark:border-gray-700 xl:pl-11">
+                                        <h5 className="font-medium text-black dark:text-white">{period.label}</h5>
+                                    </td>
+                                    {period.type === "break" ? (
+                                        <td colSpan={6} className="bg-gray-50 dark:bg-gray-700/50 p-2 text-center text-xs font-bold text-gray-500 tracking-widest uppercase border-b border-[#eee] dark:border-gray-700">
+                                            {period.name}
+                                        </td>
+                                    ) : (
+                                        DAYS.map(day => (
+                                            <td
+                                                key={`${day}-${period.id}`}
+                                                onClick={() => handleSlotClick(day, period)}
+                                                className="border-b border-[#eee] py-5 px-4 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700/50 cursor-pointer transition-colors relative group"
+                                            >
+                                                <div className="flex flex-col items-center justify-center p-1 rounded-lg">
+                                                    {getSlotContent(day, period.id) || (
+                                                        <span className="opacity-0 group-hover:opacity-100 text-gray-300 text-2xl font-light">+</span>
+                                                    )}
+                                                </div>
+                                            </td>
+                                        ))
+                                    )}
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
             </div>
 
             {/* Assignment Modal */}

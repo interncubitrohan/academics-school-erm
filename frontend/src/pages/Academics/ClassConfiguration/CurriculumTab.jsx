@@ -108,57 +108,67 @@ const CurriculumTab = ({ initialSubjects = [] }) => {
                     + Add Subject
                 </button>
             </div>
-            <div className="overflow-hidden rounded-xl border border-gray-200 bg-white dark:border-white/[0.05] dark:bg-white/[0.03]">
-                <Table>
-                    <TableHeader className="border-b border-gray-100 dark:border-white/[0.05]">
-                        <TableRow>
-                            <TableCell isHeader className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400">Subject Name</TableCell>
-                            <TableCell isHeader className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400">Default Teacher</TableCell>
-                            <TableCell isHeader className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400">Type</TableCell>
-                            <TableCell isHeader className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400">Credits</TableCell>
-                            <TableCell isHeader className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400">Weekly Sessions</TableCell>
-                            <TableCell isHeader className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400">Actions</TableCell>
-                        </TableRow>
-                    </TableHeader>
-                    <TableBody className="divide-y divide-gray-100 dark:divide-white/[0.05]">
-                        {subjects.map((subject) => (
-                            <TableRow key={subject.id}>
-                                <TableCell className="px-5 py-4 text-start font-medium text-gray-800 dark:text-white">{subject.name}</TableCell>
-                                <TableCell className="px-5 py-4 text-start text-gray-500 dark:text-gray-400">{subject.teacher}</TableCell>
-                                <TableCell className="px-5 py-4 text-start">
-                                    <Badge color={subject.type === "Mandatory" ? "brand" : "info"} size="sm">
-                                        {subject.type || "Mandatory"}
-                                    </Badge>
-                                </TableCell>
-                                <TableCell className="px-5 py-4 text-start text-gray-500 dark:text-gray-400">{subject.credits || "-"}</TableCell>
-                                <TableCell className="px-5 py-4 text-start text-gray-500 dark:text-gray-400">{subject.sessions}</TableCell>
-                                <TableCell className="px-5 py-4 text-start">
-                                    <div className="flex gap-2">
-                                        <button
-                                            onClick={() => handleOpenModal(subject)}
-                                            className="text-blue-500 hover:text-blue-700 text-sm font-medium"
-                                        >
-                                            Edit
-                                        </button>
-                                        <button
-                                            onClick={() => handleDelete(subject.id)}
-                                            className="text-red-500 hover:text-red-700 text-sm font-medium"
-                                        >
-                                            Remove
-                                        </button>
-                                    </div>
-                                </TableCell>
+            <div className="rounded-sm border border-gray-200 bg-white px-5 pt-6 pb-2.5 shadow-default dark:border-gray-700 dark:bg-gray-800 sm:px-7.5 xl:pb-1">
+                <div className="max-w-full overflow-x-auto">
+                    <Table>
+                        <TableHeader>
+                            <TableRow className="bg-gray-50 dark:bg-gray-700 text-left">
+                                <TableCell isHeader className="min-w-[150px] py-4 px-4 font-medium text-black dark:text-white xl:pl-11">Subject Name</TableCell>
+                                <TableCell isHeader className="min-w-[150px] py-4 px-4 font-medium text-black dark:text-white">Default Teacher</TableCell>
+                                <TableCell isHeader className="min-w-[120px] py-4 px-4 font-medium text-black dark:text-white">Type</TableCell>
+                                <TableCell isHeader className="min-w-[100px] py-4 px-4 font-medium text-black dark:text-white">Credits</TableCell>
+                                <TableCell isHeader className="min-w-[150px] py-4 px-4 font-medium text-black dark:text-white">Weekly Sessions</TableCell>
+                                <TableCell isHeader className="py-4 px-4 font-medium text-black dark:text-white">Actions</TableCell>
                             </TableRow>
-                        ))}
-                        {subjects.length === 0 && (
-                            <TableRow>
-                                <TableCell colSpan={6} className="px-5 py-8 text-center text-gray-500 dark:text-gray-400">
-                                    No subjects mapped yet. Click "Add Subject" to begin.
-                                </TableCell>
-                            </TableRow>
-                        )}
-                    </TableBody>
-                </Table>
+                        </TableHeader>
+                        <TableBody>
+                            {subjects.map((subject) => (
+                                <TableRow key={subject.id} className="hover:bg-gray-50 dark:hover:bg-gray-700/50">
+                                    <TableCell className="border-b border-[#eee] py-5 px-4 dark:border-gray-700 xl:pl-11">
+                                        <h5 className="font-medium text-black dark:text-white">{subject.name}</h5>
+                                    </TableCell>
+                                    <TableCell className="border-b border-[#eee] py-5 px-4 dark:border-gray-700">
+                                        <p className="text-black dark:text-white">{subject.teacher}</p>
+                                    </TableCell>
+                                    <TableCell className="border-b border-[#eee] py-5 px-4 dark:border-gray-700">
+                                        <Badge color={subject.type === "Mandatory" ? "brand" : "info"} size="sm">
+                                            {subject.type || "Mandatory"}
+                                        </Badge>
+                                    </TableCell>
+                                    <TableCell className="border-b border-[#eee] py-5 px-4 dark:border-gray-700">
+                                        <p className="text-black dark:text-white">{subject.credits || "-"}</p>
+                                    </TableCell>
+                                    <TableCell className="border-b border-[#eee] py-5 px-4 dark:border-gray-700">
+                                        <p className="text-black dark:text-white">{subject.sessions}</p>
+                                    </TableCell>
+                                    <TableCell className="border-b border-[#eee] py-5 px-4 dark:border-gray-700">
+                                        <div className="flex gap-2">
+                                            <button
+                                                onClick={() => handleOpenModal(subject)}
+                                                className="hover:text-primary text-sm font-medium"
+                                            >
+                                                Edit
+                                            </button>
+                                            <button
+                                                onClick={() => handleDelete(subject.id)}
+                                                className="hover:text-red-500 text-sm font-medium"
+                                            >
+                                                Remove
+                                            </button>
+                                        </div>
+                                    </TableCell>
+                                </TableRow>
+                            ))}
+                            {subjects.length === 0 && (
+                                <TableRow>
+                                    <TableCell colSpan={6} className="border-b border-[#eee] py-5 px-4 text-center dark:border-gray-700">
+                                        <span className="text-gray-500 dark:text-gray-400">No subjects mapped yet. Click "Add Subject" to begin.</span>
+                                    </TableCell>
+                                </TableRow>
+                            )}
+                        </TableBody>
+                    </Table>
+                </div>
             </div>
 
             {/* Modal */}

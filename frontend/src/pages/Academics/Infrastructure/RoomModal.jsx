@@ -10,16 +10,27 @@ const RoomModal = ({ isOpen, onClose, onSave, room }) => {
         name: "",
         type: "Classroom",
         capacity: "",
+        floor: "",
+        building: "",
+        facilities: "", // Comma separated string for simplicity
+        status: "Active",
     });
 
     useEffect(() => {
         if (room) {
-            setFormData(room);
+            setFormData({
+                ...room,
+                facilities: Array.isArray(room.facilities) ? room.facilities.join(", ") : room.facilities || "",
+            });
         } else {
             setFormData({
                 name: "",
                 type: "Classroom",
                 capacity: "",
+                floor: "",
+                building: "",
+                facilities: "",
+                status: "Active",
             });
         }
     }, [room, isOpen]);
@@ -31,60 +42,133 @@ const RoomModal = ({ isOpen, onClose, onSave, room }) => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        onSave(formData);
+        const submittedData = {
+            ...formData,
+            facilities: formData.facilities.split(",").map(f => f.trim()).filter(f => f),
+            capacity: Number(formData.capacity)
+        };
+        onSave(submittedData);
     };
 
     return (
-        <Modal isOpen={isOpen} onClose={onClose} className="max-w-[500px] p-6">
+        <Modal isOpen={isOpen} onClose={onClose} className="max-w-[700px] p-6">
             <h3 className="text-lg font-semibold text-gray-800 dark:text-white mb-4">
                 {room ? "Edit Room" : "Add New Room"}
             </h3>
             <form onSubmit={handleSubmit} className="space-y-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                            Room Name <span className="text-red-500">*</span>
+                        </label>
+                        <input
+                            type="text"
+                            name="name"
+                            value={formData.name}
+                            onChange={handleChange}
+                            required
+                            className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500 dark:bg-gray-800 dark:border-gray-700 dark:text-white"
+                            placeholder="e.g. 101-A"
+                        />
+                    </div>
+                    <div>
+                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                            Room Type <span className="text-red-500">*</span>
+                        </label>
+                        <select
+                            name="type"
+                            value={formData.type}
+                            onChange={handleChange}
+                            className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500 dark:bg-gray-800 dark:border-gray-700 dark:text-white"
+                        >
+                            <option value="Classroom">Classroom</option>
+                            <option value="Lab">Lab</option>
+                            <option value="Library">Library</option>
+                            <option value="Hall">Hall</option>
+                            <option value="Auditorium">Auditorium</option>
+                            <option value="Sports Room">Sports Room</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                            Capacity <span className="text-red-500">*</span>
+                        </label>
+                        <input
+                            type="number"
+                            name="capacity"
+                            value={formData.capacity}
+                            onChange={handleChange}
+                            required
+                            min="1"
+                            max="500"
+                            className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500 dark:bg-gray-800 dark:border-gray-700 dark:text-white"
+                            placeholder="e.g. 40"
+                        />
+                    </div>
+                    <div>
+                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                            Floor
+                        </label>
+                        <input
+                            type="number"
+                            name="floor"
+                            value={formData.floor}
+                            onChange={handleChange}
+                            className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500 dark:bg-gray-800 dark:border-gray-700 dark:text-white"
+                            placeholder="e.g. 1"
+                        />
+                    </div>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                            Building
+                        </label>
+                        <input
+                            type="text"
+                            name="building"
+                            value={formData.building}
+                            onChange={handleChange}
+                            className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500 dark:bg-gray-800 dark:border-gray-700 dark:text-white"
+                            placeholder="e.g. Main Block"
+                        />
+                    </div>
+                    <div>
+                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                            Status
+                        </label>
+                        <select
+                            name="status"
+                            value={formData.status}
+                            onChange={handleChange}
+                            className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500 dark:bg-gray-800 dark:border-gray-700 dark:text-white"
+                        >
+                            <option value="Active">Active</option>
+                            <option value="Under Maintenance">Under Maintenance</option>
+                            <option value="Closed">Closed</option>
+                        </select>
+                    </div>
+                </div>
+
                 <div>
                     <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                        Room Name
+                        Facilities
                     </label>
                     <input
                         type="text"
-                        name="name"
-                        value={formData.name}
+                        name="facilities"
+                        value={formData.facilities}
                         onChange={handleChange}
-                        required
                         className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500 dark:bg-gray-800 dark:border-gray-700 dark:text-white"
-                        placeholder="e.g. 101-A"
+                        placeholder="e.g. Projector, AC, Smart Board"
                     />
+                    <p className="text-xs text-gray-500 mt-1">Separate multiple facilities with commas.</p>
                 </div>
-                <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                        Room Type
-                    </label>
-                    <select
-                        name="type"
-                        value={formData.type}
-                        onChange={handleChange}
-                        className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500 dark:bg-gray-800 dark:border-gray-700 dark:text-white"
-                    >
-                        <option value="Classroom">Classroom</option>
-                        <option value="Lab">Lab</option>
-                        <option value="Library">Library</option>
-                        <option value="Hall">Hall</option>
-                    </select>
-                </div>
-                <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                        Capacity
-                    </label>
-                    <input
-                        type="number"
-                        name="capacity"
-                        value={formData.capacity}
-                        onChange={handleChange}
-                        required
-                        min="1"
-                        className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500 dark:bg-gray-800 dark:border-gray-700 dark:text-white"
-                        placeholder="e.g. 40"
-                    />
-                </div>
+
                 <div className="flex justify-end gap-3 mt-6">
                     <button
                         type="button"
