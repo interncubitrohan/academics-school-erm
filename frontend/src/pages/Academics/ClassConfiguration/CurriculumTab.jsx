@@ -174,6 +174,7 @@ const CurriculumTab = ({ initialSubjects = [] }) => {
                                     Subject
                                 </label>
                                 <select
+                                    name="subjectId"
                                     required
                                     value={formData.subjectId}
                                     onChange={(e) => setFormData({ ...formData, subjectId: e.target.value })}
@@ -192,6 +193,7 @@ const CurriculumTab = ({ initialSubjects = [] }) => {
                                         Subject Type
                                     </label>
                                     <select
+                                        name="type"
                                         value={formData.type}
                                         onChange={(e) => setFormData({ ...formData, type: e.target.value })}
                                         className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500/50 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
@@ -205,6 +207,7 @@ const CurriculumTab = ({ initialSubjects = [] }) => {
                                         Credit Hours
                                     </label>
                                     <input
+                                        name="credits"
                                         type="number"
                                         min="0"
                                         step="0.5"
@@ -221,6 +224,7 @@ const CurriculumTab = ({ initialSubjects = [] }) => {
                                         Default Teacher
                                     </label>
                                     <input
+                                        name="teacher"
                                         type="text"
                                         value={formData.teacher}
                                         onChange={(e) => setFormData({ ...formData, teacher: e.target.value })}
@@ -233,6 +237,7 @@ const CurriculumTab = ({ initialSubjects = [] }) => {
                                         Weekly Sessions
                                     </label>
                                     <input
+                                        name="sessions"
                                         type="number"
                                         min="1"
                                         required
