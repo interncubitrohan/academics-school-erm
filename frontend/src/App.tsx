@@ -25,6 +25,7 @@ import GradingSystems from "./pages/Academics/Infrastructure/GradingSystems";
 import ClassConfiguration from "./pages/Academics/ClassConfiguration/ClassConfiguration";
 import ClassDetails from "./pages/Academics/ClassConfiguration/ClassDetails";
 import ExamScheduler from "./pages/Academics/Exams/ExamScheduler";
+import MarksEntry from "./pages/Academics/Exams/MarksEntry"; // Import
 import ExamsResults from "./pages/Academics/Exams/ExamsResults";
 
 export default function App() {
@@ -64,6 +65,7 @@ export default function App() {
             <Route path="/academics/class-configuration" element={<ClassConfiguration />} />
             <Route path="/academics/classes/:classId" element={<ClassDetails />} />
             <Route path="/academics/exams/schedule" element={<ExamScheduler />} />
+            <Route path="/academics/exams/marks" element={<MarksEntry />} />
             <Route path="/academics/exams" element={<ExamsResults />} />
 
             {/* Charts */}

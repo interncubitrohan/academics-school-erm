@@ -14,7 +14,28 @@ const ExamsResults = () => {
 
     useEffect(() => {
         const storedExams = JSON.parse(localStorage.getItem("scheduledExams") || "[]");
-        setExams(storedExams);
+        if (storedExams.length === 0) {
+            // Seed a demo exam for the user to see
+            const demoExam = {
+                id: 1715411200000,
+                title: "Demo Mid-Term 2024",
+                type: "Term",
+                startDate: "2024-05-15",
+                endDate: "2024-05-25",
+                selectedClasses: [1, 5],
+                gradingScaleId: 1,
+                status: "Scheduled",
+                papers: [
+                    { subjectId: 101, date: "2024-05-15", time: "09:00", duration: "2", maxMarks: "100" },
+                    { subjectId: 102, date: "2024-05-17", time: "09:00", duration: "2", maxMarks: "100" }
+                ]
+            };
+            const seeded = [demoExam];
+            localStorage.setItem("scheduledExams", JSON.stringify(seeded));
+            setExams(seeded);
+        } else {
+            setExams(storedExams);
+        }
     }, []);
 
     const handleDelete = (id) => {
@@ -73,7 +94,12 @@ const ExamsResults = () => {
                                 </TableCell>
                                 <TableCell className="px-5 py-4 text-start">
                                     <div className="flex gap-2">
-                                        <button className="text-brand-500 hover:text-brand-700 text-sm font-medium">Results</button>
+                                        <Link
+                                            to="/academics/exams/marks"
+                                            className="text-brand-500 hover:text-brand-700 text-sm font-medium"
+                                        >
+                                            Enter Marks
+                                        </Link>
                                         <button
                                             onClick={() => handleDelete(exam.id)}
                                             className="text-red-500 hover:text-red-700 text-sm font-medium"
