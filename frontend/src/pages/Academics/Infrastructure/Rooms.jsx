@@ -112,9 +112,6 @@ const Rooms = () => {
                                     <TableCell isHeader className="min-w-[100px] py-4 px-4 font-medium text-black dark:text-white">
                                         Capacity
                                     </TableCell>
-                                    <TableCell isHeader className="min-w-[150px] py-4 px-4 font-medium text-black dark:text-white">
-                                        Facilities
-                                    </TableCell>
                                     <TableCell isHeader className="min-w-[100px] py-4 px-4 font-medium text-black dark:text-white">
                                         Status
                                     </TableCell>
@@ -127,7 +124,10 @@ const Rooms = () => {
                                 {filteredRooms.map((room) => (
                                     <TableRow key={room.id} className="hover:bg-gray-50 dark:hover:bg-gray-700/50">
                                         <TableCell className="border-b border-[#eee] py-5 px-4 dark:border-gray-700 xl:pl-11">
-                                            <h5 className="font-medium text-black dark:text-white">
+                                            <h5
+                                                className="font-medium text-blue-600 hover:underline cursor-pointer dark:text-blue-400"
+                                                onClick={() => handleEditRoom(room)}
+                                            >
                                                 {room.roomName}
                                             </h5>
                                             <span className="text-xs text-gray-500">ID: {room.roomNumber}</span>
@@ -155,18 +155,6 @@ const Rooms = () => {
                                         </TableCell>
                                         <TableCell className="border-b border-[#eee] py-5 px-4 dark:border-gray-700">
                                             <p className="text-black dark:text-white">{room.capacity}</p>
-                                        </TableCell>
-                                        <TableCell className="border-b border-[#eee] py-5 px-4 dark:border-gray-700">
-                                            <div className="flex flex-wrap gap-1">
-                                                {room.facilities.slice(0, 2).map((fac, idx) => (
-                                                    <span key={idx} className="text-xs bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded">
-                                                        {fac}
-                                                    </span>
-                                                ))}
-                                                {room.facilities.length > 2 && (
-                                                    <span className="text-xs text-gray-500 px-2 py-1">+{room.facilities.length - 2}</span>
-                                                )}
-                                            </div>
                                         </TableCell>
                                         <TableCell className="border-b border-[#eee] py-5 px-4 dark:border-gray-700">
                                             <Badge
@@ -197,7 +185,7 @@ const Rooms = () => {
                                 ))}
                                 {filteredRooms.length === 0 && (
                                     <TableRow>
-                                        <TableCell colSpan={7} className="border-b border-[#eee] py-5 px-4 text-center dark:border-gray-700">
+                                        <TableCell colSpan={6} className="border-b border-[#eee] py-5 px-4 text-center dark:border-gray-700">
                                             No rooms found.
                                         </TableCell>
                                     </TableRow>
