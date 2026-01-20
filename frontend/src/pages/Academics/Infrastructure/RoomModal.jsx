@@ -1,36 +1,51 @@
 import React, { useState, useEffect } from "react";
 import { Modal } from "../../../components/ui/modal";
-import Button from "../../../components/ui/button/Button"; // Assuming Button component exists or I'll use standard HTML button if not sure
-// If Button doesn't exist, I'll use standard Tailwind classes. 
-// Checking 'src/components/ui/button' would be ideal but I'll assume standard HTML for now to avoid extra round trips if simple.
-// Actually, I saw a button directory in the list_dir output earlier.
+
+const FACILITIES_OPTIONS = [
+    "Projector",
+    "Whiteboard",
+    "Smart Board",
+    "AC",
+    "Lab Equipment",
+    "Safety Shower",
+    "Computers",
+    "WiFi",
+    "Sound System",
+    "Stage",
+    "CCTV"
+];
 
 const RoomModal = ({ isOpen, onClose, onSave, room }) => {
     const [formData, setFormData] = useState({
-        name: "",
-        type: "Classroom",
+        blockName: "",
+        floorNumber: "",
+        roomNumber: "",
+        roomType: "Classroom",
         capacity: "",
-        floor: "",
-        building: "",
-        facilities: "", // Comma separated string for simplicity
-        status: "Active",
+        status: "Available",
+        facilities: [], // Array of strings
     });
 
     useEffect(() => {
         if (room) {
             setFormData({
-                ...room,
-                facilities: Array.isArray(room.facilities) ? room.facilities.join(", ") : room.facilities || "",
+                blockName: room.blockName,
+                floorNumber: room.floorNumber,
+                roomNumber: room.roomNumber,
+                roomType: room.roomType,
+                capacity: room.capacity,
+                status: room.status,
+                facilities: room.facilities || [],
             });
         } else {
             setFormData({
-                name: "",
-                type: "Classroom",
+                blockName: "",
+                floorNumber: "",
+                roomNumber: "",
+                roomType: "Classroom",
                 capacity: "",
-                floor: "",
-                building: "",
-                facilities: "",
-                status: "Active",
+                status: "Available",
+                facilities: [],
             });
         }
     }, [room, isOpen]);
@@ -40,12 +55,26 @@ const RoomModal = ({ isOpen, onClose, onSave, room }) => {
         setFormData((prev) => ({ ...prev, [name]: value }));
     };
 
+    const handleFacilityChange = (facility) => {
+        setFormData((prev) => {
+            const newFacilities = prev.facilities.includes(facility)
+                ? prev.facilities.filter((f) => f !== facility)
+                : [...prev.facilities, facility];
+            return { ...prev, facilities: newFacilities };
+        });
+    };
+
     const handleSubmit = (e) => {
         e.preventDefault();
+
+        // Generate roomName: Block-Floor-RoomNumber
+        const roomName = `${formData.blockName}-${formData.floorNumber}-${formData.roomNumber}`;
+
         const submittedData = {
             ...formData,
-            facilities: formData.facilities.split(",").map(f => f.trim()).filter(f => f),
-            capacity: Number(formData.capacity)
+            roomName,
+            capacity: Number(formData.capacity),
+            floorNumber: Number(formData.floorNumber),
         };
         onSave(submittedData);
     };
@@ -56,28 +85,61 @@ const RoomModal = ({ isOpen, onClose, onSave, room }) => {
                 {room ? "Edit Room" : "Add New Room"}
             </h3>
             <form onSubmit={handleSubmit} className="space-y-4">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {/* Location Details */}
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <div>
                         <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                            Room Name <span className="text-red-500">*</span>
+                            Block Name <span className="text-red-500">*</span>
                         </label>
                         <input
                             type="text"
-                            name="name"
-                            value={formData.name}
+                            name="blockName"
+                            value={formData.blockName}
                             onChange={handleChange}
                             required
                             className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500 dark:bg-gray-800 dark:border-gray-700 dark:text-white"
-                            placeholder="e.g. 101-A"
+                            placeholder="e.g. Science"
                         />
                     </div>
+                    <div>
+                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                            Floor Number <span className="text-red-500">*</span>
+                        </label>
+                        <input
+                            type="number"
+                            name="floorNumber"
+                            value={formData.floorNumber}
+                            onChange={handleChange}
+                            required
+                            className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500 dark:bg-gray-800 dark:border-gray-700 dark:text-white"
+                            placeholder="e.g. 1"
+                        />
+                    </div>
+                    <div>
+                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                            Room Number <span className="text-red-500">*</span>
+                        </label>
+                        <input
+                            type="text"
+                            name="roomNumber"
+                            value={formData.roomNumber}
+                            onChange={handleChange}
+                            required
+                            className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500 dark:bg-gray-800 dark:border-gray-700 dark:text-white"
+                            placeholder="e.g. 101"
+                        />
+                    </div>
+                </div>
+
+                {/* Properties */}
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <div>
                         <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                             Room Type <span className="text-red-500">*</span>
                         </label>
                         <select
-                            name="type"
-                            value={formData.type}
+                            name="roomType"
+                            value={formData.roomType}
                             onChange={handleChange}
                             className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500 dark:bg-gray-800 dark:border-gray-700 dark:text-white"
                         >
@@ -89,9 +151,6 @@ const RoomModal = ({ isOpen, onClose, onSave, room }) => {
                             <option value="Sports Room">Sports Room</option>
                         </select>
                     </div>
-                </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
                         <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                             Capacity <span className="text-red-500">*</span>
@@ -110,35 +169,6 @@ const RoomModal = ({ isOpen, onClose, onSave, room }) => {
                     </div>
                     <div>
                         <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                            Floor
-                        </label>
-                        <input
-                            type="number"
-                            name="floor"
-                            value={formData.floor}
-                            onChange={handleChange}
-                            className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500 dark:bg-gray-800 dark:border-gray-700 dark:text-white"
-                            placeholder="e.g. 1"
-                        />
-                    </div>
-                </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                            Building
-                        </label>
-                        <input
-                            type="text"
-                            name="building"
-                            value={formData.building}
-                            onChange={handleChange}
-                            className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500 dark:bg-gray-800 dark:border-gray-700 dark:text-white"
-                            placeholder="e.g. Main Block"
-                        />
-                    </div>
-                    <div>
-                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                             Status
                         </label>
                         <select
@@ -147,26 +177,31 @@ const RoomModal = ({ isOpen, onClose, onSave, room }) => {
                             onChange={handleChange}
                             className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500 dark:bg-gray-800 dark:border-gray-700 dark:text-white"
                         >
-                            <option value="Active">Active</option>
-                            <option value="Under Maintenance">Under Maintenance</option>
-                            <option value="Closed">Closed</option>
+                            <option value="Available">Available</option>
+                            <option value="Assigned">Assigned</option>
+                            <option value="Maintenance">Maintenance</option>
                         </select>
                     </div>
                 </div>
 
+                {/* Facilities Checkboxes */}
                 <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                         Facilities
                     </label>
-                    <input
-                        type="text"
-                        name="facilities"
-                        value={formData.facilities}
-                        onChange={handleChange}
-                        className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500 dark:bg-gray-800 dark:border-gray-700 dark:text-white"
-                        placeholder="e.g. Projector, AC, Smart Board"
-                    />
-                    <p className="text-xs text-gray-500 mt-1">Separate multiple facilities with commas.</p>
+                    <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
+                        {FACILITIES_OPTIONS.map((fac) => (
+                            <label key={fac} className="flex items-center space-x-2 text-sm text-gray-700 dark:text-gray-300 cursor-pointer">
+                                <input
+                                    type="checkbox"
+                                    checked={formData.facilities.includes(fac)}
+                                    onChange={() => handleFacilityChange(fac)}
+                                    className="rounded border-gray-300 text-blue-600 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800"
+                                />
+                                <span>{fac}</span>
+                            </label>
+                        ))}
+                    </div>
                 </div>
 
                 <div className="flex justify-end gap-3 mt-6">

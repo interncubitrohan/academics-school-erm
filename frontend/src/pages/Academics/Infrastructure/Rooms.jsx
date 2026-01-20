@@ -6,24 +6,18 @@ import {
     TableHeader,
     TableRow,
 } from "../../../components/ui/table";
-import Badge from "../../../components/ui/badge/Badge"; // Using Badge for Room Type if applicable, or generic text
+import Badge from "../../../components/ui/badge/Badge";
 import RoomModal from "./RoomModal";
 import PageBreadcrumb from "../../../components/common/PageBreadCrumb";
 import PageMeta from "../../../components/common/PageMeta";
-
-// Mock Data
-const initialRooms = [
-    { id: 1, name: "101-A", type: "Classroom", capacity: 40, floor: 1, building: "Main Block", status: "Active", facilities: ["Projector", "AC"] },
-    { id: 2, name: "Chemistry Lab", type: "Lab", capacity: 25, floor: 2, building: "Science Wing", status: "Under Maintenance", facilities: ["Lab Equipment", "Wash Basin"] },
-    { id: 3, name: "Main Library", type: "Library", capacity: 100, floor: 1, building: "Main Block", status: "Active", facilities: ["WiFi", "Computers"] },
-    { id: 4, name: "Auditorium", type: "Hall", capacity: 200, floor: 0, building: "Auditorium Block", status: "Active", facilities: ["Stage", "Sound System"] },
-    { id: 5, name: "102-B", type: "Classroom", capacity: 35, floor: 1, building: "Main Block", status: "Active", facilities: ["Whiteboard"] },
-];
+import { MOCK_ROOMS } from "../../../data/roomData";
 
 const Rooms = () => {
-    const [rooms, setRooms] = useState(initialRooms);
+    const [rooms, setRooms] = useState(MOCK_ROOMS);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [currentRoom, setCurrentRoom] = useState(null);
+    const [searchTerm, setSearchTerm] = useState("");
+    const [filterType, setFilterType] = useState("");
 
     const handleAddRoom = () => {
         setCurrentRoom(null);
@@ -49,10 +43,20 @@ const Rooms = () => {
             );
         } else {
             // Add
-            setRooms([...rooms, { ...roomData, id: Date.now() }]);
+            setRooms([...rooms, { ...roomData, id: `room_${Date.now()}` }]);
         }
         setIsModalOpen(false);
     };
+
+    const filteredRooms = rooms.filter((room) => {
+        const matchesSearch =
+            room.roomName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            room.roomNumber.toLowerCase().includes(searchTerm.toLowerCase());
+        const matchesType = filterType ? room.roomType === filterType : true;
+        return matchesSearch && matchesType;
+    });
+
+    const uniqueTypes = [...new Set(rooms.map((r) => r.roomType))];
 
     return (
         <>
@@ -64,30 +68,52 @@ const Rooms = () => {
 
             <div className="space-y-6">
                 <div className="rounded-sm border border-gray-200 bg-white px-5 pt-6 pb-2.5 shadow-default dark:border-gray-700 dark:bg-gray-800 sm:px-7.5 xl:pb-1">
-                    <div className="flex justify-between items-center mb-4">
+                    <div className="flex flex-col md:flex-row justify-between items-center mb-4 gap-4">
                         <h3 className="text-xl font-semibold text-black dark:text-white">Room List</h3>
-                        <button
-                            onClick={handleAddRoom}
-                            className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700"
-                        >
-                            + Add Room
-                        </button>
+                        <div className="flex gap-2 w-full md:w-auto">
+                            <input
+                                type="text"
+                                placeholder="Search by name or number..."
+                                value={searchTerm}
+                                onChange={(e) => setSearchTerm(e.target.value)}
+                                className="px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500 dark:bg-gray-800 dark:border-gray-700 dark:text-white"
+                            />
+                            <select
+                                value={filterType}
+                                onChange={(e) => setFilterType(e.target.value)}
+                                className="px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500 dark:bg-gray-800 dark:border-gray-700 dark:text-white"
+                            >
+                                <option value="">All Types</option>
+                                {uniqueTypes.map(type => (
+                                    <option key={type} value={type}>{type}</option>
+                                ))}
+                            </select>
+                            <button
+                                onClick={handleAddRoom}
+                                className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 whitespace-nowrap"
+                            >
+                                + Add Room
+                            </button>
+                        </div>
                     </div>
                     <div className="max-w-full overflow-x-auto">
                         <Table>
                             <TableHeader>
                                 <TableRow className="bg-gray-50 dark:bg-gray-700 text-left">
-                                    <TableCell isHeader className="min-w-[120px] py-4 px-4 font-medium text-black dark:text-white xl:pl-11">
+                                    <TableCell isHeader className="min-w-[150px] py-4 px-4 font-medium text-black dark:text-white xl:pl-11">
                                         Room Name
                                     </TableCell>
                                     <TableCell isHeader className="min-w-[120px] py-4 px-4 font-medium text-black dark:text-white">
                                         Type
                                     </TableCell>
+                                    <TableCell isHeader className="min-w-[150px] py-4 px-4 font-medium text-black dark:text-white">
+                                        Location
+                                    </TableCell>
                                     <TableCell isHeader className="min-w-[100px] py-4 px-4 font-medium text-black dark:text-white">
                                         Capacity
                                     </TableCell>
                                     <TableCell isHeader className="min-w-[150px] py-4 px-4 font-medium text-black dark:text-white">
-                                        Building / Floor
+                                        Facilities
                                     </TableCell>
                                     <TableCell isHeader className="min-w-[100px] py-4 px-4 font-medium text-black dark:text-white">
                                         Status
@@ -98,44 +124,58 @@ const Rooms = () => {
                                 </TableRow>
                             </TableHeader>
                             <TableBody>
-                                {rooms.map((room) => (
+                                {filteredRooms.map((room) => (
                                     <TableRow key={room.id} className="hover:bg-gray-50 dark:hover:bg-gray-700/50">
                                         <TableCell className="border-b border-[#eee] py-5 px-4 dark:border-gray-700 xl:pl-11">
                                             <h5 className="font-medium text-black dark:text-white">
-                                                {room.name}
+                                                {room.roomName}
                                             </h5>
+                                            <span className="text-xs text-gray-500">ID: {room.roomNumber}</span>
                                         </TableCell>
                                         <TableCell className="border-b border-[#eee] py-5 px-4 dark:border-gray-700">
                                             <Badge
                                                 size="sm"
                                                 color={
-                                                    room.type === "Classroom"
+                                                    room.roomType === "Classroom"
                                                         ? "success"
-                                                        : room.type === "Lab"
+                                                        : room.roomType === "Lab"
                                                             ? "warning"
-                                                            : room.type === "Library"
+                                                            : room.roomType === "Library"
                                                                 ? "info"
                                                                 : "error"
                                                 }
                                             >
-                                                {room.type}
+                                                {room.roomType}
                                             </Badge>
+                                        </TableCell>
+                                        <TableCell className="border-b border-[#eee] py-5 px-4 dark:border-gray-700">
+                                            <p className="text-black dark:text-white">
+                                                {room.blockName} <span className="text-sm text-gray-500">(Floor {room.floorNumber})</span>
+                                            </p>
                                         </TableCell>
                                         <TableCell className="border-b border-[#eee] py-5 px-4 dark:border-gray-700">
                                             <p className="text-black dark:text-white">{room.capacity}</p>
                                         </TableCell>
                                         <TableCell className="border-b border-[#eee] py-5 px-4 dark:border-gray-700">
-                                            <p className="text-black dark:text-white">
-                                                {room.building} <span className="text-sm text-gray-500">({room.floor})</span>
-                                            </p>
+                                            <div className="flex flex-wrap gap-1">
+                                                {room.facilities.slice(0, 2).map((fac, idx) => (
+                                                    <span key={idx} className="text-xs bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded">
+                                                        {fac}
+                                                    </span>
+                                                ))}
+                                                {room.facilities.length > 2 && (
+                                                    <span className="text-xs text-gray-500 px-2 py-1">+{room.facilities.length - 2}</span>
+                                                )}
+                                            </div>
                                         </TableCell>
                                         <TableCell className="border-b border-[#eee] py-5 px-4 dark:border-gray-700">
                                             <Badge
                                                 size="sm"
-                                                color={room.status === "Active" ? "success" : "error"}
+                                                color={room.status === "Available" ? "success" : "warning"}
                                             >
                                                 {room.status}
                                             </Badge>
+                                            {room.assignedClass && <div className="text-xs text-gray-500 mt-1">Class: {room.assignedClass}</div>}
                                         </TableCell>
                                         <TableCell className="border-b border-[#eee] py-5 px-4 dark:border-gray-700">
                                             <div className="flex items-center space-x-3.5">
@@ -155,9 +195,9 @@ const Rooms = () => {
                                         </TableCell>
                                     </TableRow>
                                 ))}
-                                {rooms.length === 0 && (
+                                {filteredRooms.length === 0 && (
                                     <TableRow>
-                                        <TableCell colSpan={6} className="border-b border-[#eee] py-5 px-4 text-center dark:border-gray-700">
+                                        <TableCell colSpan={7} className="border-b border-[#eee] py-5 px-4 text-center dark:border-gray-700">
                                             No rooms found.
                                         </TableCell>
                                     </TableRow>
