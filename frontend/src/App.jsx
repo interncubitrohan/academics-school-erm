@@ -8,6 +8,7 @@ import Academics from "./pages/Academics/Academics";
 import Rooms from "./pages/Academics/Infrastructure/Rooms";
 import Subjects from "./pages/Academics/Infrastructure/Subjects";
 import GradingSystems from "./pages/Academics/Infrastructure/GradingSystems";
+import SubjectTypes from "./pages/Academics/Infrastructure/SubjectTypes";
 import ClassConfiguration from "./pages/Academics/ClassConfiguration/ClassConfiguration";
 import ClassDetails from "./pages/Academics/ClassConfiguration/ClassDetails";
 import ExamScheduler from "./pages/Academics/Exams/ExamScheduler";
@@ -33,6 +34,7 @@ export default function App() {
                         <Route path="/academics/infrastructure/rooms" element={<Rooms />} />
                         <Route path="/academics/infrastructure/subjects" element={<Subjects />} />
                         <Route path="/academics/infrastructure/grading" element={<GradingSystems />} />
+                        <Route path="/academics/infrastructure/subject-types" element={<SubjectTypes />} />
                         <Route path="/academics/class-configuration" element={<ClassConfiguration />} />
                         <Route path="/academics/classes/:classId" element={<ClassDetails />} />
                         <Route path="/academics/exams/schedule" element={<ExamScheduler />} />

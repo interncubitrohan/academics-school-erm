@@ -24,6 +24,7 @@ const navItems = [
             { name: "Overview", path: "/academics", pro: false },
             { name: "Rooms", path: "/academics/infrastructure/rooms", pro: false },
             { name: "Subjects", path: "/academics/infrastructure/subjects", pro: false },
+            { name: "Subject Types", path: "/academics/infrastructure/subject-types", pro: false },
             { name: "Grading", path: "/academics/infrastructure/grading", pro: false },
             { name: "Calss Config", path: "/academics/class-configuration", pro: false },
             { name: "Exams", path: "/academics/exams", pro: false },
