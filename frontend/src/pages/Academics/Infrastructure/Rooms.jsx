@@ -1,13 +1,7 @@
 import React, { useState } from "react";
-import {
-    Table,
-    TableBody,
-    TableCell,
-    TableHeader,
-    TableRow,
-} from "../../../components/ui/table";
-import Badge from "../../../components/ui/badge/Badge";
+
 import RoomModal from "./RoomModal";
+import RoomList from "./RoomList";
 import PageBreadcrumb from "../../../components/common/PageBreadCrumb";
 import PageMeta from "../../../components/common/PageMeta";
 import { MOCK_ROOMS } from "../../../data/roomData";
@@ -39,11 +33,11 @@ const Rooms = () => {
         if (currentRoom) {
             // Edit
             setRooms(
-                rooms.map((r) => (r.id === currentRoom.id ? { ...roomData, id: r.id } : r))
+                rooms.map((r) => (r.id === currentRoom.id ? { ...r, ...roomData } : r))
             );
         } else {
             // Add
-            setRooms([...rooms, { ...roomData, id: `room_${Date.now()}` }]);
+            setRooms([...rooms, { assignedClass: null, ...roomData, id: `room_${Date.now()}` }]);
         }
         setIsModalOpen(false);
     };
@@ -96,103 +90,12 @@ const Rooms = () => {
                             </button>
                         </div>
                     </div>
-                    <div className="max-w-full overflow-x-auto">
-                        <Table>
-                            <TableHeader>
-                                <TableRow className="bg-gray-50 dark:bg-gray-700 text-left">
-                                    <TableCell isHeader className="min-w-[150px] py-4 px-4 font-medium text-black dark:text-white xl:pl-11">
-                                        Room Name
-                                    </TableCell>
-                                    <TableCell isHeader className="min-w-[120px] py-4 px-4 font-medium text-black dark:text-white">
-                                        Type
-                                    </TableCell>
-                                    <TableCell isHeader className="min-w-[150px] py-4 px-4 font-medium text-black dark:text-white">
-                                        Location
-                                    </TableCell>
-                                    <TableCell isHeader className="min-w-[100px] py-4 px-4 font-medium text-black dark:text-white">
-                                        Capacity
-                                    </TableCell>
-                                    <TableCell isHeader className="min-w-[100px] py-4 px-4 font-medium text-black dark:text-white">
-                                        Status
-                                    </TableCell>
-                                    <TableCell isHeader className="py-4 px-4 font-medium text-black dark:text-white">
-                                        Actions
-                                    </TableCell>
-                                </TableRow>
-                            </TableHeader>
-                            <TableBody>
-                                {filteredRooms.map((room) => (
-                                    <TableRow key={room.id} className="hover:bg-gray-50 dark:hover:bg-gray-700/50">
-                                        <TableCell className="border-b border-[#eee] py-5 px-4 dark:border-gray-700 xl:pl-11">
-                                            <h5
-                                                className="font-medium text-blue-600 hover:underline cursor-pointer dark:text-blue-400"
-                                                onClick={() => handleEditRoom(room)}
-                                            >
-                                                {room.roomName}
-                                            </h5>
-                                            <span className="text-xs text-gray-500">ID: {room.roomNumber}</span>
-                                        </TableCell>
-                                        <TableCell className="border-b border-[#eee] py-5 px-4 dark:border-gray-700">
-                                            <Badge
-                                                size="sm"
-                                                color={
-                                                    room.roomType === "Classroom"
-                                                        ? "success"
-                                                        : room.roomType === "Lab"
-                                                            ? "warning"
-                                                            : room.roomType === "Library"
-                                                                ? "info"
-                                                                : "error"
-                                                }
-                                            >
-                                                {room.roomType}
-                                            </Badge>
-                                        </TableCell>
-                                        <TableCell className="border-b border-[#eee] py-5 px-4 dark:border-gray-700">
-                                            <p className="text-black dark:text-white">
-                                                {room.blockName} <span className="text-sm text-gray-500">(Floor {room.floorNumber})</span>
-                                            </p>
-                                        </TableCell>
-                                        <TableCell className="border-b border-[#eee] py-5 px-4 dark:border-gray-700">
-                                            <p className="text-black dark:text-white">{room.capacity}</p>
-                                        </TableCell>
-                                        <TableCell className="border-b border-[#eee] py-5 px-4 dark:border-gray-700">
-                                            <Badge
-                                                size="sm"
-                                                color={room.status === "Available" ? "success" : "warning"}
-                                            >
-                                                {room.status}
-                                            </Badge>
-                                            {room.assignedClass && <div className="text-xs text-gray-500 mt-1">Class: {room.assignedClass}</div>}
-                                        </TableCell>
-                                        <TableCell className="border-b border-[#eee] py-5 px-4 dark:border-gray-700">
-                                            <div className="flex items-center space-x-3.5">
-                                                <button
-                                                    onClick={() => handleEditRoom(room)}
-                                                    className="hover:text-primary"
-                                                >
-                                                    Edit
-                                                </button>
-                                                <button
-                                                    onClick={() => handleDeleteRoom(room.id)}
-                                                    className="hover:text-red-500"
-                                                >
-                                                    Delete
-                                                </button>
-                                            </div>
-                                        </TableCell>
-                                    </TableRow>
-                                ))}
-                                {filteredRooms.length === 0 && (
-                                    <TableRow>
-                                        <TableCell colSpan={6} className="border-b border-[#eee] py-5 px-4 text-center dark:border-gray-700">
-                                            No rooms found.
-                                        </TableCell>
-                                    </TableRow>
-                                )}
-                            </TableBody>
-                        </Table>
-                    </div>
+
+                    <RoomList
+                        rooms={filteredRooms}
+                        onEdit={handleEditRoom}
+                        onDelete={handleDeleteRoom}
+                    />
                 </div>
             </div>
 
