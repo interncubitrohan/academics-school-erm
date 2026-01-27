@@ -3,37 +3,25 @@ import PageBreadcrumb from "../../../components/common/PageBreadCrumb";
 import PageMeta from "../../../components/common/PageMeta";
 import ClassList from "./ClassList";
 import ClassForm from "./ClassForm";
+import ClassCreateWizard from "./ClassCreateWizard";
+import { MOCK_CLASSES } from "../../../data/classData";
+import { MOCK_TEACHERS } from "../../../data/teacherData";
+import { MOCK_ROOMS } from "../../../data/roomData";
 
-// Mock Data
-const initialClasses = [
-    { id: 1, name: "Class 1-A", grade: "1", section: "A", board: "CBSE", teacher: "Sarah Williams", room: "Room 101" },
-    { id: 2, name: "Class 2-B", grade: "2", section: "B", board: "CBSE", teacher: "John Smith", room: "Room 102" },
-    { id: 3, name: "Class 10-C", grade: "10", section: "C", board: "IGCSE", teacher: "Emily Davis", room: "Lab 3" },
-];
-
-const mockTeachers = [
-    { id: 1, name: "Sarah Williams" },
-    { id: 2, name: "John Smith" },
-    { id: 3, name: "Emily Davis" },
-    { id: 4, name: "Michael Brown" },
-];
-
-const mockRooms = [
-    { id: 1, name: "Room 101" },
-    { id: 2, name: "Room 102" },
-    { id: 3, name: "Room 103" },
-    { id: 4, name: "Lab 1" },
-    { id: 5, name: "Lab 2" },
-    { id: 6, name: "Lab 3" },
-];
+import { useNavigate } from "react-router";
 
 const ClassConfiguration = () => {
+    const navigate = useNavigate();
     const [view, setView] = useState("list"); // list, create, edit
-    const [classes, setClasses] = useState(initialClasses);
+    const [classes, setClasses] = useState(MOCK_CLASSES);
     const [currentClass, setCurrentClass] = useState(null);
+    const [teachers, setTeachers] = useState(MOCK_TEACHERS);
+    const [rooms, setRooms] = useState(MOCK_ROOMS);
+    const [wizardKey, setWizardKey] = useState(0);
 
     const handleCreate = () => {
         setCurrentClass(null);
+        setWizardKey(prev => prev + 1); // Reset wizard state
         setView("create");
     };
 
@@ -48,19 +36,62 @@ const ClassConfiguration = () => {
         }
     };
 
-    const handleSave = (classData) => {
+    const handleSave = (classData, action = 'create') => {
+        let updatedClasses;
+        const isNew = !currentClass;
+        // Ensure ID exists for new classes
+        const savedClass = {
+            ...classData,
+            id: classData.id || `cls_${Date.now()}`
+        };
+
         if (currentClass) {
             // Update existing
-            setClasses(
-                classes.map((c) =>
-                    c.id === currentClass.id ? { ...classData, id: c.id } : c
-                )
+            updatedClasses = classes.map((c) =>
+                c.id === currentClass.id ? savedClass : c
             );
         } else {
             // Create new
-            setClasses([...classes, { ...classData, id: Date.now() }]);
+            updatedClasses = [...classes, savedClass];
         }
-        setView("list");
+
+        setClasses(updatedClasses);
+
+        // Update teacher assignments
+        if (classData.classTeacher) {
+            setTeachers(teachers.map(t =>
+                t.id === classData.classTeacher.id
+                    ? { ...t, isClassTeacher: true, assignedClass: savedClass.id }
+                    : t
+            ));
+        }
+
+        // Update room assignments
+        if (classData.room) {
+            setRooms(rooms.map(r =>
+                r.id === classData.room.id
+                    ? { ...r, status: "Assigned", assignedClass: savedClass.className }
+                    : r
+            ));
+        }
+
+        // Handle navigation based on action
+        switch (action) {
+            case 'create_another':
+                // Stay in create mode, reset wizard
+                setWizardKey(prev => prev + 1);
+                break;
+            case 'configure':
+                // Navigate to details page
+                navigate(`/academics/classes/${savedClass.id}`);
+                break;
+            case 'draft':
+            case 'create':
+            default:
+                // Return to list
+                setView("list");
+                break;
+        }
     };
 
     const handleCancel = () => {
@@ -83,13 +114,23 @@ const ClassConfiguration = () => {
                     onEdit={handleEdit}
                     onDelete={handleDelete}
                 />
+            ) : view === "create" ? (
+                <ClassCreateWizard
+                    key={wizardKey}
+                    onSave={handleSave}
+                    onCancel={handleCancel}
+                    teachers={teachers}
+                    rooms={rooms}
+                    existingClasses={classes}
+                />
             ) : (
                 <ClassForm
                     onSave={handleSave}
                     onCancel={handleCancel}
                     initialData={currentClass}
-                    teachers={mockTeachers}
-                    rooms={mockRooms}
+                    teachers={teachers}
+                    rooms={rooms}
+                    existingClasses={classes}
                 />
             )}
         </>
