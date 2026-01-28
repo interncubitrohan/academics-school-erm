@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Link } from "react-router";
 import {
     Table,
     TableBody,
@@ -101,12 +102,20 @@ const CurriculumTab = ({ initialSubjects = [] }) => {
         <div className="space-y-4">
             <div className="flex justify-between items-center">
                 <h3 className="text-lg font-bold text-gray-800 dark:text-white">Subject Mapping</h3>
-                <button
-                    onClick={() => handleOpenModal()}
-                    className="px-4 py-2 text-sm font-medium text-white bg-brand-600 rounded-lg hover:bg-brand-700"
-                >
-                    + Add Subject
-                </button>
+                <div className="flex gap-2">
+                    <Link
+                        to={`/academics/classes/1/mapping`} // Hardcoded ID 1 for now as CurriculumTab doesn't have classId prop easily available without context, but parent ClassDetails has mockClassDetails.id=1. 
+                        className="px-4 py-2 text-sm font-medium text-brand-600 bg-brand-50 border border-brand-200 rounded-lg hover:bg-brand-100"
+                    >
+                        Configure Wizard
+                    </Link>
+                    <button
+                        onClick={() => handleOpenModal()}
+                        className="px-4 py-2 text-sm font-medium text-white bg-brand-600 rounded-lg hover:bg-brand-700"
+                    >
+                        + Add Subject
+                    </button>
+                </div>
             </div>
             <div className="rounded-sm border border-gray-200 bg-white px-5 pt-6 pb-2.5 shadow-default dark:border-gray-700 dark:bg-gray-800 sm:px-7.5 xl:pb-1">
                 <div className="max-w-full overflow-x-auto">
