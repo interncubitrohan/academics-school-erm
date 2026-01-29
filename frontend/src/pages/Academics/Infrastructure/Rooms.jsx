@@ -6,7 +6,11 @@ import PageBreadcrumb from "../../../components/common/PageBreadCrumb";
 import PageMeta from "../../../components/common/PageMeta";
 import { MOCK_ROOMS } from "../../../data/roomData";
 
+import Button from "../../../components/ui/button/Button";
+
 const Rooms = () => {
+    // ... maintain existing state ...
+
     const [rooms, setRooms] = useState(MOCK_ROOMS);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [currentRoom, setCurrentRoom] = useState(null);
@@ -63,7 +67,7 @@ const Rooms = () => {
             <div className="space-y-6">
                 <div className="rounded-sm border border-gray-200 bg-white px-5 pt-6 pb-2.5 shadow-default dark:border-gray-700 dark:bg-gray-800 sm:px-7.5 xl:pb-1">
                     <div className="flex flex-col md:flex-row justify-between items-center mb-4 gap-4">
-                        <h3 className="text-xl font-semibold text-black dark:text-white">Room List</h3>
+                        <h3 className="text-xl font-semibold text-gray-800 dark:text-white">Room List</h3>
                         <div className="flex gap-2 w-full md:w-auto">
                             <input
                                 type="text"
@@ -82,12 +86,12 @@ const Rooms = () => {
                                     <option key={type} value={type}>{type}</option>
                                 ))}
                             </select>
-                            <button
+                            <Button
                                 onClick={handleAddRoom}
-                                className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 whitespace-nowrap"
+                                startIcon={<span className="text-lg leading-none">+</span>}
                             >
-                                + Add Room
-                            </button>
+                                Add Room
+                            </Button>
                         </div>
                     </div>
 

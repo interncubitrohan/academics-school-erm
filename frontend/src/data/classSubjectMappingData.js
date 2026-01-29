@@ -26,7 +26,7 @@ export const MOCK_CLASS_SUBJECT_MAPPINGS = [
     {
         id: "map_2025_10A", // Unique Mapping ID
         academicYear: "2025-2026",
-        classId: "class_10_A", // References a Class Master ID
+        classId: "cls_001", // References Class Master ID (Class 10-A)
         className: "Class 10-A", // Denormalized for convenience
         termStructure: "Annual", // Annual, Semester, Trimester
 

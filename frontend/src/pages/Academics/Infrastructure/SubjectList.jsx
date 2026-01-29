@@ -14,9 +14,11 @@ import SubjectForm from "./SubjectForm";
 import ViewSubject from "./ViewSubject";
 import BulkUploadSubjects from "./BulkUploadSubjects";
 import { MOCK_SUBJECTS } from "../../../data/subjectData";
+import Button from "../../../components/ui/button/Button";
 
 // Mock Data for "In Use" subjects (e.g. mapped to classes)
 const MOCKED_MAPPED_SUBJECT_IDS = ["sub_1", "sub_2", "sub_3"];
+
 
 const SubjectList = () => {
     const [subjects, setSubjects] = useState(MOCK_SUBJECTS);
@@ -161,19 +163,21 @@ const SubjectList = () => {
                             </div>
 
                             <div className="flex gap-2 w-full sm:w-auto">
-                                <button
+                                <Button
+                                    variant="outline"
                                     onClick={() => setIsBulkUploadOpen(true)}
-                                    className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 flex items-center justify-center gap-2 dark:bg-gray-800 dark:text-gray-200 dark:border-gray-700"
+                                    startIcon={
+                                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" /></svg>
+                                    }
                                 >
-                                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" /></svg>
                                     Bulk Upload
-                                </button>
-                                <button
+                                </Button>
+                                <Button
                                     onClick={handleAddSubject}
-                                    className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 flex items-center justify-center gap-2 flex-1 sm:flex-none"
+                                    startIcon={<span className="text-lg leading-none">+</span>}
                                 >
-                                    + Add Subject
-                                </button>
+                                    Add Subject
+                                </Button>
                             </div>
                         </div>
 

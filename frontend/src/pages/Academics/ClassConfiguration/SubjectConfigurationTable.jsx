@@ -34,7 +34,7 @@ const SubjectConfigurationTable = ({ subjects, setSubjects, errors = {} }) => {
     return (
         <div className="space-y-4">
             <div className="flex flex-col gap-1">
-                <h3 className="text-lg font-bold text-gray-800 dark:text-white">
+                <h3 className="text-xl font-semibold text-gray-800 dark:text-white">
                     Step 3: Define Rules & Configuration
                 </h3>
                 <p className="text-sm text-gray-500 dark:text-gray-400">

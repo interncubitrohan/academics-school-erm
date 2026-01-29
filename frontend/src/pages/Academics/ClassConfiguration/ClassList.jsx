@@ -132,7 +132,7 @@ const ClassList = ({ classes, onEdit, onDelete, onCreate }) => {
                                                 </svg>
                                             </button>
                                             <Link
-                                                to={`/academics/classes/${cls.id}/curriculum`}
+                                                to={`/academics/classes/${cls.id}/mapping`}
                                                 className="hover:text-primary"
                                                 title="Configure Subjects"
                                             >

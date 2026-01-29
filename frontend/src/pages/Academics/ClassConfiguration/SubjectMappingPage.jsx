@@ -3,6 +3,7 @@ import { useNavigate, useParams } from "react-router";
 import PageMeta from "../../../components/common/PageMeta";
 import PageBreadcrumb from "../../../components/common/PageBreadCrumb";
 import Badge from "../../../components/ui/badge/Badge";
+import Button from "../../../components/ui/button/Button";
 
 // Steps Components
 import StepTermStructure from "./StepTermStructure";
@@ -11,15 +12,7 @@ import SubjectConfigurationTable from "./SubjectConfigurationTable";
 
 // Data
 import { MOCK_SUBJECTS } from "../../../data/subjectData";
-
-// Mock Data for the Header
-const MOCK_CLASS_SUMMARY = {
-    className: "Class 10-A",
-    academicYear: "2025-2026",
-    board: "CBSE",
-    studentCount: 42,
-    classTeacher: "Sarah Williams"
-};
+import { MOCK_CLASSES } from "../../../data/classData";
 
 const STEPS = [
     { number: 1, title: "Configuration" },
@@ -32,6 +25,26 @@ const SubjectMappingPage = () => {
     const navigate = useNavigate();
     const { classId } = useParams();
     const [currentStep, setCurrentStep] = useState(1);
+
+    // Derived State for Header
+    // Fallback to first class or valid empty structure to prevent crashes
+    const [classSummary, setClassSummary] = useState(MOCK_CLASSES?.[0] || {
+        name: "Loading...",
+        academicYear: "...",
+        board: "...",
+        studentCount: 0,
+        classTeacher: "..."
+    });
+
+    useEffect(() => {
+        if (classId) {
+            // Updated to handle string IDs from centralized mock data
+            const foundClass = MOCK_CLASSES.find(c => c.id === classId || c.id === parseInt(classId));
+            if (foundClass) {
+                setClassSummary(foundClass);
+            }
+        }
+    }, [classId]);
 
     // State Management
     const [termStructure, setTermStructure] = useState("Annual"); // Default
@@ -46,6 +59,24 @@ const SubjectMappingPage = () => {
             if (existing) return existing;
 
             const master = MOCK_SUBJECTS.find(s => s.id === id);
+            if (!master) {
+                // Return a safe fallback to prevent crashes
+                return {
+                    id: id,
+                    subjectName: "Unknown Subject",
+                    subjectCode: "ERR",
+                    subjectType: "Theory",
+                    displayOrder: index + 1,
+                    isOptional: false,
+                    maxTheoryMarks: 0,
+                    maxPracticalMarks: 0,
+                    maxIAMarks: 0,
+                    passMarks: 0,
+                    totalMaxMarks: 0,
+                    teachingHoursPerWeek: 0
+                };
+            }
+
             return {
                 ...master,
                 displayOrder: index + 1,
@@ -153,7 +184,7 @@ const SubjectMappingPage = () => {
 
         console.log("Saving Mapping...", {
             classId,
-            academicYear: MOCK_CLASS_SUMMARY.academicYear,
+            academicYear: classSummary.academicYear,
             termStructure,
             subjects: configuredSubjects
         });
@@ -171,7 +202,7 @@ const SubjectMappingPage = () => {
             case 1:
                 return (
                     <StepTermStructure
-                        academicYear={MOCK_CLASS_SUMMARY.academicYear}
+                        academicYear={classSummary.academicYear}
                         termStructure={termStructure}
                         setTermStructure={setTermStructure}
                     />
@@ -199,7 +230,7 @@ const SubjectMappingPage = () => {
                         </div>
                         <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">Ready to Save Configuration</h3>
                         <p className="text-gray-500 max-w-md">
-                            You have configured <strong>{configuredSubjects.length} subjects</strong> for {MOCK_CLASS_SUMMARY.className}.
+                            You have configured <strong>{configuredSubjects.length} subjects</strong> for {classSummary.name}.
                             Review your settings one last time before finalizing.
                         </p>
 
@@ -241,26 +272,26 @@ const SubjectMappingPage = () => {
                         <div>
                             <div className="flex items-center gap-3 mb-1">
                                 <h2 className="text-2xl font-bold text-gray-800 dark:text-white">
-                                    {MOCK_CLASS_SUMMARY.className}
+                                    {classSummary.name}
                                 </h2>
                                 <Badge color="success" size="sm">Active</Badge>
                             </div>
                             <div className="flex flex-wrap items-center gap-x-6 gap-y-2 text-sm text-gray-500 dark:text-gray-400">
                                 <div className="flex items-center gap-2">
                                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
-                                    <span className="font-medium">Year:</span> {MOCK_CLASS_SUMMARY.academicYear}
+                                    <span className="font-medium">Year:</span> {classSummary.academicYear}
                                 </div>
                                 <div className="flex items-center gap-2">
                                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" /></svg>
-                                    <span className="font-medium">Board:</span> {MOCK_CLASS_SUMMARY.board}
+                                    <span className="font-medium">Board:</span> {classSummary.board}
                                 </div>
                                 <div className="flex items-center gap-2">
                                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" /></svg>
-                                    <span className="font-medium">Students:</span> {MOCK_CLASS_SUMMARY.studentCount}
+                                    <span className="font-medium">Students:</span> {classSummary.studentCount}
                                 </div>
                                 <div className="flex items-center gap-2">
                                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>
-                                    <span className="font-medium">Class Teacher:</span> {MOCK_CLASS_SUMMARY.classTeacher}
+                                    <span className="font-medium">Class Teacher:</span> {classSummary.classTeacher?.name || classSummary.classTeacher || "Unassigned"}
                                 </div>
                             </div>
                         </div>
@@ -313,24 +344,21 @@ const SubjectMappingPage = () => {
                     <div className="flex items-center justify-between border-t border-gray-200 bg-gray-50 p-4 dark:border-gray-700 dark:bg-gray-800/50 rounded-b-xl">
                         {/* LEFT ACTIONS */}
                         <div className="flex gap-2">
-                            <button
+                            <Button
+                                variant="outline"
                                 onClick={handleBack}
                                 disabled={currentStep === 1}
-                                className={`px-6 py-2.5 text-sm font-medium border rounded-lg transition-colors ${currentStep === 1
-                                    ? "text-gray-400 bg-gray-100 border-gray-200 cursor-not-allowed dark:bg-gray-800 dark:border-gray-700 dark:text-gray-600"
-                                    : "text-gray-700 bg-white border-gray-300 hover:bg-gray-50 dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 dark:hover:bg-gray-700"
-                                    }`}
                             >
                                 Back
-                            </button>
+                            </Button>
 
                             {currentStep >= 2 && (
-                                <button
+                                <Button
+                                    variant="danger"
                                     onClick={handleClearAll}
-                                    className="px-4 py-2.5 text-sm font-medium text-red-600 bg-red-50 border border-red-200 rounded-lg hover:bg-red-100 dark:bg-red-900/20 dark:border-red-800 dark:text-red-400"
                                 >
                                     Clear All
-                                </button>
+                                </Button>
                             )}
                         </div>
 
@@ -338,34 +366,27 @@ const SubjectMappingPage = () => {
                         <div className="flex gap-3">
                             {currentStep === STEPS.length ? (
                                 <>
-                                    <button
+                                    <Button
+                                        variant="outline"
                                         onClick={() => handleSave(false)}
                                         disabled={!isFormValid}
-                                        className={`px-6 py-2.5 text-sm font-medium border rounded-lg transition-all ${!isFormValid
-                                            ? "bg-gray-100 text-gray-400 border-gray-200 cursor-not-allowed dark:bg-gray-800 dark:border-gray-700 dark:text-gray-600"
-                                            : "text-gray-700 bg-white border-gray-300 hover:bg-gray-50 dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600"
-                                            }`}
                                     >
                                         Save Draft
-                                    </button>
-                                    <button
+                                    </Button>
+                                    <Button
+                                        variant="success"
                                         onClick={() => handleSave(true)}
                                         disabled={!isFormValid}
-                                        className={`px-6 py-2.5 text-sm font-medium text-white rounded-lg shadow-md transition-all ${!isFormValid
-                                            ? "bg-green-300 cursor-not-allowed dark:bg-green-800/50"
-                                            : "bg-green-600 hover:bg-green-700 hover:shadow-lg"
-                                            }`}
                                     >
                                         Save & Proceed
-                                    </button>
+                                    </Button>
                                 </>
                             ) : (
-                                <button
+                                <Button
                                     onClick={handleNext}
-                                    className="px-6 py-2.5 text-sm font-medium text-white bg-brand-600 rounded-lg hover:bg-brand-700 shadow-md hover:shadow-lg transition-all"
                                 >
                                     Next Step
-                                </button>
+                                </Button>
                             )}
                         </div>
                     </div>
