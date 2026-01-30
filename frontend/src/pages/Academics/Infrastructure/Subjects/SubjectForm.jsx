@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from "react";
-import { Modal } from "../../../components/ui/modal";
+﻿import React, { useState, useEffect } from "react";
+import { Modal } from "../../../../components/ui/modal";
 import { FiTrash } from "react-icons/fi";
-import BoardSelector from "../../../components/common/BoardSelector";
-import Button from "../../../components/ui/button/Button";
-import { MOCK_SUBJECTS } from "../../../data/subjectData";
+import BoardSelector from "../../../../components/common/BoardSelector";
+import Button from "../../../../components/ui/button/Button";
+import { MOCK_SUBJECTS } from "../../../../data/subjectData";
 
 const SubjectForm = ({ isOpen, onClose, onSave, subject }) => {
     const defaultState = {
@@ -509,3 +509,4 @@ const SubjectForm = ({ isOpen, onClose, onSave, subject }) => {
 };
 
 export default SubjectForm;
+

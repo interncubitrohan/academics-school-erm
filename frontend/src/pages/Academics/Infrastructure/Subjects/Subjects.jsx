@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import SubjectList from './SubjectList';
 
 const Subjects = () => {
@@ -8,3 +8,4 @@ const Subjects = () => {
 };
 
 export default Subjects;
+

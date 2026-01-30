@@ -1,12 +1,12 @@
-import React from "react";
+﻿import React from "react";
 import {
     Table,
     TableBody,
     TableCell,
     TableHeader,
     TableRow,
-} from "../../../components/ui/table";
-import Badge from "../../../components/ui/badge/Badge";
+} from "../../../../components/ui/table";
+import Badge from "../../../../components/ui/badge/Badge";
 
 const GradingScaleList = ({ scales, onEdit, onDelete, onCreate, onDuplicate, onView }) => {
     return (
@@ -201,3 +201,4 @@ const GradingScaleList = ({ scales, onEdit, onDelete, onCreate, onDuplicate, onV
 };
 
 export default GradingScaleList;
+

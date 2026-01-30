@@ -1,6 +1,6 @@
-import React, { useState } from "react";
-import PageBreadcrumb from "../../../components/common/PageBreadCrumb";
-import PageMeta from "../../../components/common/PageMeta";
+﻿import React, { useState } from "react";
+import PageBreadcrumb from "../../../../components/common/PageBreadCrumb";
+import PageMeta from "../../../../components/common/PageMeta";
 import SubjectTypeList from "./SubjectTypeList";
 import SubjectTypeModal from "./SubjectTypeModal";
 import ViewSubjectTypeModal from "./ViewSubjectTypeModal";
@@ -228,3 +228,4 @@ const SubjectTypes = () => {
 };
 
 export default SubjectTypes;
+

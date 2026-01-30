@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+﻿import React, { useState, useEffect } from "react";
 import { FiPlus, FiTrash2, FiAlertCircle } from "react-icons/fi";
 
 const GradeBandBuilder = ({ bands, onChange }) => {
@@ -176,3 +176,4 @@ const GradeBandBuilder = ({ bands, onChange }) => {
 };
 
 export default GradeBandBuilder;
+

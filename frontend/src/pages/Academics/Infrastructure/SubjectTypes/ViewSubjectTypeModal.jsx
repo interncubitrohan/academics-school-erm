@@ -1,6 +1,6 @@
-import React from "react";
-import { Modal } from "../../../components/ui/modal";
-import Badge from "../../../components/ui/badge/Badge";
+﻿import React from "react";
+import { Modal } from "../../../../components/ui/modal";
+import Badge from "../../../../components/ui/badge/Badge";
 import { FiCheck, FiX, FiStar } from "react-icons/fi";
 
 const ViewSubjectTypeModal = ({ isOpen, onClose, subjectType }) => {
@@ -98,3 +98,4 @@ const ViewSubjectTypeModal = ({ isOpen, onClose, subjectType }) => {
 };
 
 export default ViewSubjectTypeModal;
+

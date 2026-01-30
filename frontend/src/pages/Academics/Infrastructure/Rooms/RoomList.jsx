@@ -1,12 +1,12 @@
-import React from "react";
+﻿import React from "react";
 import {
     Table,
     TableBody,
     TableCell,
     TableHeader,
     TableRow,
-} from "../../../components/ui/table";
-import Badge from "../../../components/ui/badge/Badge";
+} from "../../../../components/ui/table";
+import Badge from "../../../../components/ui/badge/Badge";
 
 const RoomList = ({ rooms, onEdit, onDelete }) => {
     return (
@@ -140,3 +140,4 @@ const RoomList = ({ rooms, onEdit, onDelete }) => {
 };
 
 export default RoomList;
+

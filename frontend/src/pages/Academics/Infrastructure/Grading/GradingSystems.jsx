@@ -1,6 +1,6 @@
-import React, { useState } from "react";
-import PageBreadcrumb from "../../../components/common/PageBreadCrumb";
-import PageMeta from "../../../components/common/PageMeta";
+﻿import React, { useState } from "react";
+import PageBreadcrumb from "../../../../components/common/PageBreadCrumb";
+import PageMeta from "../../../../components/common/PageMeta";
 import GradingScaleList from "./GradingScaleList";
 import GradingScaleForm from "./GradingScaleForm";
 import ViewGradingScale from "./ViewGradingScale";
@@ -172,3 +172,4 @@ const GradingSystems = () => {
 };
 
 export default GradingSystems;
+

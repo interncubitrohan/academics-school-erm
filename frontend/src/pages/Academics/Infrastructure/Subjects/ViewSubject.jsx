@@ -1,6 +1,6 @@
-import React from "react";
-import { Modal } from "../../../components/ui/modal";
-import Badge from "../../../components/ui/badge/Badge";
+﻿import React from "react";
+import { Modal } from "../../../../components/ui/modal";
+import Badge from "../../../../components/ui/badge/Badge";
 
 const ViewSubject = ({ isOpen, onClose, subject }) => {
     if (!subject) return null;
@@ -31,7 +31,7 @@ const ViewSubject = ({ isOpen, onClose, subject }) => {
                                 <span className="font-mono bg-gray-100 dark:bg-gray-700 px-2 py-0.5 rounded text-gray-800 dark:text-gray-200">
                                     {subject.subjectCode}
                                 </span>
-                                {subject.shortName && <span>• {subject.shortName}</span>}
+                                {subject.shortName && <span>â€¢ {subject.shortName}</span>}
                             </div>
                         </div>
                         <Badge
@@ -164,3 +164,4 @@ const ViewSubject = ({ isOpen, onClose, subject }) => {
 };
 
 export default ViewSubject;
+

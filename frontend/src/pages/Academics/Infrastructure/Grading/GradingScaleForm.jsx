@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from "react";
+﻿import React, { useState, useEffect } from "react";
 import { FiSave, FiX } from "react-icons/fi";
 import GradeBandBuilder from "./GradeBandBuilder";
-import BoardSelector from "../../../components/common/BoardSelector";
+import BoardSelector from "../../../../components/common/BoardSelector";
 
 const GradingScaleForm = ({ onSave, onCancel, initialData }) => {
     const [formData, setFormData] = useState({
@@ -255,3 +255,4 @@ const GradingScaleForm = ({ onSave, onCancel, initialData }) => {
 };
 
 export default GradingScaleForm;
+

@@ -1,4 +1,4 @@
-import React from "react";
+﻿import React from "react";
 import { FiStar } from "react-icons/fi";
 import {
     Table,
@@ -6,8 +6,8 @@ import {
     TableCell,
     TableHeader,
     TableRow,
-} from "../../../components/ui/table";
-import Badge from "../../../components/ui/badge/Badge";
+} from "../../../../components/ui/table";
+import Badge from "../../../../components/ui/badge/Badge";
 
 const SubjectTypeList = ({ subjectTypes, onEdit, onDelete, onSetDefault, onView, checkDeletePermission }) => {
     return (
@@ -153,3 +153,4 @@ const SubjectTypeList = ({ subjectTypes, onEdit, onDelete, onSetDefault, onView,
 };
 
 export default SubjectTypeList;
+

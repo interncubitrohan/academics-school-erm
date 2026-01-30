@@ -1,6 +1,6 @@
-import React from "react";
-import { Modal } from "../../../components/ui/modal";
-import Badge from "../../../components/ui/badge/Badge";
+﻿import React from "react";
+import { Modal } from "../../../../components/ui/modal";
+import Badge from "../../../../components/ui/badge/Badge";
 import { FiX } from "react-icons/fi";
 
 const ViewGradingScale = ({ isOpen, onClose, scale }) => {
@@ -95,3 +95,4 @@ const ViewGradingScale = ({ isOpen, onClose, scale }) => {
 };
 
 export default ViewGradingScale;
+

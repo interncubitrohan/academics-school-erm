@@ -1,20 +1,20 @@
-import React, { useState } from "react";
+﻿import React, { useState } from "react";
 import {
     Table,
     TableBody,
     TableCell,
     TableHeader,
     TableRow,
-} from "../../../components/ui/table";
-import { Modal } from "../../../components/ui/modal";
-import Badge from "../../../components/ui/badge/Badge";
-import PageBreadcrumb from "../../../components/common/PageBreadCrumb";
-import PageMeta from "../../../components/common/PageMeta";
+} from "../../../../components/ui/table";
+import { Modal } from "../../../../components/ui/modal";
+import Badge from "../../../../components/ui/badge/Badge";
+import PageBreadcrumb from "../../../../components/common/PageBreadCrumb";
+import PageMeta from "../../../../components/common/PageMeta";
 import SubjectForm from "./SubjectForm";
 import ViewSubject from "./ViewSubject";
 import BulkUploadSubjects from "./BulkUploadSubjects";
-import { MOCK_SUBJECTS } from "../../../data/subjectData";
-import Button from "../../../components/ui/button/Button";
+import { MOCK_SUBJECTS } from "../../../../data/subjectData";
+import Button from "../../../../components/ui/button/Button";
 
 // Mock Data for "In Use" subjects (e.g. mapped to classes)
 const MOCKED_MAPPED_SUBJECT_IDS = ["sub_1", "sub_2", "sub_3"];
@@ -523,3 +523,4 @@ const SubjectList = () => {
 };
 
 export default SubjectList;
+

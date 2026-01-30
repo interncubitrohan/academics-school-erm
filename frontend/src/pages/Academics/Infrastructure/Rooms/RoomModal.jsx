@@ -1,5 +1,5 @@
-import React from "react";
-import { Modal } from "../../../components/ui/modal";
+﻿import React from "react";
+import { Modal } from "../../../../components/ui/modal";
 import RoomForm from "./RoomForm";
 
 const RoomModal = ({ isOpen, onClose, onSave, room }) => {
@@ -18,5 +18,6 @@ const RoomModal = ({ isOpen, onClose, onSave, room }) => {
 };
 
 export default RoomModal;
+
 
 

@@ -1,12 +1,12 @@
-import React, { useState } from "react";
+﻿import React, { useState } from "react";
 
 import RoomModal from "./RoomModal";
 import RoomList from "./RoomList";
-import PageBreadcrumb from "../../../components/common/PageBreadCrumb";
-import PageMeta from "../../../components/common/PageMeta";
-import { MOCK_ROOMS } from "../../../data/roomData";
+import PageBreadcrumb from "../../../../components/common/PageBreadCrumb";
+import PageMeta from "../../../../components/common/PageMeta";
+import { MOCK_ROOMS } from "../../../../data/roomData";
 
-import Button from "../../../components/ui/button/Button";
+import Button from "../../../../components/ui/button/Button";
 
 const Rooms = () => {
     // ... maintain existing state ...
@@ -114,3 +114,4 @@ const Rooms = () => {
 };
 
 export default Rooms;
+

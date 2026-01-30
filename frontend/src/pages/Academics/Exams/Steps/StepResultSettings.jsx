@@ -1,5 +1,5 @@
 import React from "react";
-import { mockGradingScales } from "../../Infrastructure/GradingSystems"; // Importing from existing file
+import { mockGradingScales } from "../../Infrastructure/Grading/GradingSystems"; // Importing from existing file
 
 const StepResultSettings = ({ formData, setFormData }) => {
 

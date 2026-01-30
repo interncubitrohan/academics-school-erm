@@ -1,13 +1,13 @@
-import React, { useState, useRef } from "react";
-import { Modal } from "../../../components/ui/modal";
+﻿import React, { useState, useRef } from "react";
+import { Modal } from "../../../../components/ui/modal";
 import {
     Table,
     TableBody,
     TableCell,
     TableHeader,
     TableRow,
-} from "../../../components/ui/table";
-import Badge from "../../../components/ui/badge/Badge";
+} from "../../../../components/ui/table";
+import Badge from "../../../../components/ui/badge/Badge";
 
 const SAMPLE_CSV = `SubjectName,SubjectCode,SubjectType,Boards,ApplicableGrades,Description
 Mathematics,MATH101,Theory,CBSE;IGCSE,9;10,Core Mathematics
@@ -316,3 +316,4 @@ const BulkUploadSubjects = ({ isOpen, onClose, onImport, existingSubjects = [] }
 };
 
 export default BulkUploadSubjects;
+

@@ -1,5 +1,5 @@
-import React from "react";
-import { Modal } from "../../../components/ui/modal";
+﻿import React from "react";
+import { Modal } from "../../../../components/ui/modal";
 import SubjectTypeForm from "./SubjectTypeForm";
 
 const SubjectTypeModal = ({ isOpen, onClose, onSave, subjectType }) => {
@@ -22,3 +22,4 @@ const SubjectTypeModal = ({ isOpen, onClose, onSave, subjectType }) => {
 };
 
 export default SubjectTypeModal;
+
