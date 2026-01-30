@@ -13,8 +13,10 @@ import ClassConfiguration from "./pages/Academics/ClassConfiguration/ClassConfig
 import ClassDetails from "./pages/Academics/ClassConfiguration/ClassDetails";
 import ExamScheduler from "./pages/Academics/Exams/ExamScheduler";
 import MarksEntry from "./pages/Academics/Exams/MarksEntry";
-import ExamsResults from "./pages/Academics/Exams/ExamsResults";
+import ExamList from "./pages/Academics/Exams/ExamList";
+import ExamCreateWizard from "./pages/Academics/Exams/ExamCreateWizard";
 import SubjectMappingPage from "./pages/Academics/ClassConfiguration/SubjectMappingPage";
+import EvaluationFramework from "./pages/Academics/Evaluation/EvaluationFramework";
 
 
 export default function App() {
@@ -40,8 +42,10 @@ export default function App() {
                         <Route path="/academics/classes/:classId" element={<ClassDetails />} />
                         <Route path="/academics/exams/schedule" element={<ExamScheduler />} />
                         <Route path="/academics/exams/marks" element={<MarksEntry />} />
-                        <Route path="/academics/exams" element={<ExamsResults />} />
+                        <Route path="/academics/exams" element={<ExamList />} />
+                        <Route path="/academics/exams/create" element={<ExamCreateWizard />} />
                         <Route path="/academics/classes/:classId/mapping" element={<SubjectMappingPage />} />
+                        <Route path="/academics/evaluation/framework" element={<EvaluationFramework />} />
                     </Route>
 
                     {/* Fallback Route */}
