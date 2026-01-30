@@ -30,6 +30,12 @@ const ExamCreateWizard = () => {
                 alert("Please enter Exam Name.");
                 return;
             }
+            if (formData.board?.category === "State Board") {
+                if (!formData.board?.state || !formData.board?.boardName) {
+                    alert("Please select both State and Board Name for State Board.");
+                    return;
+                }
+            }
         }
         if (currentStep === 2) {
             if (!formData.schedule.startDate || !formData.schedule.endDate) {
@@ -118,7 +124,16 @@ const ExamCreateWizard = () => {
             <div className="flex justify-between items-center mb-6">
                 <div>
                     <h1 className="text-2xl font-bold text-gray-800 dark:text-white">Create New Exam</h1>
-                    <p className="text-sm text-gray-500 dark:text-gray-400">Configure exam details, schedule, and evaluation rules</p>
+                    <div className="flex items-center gap-2 mt-1">
+                        <p className="text-sm text-gray-500 dark:text-gray-400">Configure exam details, schedule, and evaluation rules</p>
+                        {formData.board?.category && (
+                            <span className="px-2 py-0.5 rounded text-xs font-medium bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300 border border-blue-200 dark:border-blue-800">
+                                {formData.board.category}
+                                {formData.board.state ? ` - ${formData.board.state}` : ""}
+                                {formData.board.boardName ? ` (${formData.board.boardName})` : ""}
+                            </span>
+                        )}
+                    </div>
                 </div>
                 <div className="flex gap-2">
                     <Button variant="outline" onClick={() => navigate("/academics/exams")}>

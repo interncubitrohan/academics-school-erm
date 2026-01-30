@@ -15,7 +15,6 @@ const initialSubjectTypes = [
         isCompulsory: true,
         affectsPromotion: true,
         displayOrder: 1,
-        isDefault: true,
         status: "Active",
     },
     {
@@ -26,7 +25,6 @@ const initialSubjectTypes = [
         isCompulsory: true,
         affectsPromotion: false,
         displayOrder: 2,
-        isDefault: false,
         status: "Active",
     },
     {
@@ -37,7 +35,6 @@ const initialSubjectTypes = [
         isCompulsory: false,
         affectsPromotion: true,
         displayOrder: 3,
-        isDefault: false,
         status: "Active",
     },
 ];
@@ -68,9 +65,6 @@ const SubjectTypes = () => {
     const MOCK_LINKED_IDS = [1]; // ID 1 (Scholastic - Core) is linked to subjects
 
     const checkDeletePermission = (type) => {
-        if (type.isDefault) {
-            return { allowed: false, reason: "Cannot delete default subject type." };
-        }
         if (MOCK_LINKED_IDS.includes(type.id)) {
             return { allowed: false, reason: "Cannot delete: Assigned to subjects." };
         }
@@ -107,14 +101,6 @@ const SubjectTypes = () => {
             ];
         }
 
-        // Enforce Single Default Rule
-        if (formData.isDefault) {
-            updatedList = updatedList.map(t => ({
-                ...t,
-                isDefault: (t.id === (currentType?.id || updatedList[updatedList.length - 1].id))
-            }));
-        }
-
         setSubjectTypes(updatedList);
         setIsModalOpen(false);
     };
@@ -122,16 +108,6 @@ const SubjectTypes = () => {
     const handleCancel = () => {
         setIsModalOpen(false);
         setCurrentType(null);
-    };
-
-    const handleSetDefault = (id) => {
-        // Set selected as default, others as false
-        setSubjectTypes(
-            subjectTypes.map((t) => ({
-                ...t,
-                isDefault: t.id === id
-            }))
-        );
     };
 
     const handleView = (type) => {
@@ -193,7 +169,7 @@ const SubjectTypes = () => {
                         <div className="flex flex-col sm:flex-row gap-2 w-full md:w-auto">
                             <input
                                 type="text"
-                                placeholder="Search..."
+                                placeholder="Search types..."
                                 value={searchTerm}
                                 onChange={(e) => setSearchTerm(e.target.value)}
                                 className="px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500 dark:bg-gray-800 dark:border-gray-700 dark:text-white"
@@ -203,18 +179,18 @@ const SubjectTypes = () => {
                                 onChange={(e) => setFilterCompulsory(e.target.value)}
                                 className="px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500 dark:bg-gray-800 dark:border-gray-700 dark:text-white"
                             >
-                                <option value="all">All (Compulsory)</option>
-                                <option value="yes">Compulsory Only</option>
-                                <option value="no">Optional Only</option>
+                                <option value="all">All Types (Compulsory)</option>
+                                <option value="yes">Compulsory</option>
+                                <option value="no">Optional</option>
                             </select>
                             <select
                                 value={filterPromotion}
                                 onChange={(e) => setFilterPromotion(e.target.value)}
                                 className="px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500 dark:bg-gray-800 dark:border-gray-700 dark:text-white"
                             >
-                                <option value="all">All (Promotion)</option>
-                                <option value="yes">Affects Promotion</option>
-                                <option value="no">No Impact</option>
+                                <option value="all">All Types (Promotion)</option>
+                                <option value="yes">Promotional</option>
+                                <option value="no">Non-Promotional</option>
                             </select>
                             <button
                                 onClick={handleCreate}
@@ -229,7 +205,6 @@ const SubjectTypes = () => {
                         subjectTypes={filteredTypes}
                         onEdit={handleEdit}
                         onDelete={handleDelete}
-                        onSetDefault={handleSetDefault}
                         onView={handleView}
                         checkDeletePermission={checkDeletePermission}
                     />

@@ -10,7 +10,7 @@ export const MOCK_CLASSES = [
         academicYear: "2025-2026",
         grade: "10",
         section: "A",
-        board: "CBSE",
+        board: { category: "CBSE", state: "", boardName: "" },
         medium: "English",
         room: {
             id: "room_002",
@@ -37,7 +37,7 @@ export const MOCK_CLASSES = [
         academicYear: "2025-2026",
         grade: "12",
         section: "B",
-        board: "CBSE",
+        board: { category: "CBSE", state: "", boardName: "" },
         medium: "English",
         room: {
             id: "room_003",
@@ -67,7 +67,7 @@ export const MOCK_CLASSES = [
         academicYear: "2025-2026",
         grade: "1",
         section: "C",
-        board: "CBSE",
+        board: { category: "CBSE", state: "", boardName: "" },
         medium: "English",
         room: null,
         roomNote: "Waiting for new block completion",

@@ -124,13 +124,18 @@ const SubjectList = () => {
             subject.subjectCode.toLowerCase().includes(searchTerm.toLowerCase());
 
         const matchesType = filterType === "All" || subject.subjectType === filterType;
-        const matchesBoard = filterBoard === "All" || subject.boards.includes(filterBoard);
+        const matchesBoard = filterBoard === "All" || subject.boards.some(b => {
+            const boardStr = b.category === "State Board" ? `${b.category} - ${b.state}` : b.category;
+            return boardStr === filterBoard;
+        });
         const matchesGrade = filterGrade === "All" || subject.applicableGrades.includes(filterGrade);
 
         return matchesSearch && matchesType && matchesBoard && matchesGrade;
     });
 
-    const uniqueBoards = Array.from(new Set(MOCK_SUBJECTS.flatMap(s => s.boards)));
+    const uniqueBoards = Array.from(new Set(MOCK_SUBJECTS.flatMap(s => s.boards.map(b =>
+        b.category === "State Board" ? `${b.category} - ${b.state}` : b.category
+    )))).filter(Boolean);
     const uniqueGrades = Array.from(new Set(MOCK_SUBJECTS.flatMap(s => s.applicableGrades))).sort((a, b) => Number(a) - Number(b));
 
     return (
@@ -302,9 +307,9 @@ const SubjectList = () => {
                                             </TableCell>
                                             <TableCell className="border-b border-[#eee] py-5 px-4 dark:border-gray-700">
                                                 <div className="flex flex-wrap gap-1">
-                                                    {subject.boards.map(board => (
-                                                        <span key={board} className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300">
-                                                            {board}
+                                                    {subject.boards.map((board, idx) => (
+                                                        <span key={idx} className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300">
+                                                            {board.category === "State Board" ? `${board.state} Board` : board.category}
                                                         </span>
                                                     ))}
                                                 </div>

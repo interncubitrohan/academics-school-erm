@@ -73,8 +73,10 @@ const ClassList = ({ classes, onEdit, onDelete, onCreate }) => {
                                         </Badge>
                                     </TableCell>
                                     <TableCell className="border-b border-[#eee] py-5 px-4 dark:border-gray-700">
-                                        <Badge size="sm" color={cls.board === "CBSE" ? "info" : "warning"}>
-                                            {cls.board}
+                                        <Badge size="sm" color={cls.board?.category === "CBSE" ? "info" : "warning"}>
+                                            {typeof cls.board === 'object' ?
+                                                `${cls.board.category}${cls.board.state ? ` - ${cls.board.state}` : ''}`
+                                                : cls.board}
                                         </Badge>
                                     </TableCell>
                                     <TableCell className="border-b border-[#eee] py-5 px-4 dark:border-gray-700">

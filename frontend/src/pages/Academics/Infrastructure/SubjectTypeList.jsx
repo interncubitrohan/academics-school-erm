@@ -30,9 +30,7 @@ const SubjectTypeList = ({ subjectTypes, onEdit, onDelete, onSetDefault, onView,
                         <TableCell isHeader className="min-w-[80px] py-4 px-4 font-medium text-black dark:text-white">
                             Order
                         </TableCell>
-                        <TableCell isHeader className="min-w-[80px] py-4 px-4 font-medium text-black dark:text-white">
-                            Default
-                        </TableCell>
+
                         <TableCell isHeader className="min-w-[100px] py-4 px-4 font-medium text-black dark:text-white">
                             Status
                         </TableCell>
@@ -76,15 +74,6 @@ const SubjectTypeList = ({ subjectTypes, onEdit, onDelete, onSetDefault, onView,
                                         <p className="text-black dark:text-white">
                                             {type.displayOrder}
                                         </p>
-                                    </TableCell>
-                                    <TableCell className="border-b border-[#eee] py-5 px-4 dark:border-gray-700">
-                                        {type.isDefault ? (
-                                            <FiStar className="text-warning text-lg fill-current" />
-                                        ) : (
-                                            <button onClick={() => onSetDefault(type.id)} className="text-gray-400 hover:text-warning" title="Set as Default">
-                                                <FiStar className="text-lg" />
-                                            </button>
-                                        )}
                                     </TableCell>
                                     <TableCell className="border-b border-[#eee] py-5 px-4 dark:border-gray-700">
                                         <Badge size="sm" color={type.status === "Active" ? "success" : "warning"}>

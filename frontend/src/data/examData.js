@@ -19,6 +19,7 @@ export const mockExams = [
         term: "Term 1",
         examCode: "MT-2024-T1",
         description: "Half-yearly assessment covering the first 50% of the syllabus.",
+        board: { category: "CBSE", state: "", boardName: "" },
         
         schedule: {
             startDate: "2024-10-15",
@@ -137,6 +138,11 @@ export const getEmptyExamObject = () => ({
         resultDate: "",
         excludedDates: [],
         timetable: []
+    },
+    board: {
+        category: "",
+        state: "",
+        boardName: ""
     },
     applicableClasses: [],
     applicableSubjects: [],

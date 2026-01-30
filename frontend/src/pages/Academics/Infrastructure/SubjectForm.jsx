@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { Modal } from "../../../components/ui/modal";
+import { FiTrash } from "react-icons/fi";
+import BoardSelector from "../../../components/common/BoardSelector";
+import Button from "../../../components/ui/button/Button";
 import { MOCK_SUBJECTS } from "../../../data/subjectData";
 
 const SubjectForm = ({ isOpen, onClose, onSave, subject }) => {
@@ -22,6 +25,7 @@ const SubjectForm = ({ isOpen, onClose, onSave, subject }) => {
 
     const [formData, setFormData] = useState(defaultState);
     const [touched, setTouched] = useState({});
+    const [tempBoard, setTempBoard] = useState({ category: "", state: "", boardName: "" });
 
     // Reset or Populate form
     useEffect(() => {
@@ -62,14 +66,7 @@ const SubjectForm = ({ isOpen, onClose, onSave, subject }) => {
         });
     };
 
-    const handleBoardChange = (board) => {
-        setFormData(prev => {
-            const boards = prev.boards.includes(board)
-                ? prev.boards.filter(b => b !== board)
-                : [...prev.boards, board];
-            return { ...prev, boards };
-        });
-    };
+
 
     const handleGradeChange = (grade) => {
         setFormData(prev => {
@@ -317,21 +314,72 @@ const SubjectForm = ({ isOpen, onClose, onSave, subject }) => {
                             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                                 Applicable Boards <span className="text-red-500">*</span>
                             </label>
-                            <div className="p-3 border border-gray-200 dark:border-gray-700 rounded-lg bg-white dark:bg-gray-800 max-h-40 overflow-y-auto">
-                                <div className="space-y-2">
-                                    {["CBSE", "IGCSE", "IB", "State Board"].map((board) => (
-                                        <label key={board} className="flex items-center space-x-2 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700/50 p-1 rounded">
-                                            <input
-                                                type="checkbox"
-                                                checked={formData.boards.includes(board)}
-                                                onChange={() => handleBoardChange(board)}
-                                                className="rounded border-gray-300 text-brand-600 focus:ring-brand-500"
-                                            />
-                                            <span className="text-sm text-gray-700 dark:text-gray-300">{board}</span>
-                                        </label>
-                                    ))}
+
+                            <div className="space-y-3">
+                                {/* Selected Boards List */}
+                                {formData.boards.length > 0 && (
+                                    <div className="flex flex-wrap gap-2 mb-2">
+                                        {formData.boards.map((b, idx) => (
+                                            <div key={idx} className="flex items-center gap-2 px-3 py-1.5 bg-brand-50 dark:bg-brand-900/20 text-brand-700 dark:text-brand-300 rounded-lg border border-brand-200 dark:border-brand-800 text-sm">
+                                                <span>
+                                                    {b.category}
+                                                    {b.state ? ` - ${b.state}` : ''}
+                                                    {b.boardName ? ` (${b.boardName})` : ''}
+                                                </span>
+                                                <button
+                                                    type="button"
+                                                    onClick={() => {
+                                                        const newBoards = [...formData.boards];
+                                                        newBoards.splice(idx, 1);
+                                                        setFormData(prev => ({ ...prev, boards: newBoards }));
+                                                    }}
+                                                    className="text-brand-400 hover:text-red-500 transition-colors"
+                                                >
+                                                    <FiTrash size={14} />
+                                                </button>
+                                            </div>
+                                        ))}
+                                    </div>
+                                )}
+
+                                {/* Add Board Component */}
+                                <div className="p-3 border border-gray-200 dark:border-gray-700 rounded-lg bg-gray-50/50 dark:bg-gray-800/50">
+                                    <BoardSelector
+                                        value={tempBoard}
+                                        onChange={(newBoard) => {
+                                            setTempBoard(newBoard);
+
+                                            // Validate uniqueness
+                                            const exists = formData.boards.some(b =>
+                                                b.category === newBoard.category &&
+                                                b.state === newBoard.state &&
+                                                b.boardName === newBoard.boardName
+                                            );
+
+                                            // Only add if it's a complete selection
+                                            const isComplete = newBoard.category && (
+                                                newBoard.category !== "State Board" ||
+                                                (newBoard.state && newBoard.boardName)
+                                            );
+
+                                            if (!exists && isComplete) {
+                                                // Add to list
+                                                setFormData(prev => ({
+                                                    ...prev,
+                                                    boards: [...prev.boards, newBoard]
+                                                }));
+                                                // Reset temp board
+                                                setTempBoard({ category: "", state: "", boardName: "" });
+                                            }
+                                        }}
+                                        errors={{}}
+                                    />
+                                    <p className="text-xs text-gray-500 mt-2">
+                                        Select a board above to add it to the list.
+                                    </p>
                                 </div>
                             </div>
+
                             {touched.boards && formData.boards.length === 0 && (
                                 <p className="text-xs text-red-500 mt-1">Please select at least one board.</p>
                             )}

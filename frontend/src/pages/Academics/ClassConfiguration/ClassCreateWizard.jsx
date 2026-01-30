@@ -13,7 +13,7 @@ const ClassCreateWizard = ({ onSave, onCancel, teachers, rooms, existingClasses 
         academicYear: "2025-2026",
         grade: "",
         section: "",
-        board: "CBSE",
+        board: { category: "CBSE", state: "", boardName: "" },
         medium: "English",
         classType: "Regular",
 
@@ -114,6 +114,14 @@ const ClassCreateWizard = ({ onSave, onCancel, teachers, rooms, existingClasses 
         if (step === 1) {
             if (!formData.grade) newErrors.grade = "Grade is required";
             if (!formData.section) newErrors.section = "Section is required";
+            // Board Validation
+            if (!formData.board?.category) {
+                // optional: enforce category selection if desired
+            } else if (formData.board.category === "State Board") {
+                if (!formData.board.state || !formData.board.boardName) {
+                    newErrors.board = "State and Board Name are required";
+                }
+            }
         }
 
         if (step === 3) {
@@ -227,6 +235,7 @@ const ClassCreateWizard = ({ onSave, onCancel, teachers, rooms, existingClasses 
                 {currentStep === 1 && (
                     <StepBasicInfo
                         formData={formData}
+                        setFormData={setFormData}
                         handleChange={handleChange}
                         errors={errors}
                     />

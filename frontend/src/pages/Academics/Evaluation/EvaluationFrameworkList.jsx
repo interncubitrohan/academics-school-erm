@@ -71,7 +71,9 @@ const EvaluationFrameworkList = ({ frameworks, onEdit, onDelete, onCreate, onVie
                                     </TableCell>
                                     <TableCell className="border-b border-[#eee] py-5 px-4 dark:border-gray-700">
                                         <span className="text-sm text-black dark:text-white">
-                                            {framework.board}
+                                            {typeof framework.board === 'object' ?
+                                                `${framework.board.category}${framework.board.state ? ` - ${framework.board.state}` : ''}${framework.board.boardName ? ` (${framework.board.boardName})` : ''}`
+                                                : framework.board}
                                         </span>
                                     </TableCell>
                                     <TableCell className="border-b border-[#eee] py-5 px-4 dark:border-gray-700">

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import BoardSelector from "../../../components/common/BoardSelector";
 
 const ClassForm = ({ onSave, onCancel, initialData, teachers, rooms, existingClasses }) => {
     const [formData, setFormData] = useState({
@@ -6,7 +7,7 @@ const ClassForm = ({ onSave, onCancel, initialData, teachers, rooms, existingCla
         academicYear: "2025-2026",
         grade: "",
         section: "",
-        board: "CBSE",
+        board: { category: "CBSE", state: "", boardName: "" },
         medium: "English",
         room: null,
         roomNote: "",
@@ -127,6 +128,18 @@ const ClassForm = ({ onSave, onCancel, initialData, teachers, rooms, existingCla
             }
         }
 
+        // Board validation
+        if (!formData.board?.category) {
+            // Optional: enforce board category if needed, but currently default is CBSE
+        } else if (formData.board.category === "State Board") {
+            if (!formData.board.state || !formData.board.boardName) {
+                // We don't have a specific error field for this in the form UI currently connected to BoardSelector errors prop fully
+                // But we can map it or just use a general alert/toast if UI is limited.
+                // Better: Add error state for board and pass it.
+                newErrors.board = "State and Board Name are required for State Board";
+            }
+        }
+
         setErrors(newErrors);
         return Object.keys(newErrors).length === 0;
     };
@@ -231,17 +244,11 @@ const ClassForm = ({ onSave, onCancel, initialData, teachers, rooms, existingCla
                         <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                             Board
                         </label>
-                        <select
-                            name="board"
+                        <BoardSelector
                             value={formData.board}
-                            onChange={handleChange}
-                            className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500 dark:bg-gray-900 dark:border-gray-700 dark:text-white"
-                        >
-                            <option value="CBSE">CBSE</option>
-                            <option value="ICSE">ICSE</option>
-                            <option value="IGCSE">IGCSE</option>
-                            <option value="State">State Board</option>
-                        </select>
+                            onChange={(newBoardData) => setFormData(prev => ({ ...prev, board: newBoardData }))}
+                            errors={{ category: errors.board, state: errors.board, boardName: errors.board }}
+                        />
                     </div>
 
                     <div>

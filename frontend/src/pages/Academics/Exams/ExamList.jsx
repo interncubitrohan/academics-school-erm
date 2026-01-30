@@ -55,6 +55,7 @@ const ExamList = () => {
                                 <TableCell isHeader className="min-w-[100px] py-4 px-4 font-medium text-black dark:text-white">Code</TableCell>
                                 <TableCell isHeader className="min-w-[120px] py-4 px-4 font-medium text-black dark:text-white">Type</TableCell>
                                 <TableCell isHeader className="min-w-[120px] py-4 px-4 font-medium text-black dark:text-white">Session</TableCell>
+                                <TableCell isHeader className="min-w-[120px] py-4 px-4 font-medium text-black dark:text-white">Board</TableCell>
                                 <TableCell isHeader className="min-w-[120px] py-4 px-4 font-medium text-black dark:text-white">Status</TableCell>
                                 <TableCell isHeader className="min-w-[120px] py-4 px-4 font-medium text-black dark:text-white">Result Date</TableCell>
                                 <TableCell isHeader className="py-4 px-4 font-medium text-black dark:text-white">Actions</TableCell>
@@ -80,6 +81,13 @@ const ExamList = () => {
                                             <span className="text-sm">{exam.academicYear}</span>
                                             <span className="text-xs text-gray-500">{exam.term}</span>
                                         </div>
+                                    </TableCell>
+                                    <TableCell className="border-b border-[#eee] py-5 px-4 dark:border-gray-700">
+                                        <span className="text-sm text-gray-700 dark:text-gray-300">
+                                            {typeof exam.board === 'object' ?
+                                                `${exam.board.type}${exam.board.state ? ` - ${exam.board.state}` : ''}`
+                                                : (exam.board || "-")}
+                                        </span>
                                     </TableCell>
                                     <TableCell className="border-b border-[#eee] py-5 px-4 dark:border-gray-700">
                                         <Badge color={getStatusColor(exam.status)}>{exam.status}</Badge>

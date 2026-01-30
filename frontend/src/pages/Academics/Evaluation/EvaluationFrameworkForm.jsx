@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { FiSave, FiX } from "react-icons/fi";
 import Button from "../../../components/ui/button/Button";
+import BoardSelector from "../../../components/common/BoardSelector";
 import AssessmentComponentBuilder from "./AssessmentComponentBuilder";
 import PassingCriteriaSection from "./PassingCriteriaSection";
 
 const EvaluationFrameworkForm = ({ onSave, onCancel, initialData }) => {
     // Mock Data for Dropdowns
-    const BOARDS = ["CBSE", "ICSE", "State Board", "IB", "Generic"];
     const ACADEMIC_YEARS = ["2024-2025", "2025-2026", "2026-2027"];
     const AVAILABLE_GRADES = [
         "Nursery", "LKG", "UKG",
@@ -128,6 +128,16 @@ const EvaluationFrameworkForm = ({ onSave, onCancel, initialData }) => {
         }
 
         // Structural Validation
+        if (!formData.board?.category) {
+            alert("Please select a Board Category.");
+            return;
+        }
+
+        if (formData.board?.category === "State Board" && (!formData.board?.state || !formData.board?.boardName)) {
+            alert("Please select both State and Board Name.");
+            return;
+        }
+
         if (!formData.assessmentComponents || formData.assessmentComponents.length === 0) {
             alert("Please add at least one assessment component.");
             return;
@@ -178,18 +188,15 @@ const EvaluationFrameworkForm = ({ onSave, onCancel, initialData }) => {
 
                         {/* Board */}
                         <div className="col-span-2 md:col-span-1">
-                            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                                Board / Curriculum <span className="text-red-500">*</span>
-                            </label>
-                            <select
-                                name="board"
+                            <BoardSelector
                                 value={formData.board}
-                                onChange={handleChange}
-                                className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500 dark:bg-gray-900 dark:border-gray-700 dark:text-white"
-                            >
-                                <option value="">Select Board</option>
-                                {BOARDS.map(b => <option key={b} value={b}>{b}</option>)}
-                            </select>
+                                onChange={(newBoardData) => setFormData(prev => ({ ...prev, board: newBoardData }))}
+                                errors={{
+                                    category: !formData.board?.category && "Board Category is required",
+                                    state: (!formData.board?.state && formData.board?.category === "State Board") ? "State is required" : null,
+                                    boardName: (!formData.board?.boardName && formData.board?.category === "State Board") ? "Board Name is required" : null
+                                }}
+                            />
                         </div>
 
                         {/* Academic Year */}

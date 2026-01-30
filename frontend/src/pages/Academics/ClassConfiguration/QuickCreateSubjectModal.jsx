@@ -1,12 +1,13 @@
 import React, { useState } from "react";
 import { Modal } from "../../../components/ui/modal";
+import BoardSelector from "../../../components/common/BoardSelector";
 
 const QuickCreateSubjectModal = ({ isOpen, onClose, onSave }) => {
     const [formData, setFormData] = useState({
         subjectName: "",
         subjectCode: "",
         subjectType: "Theory",
-        board: ""
+        board: { category: "", state: "", boardName: "" }
     });
 
     const [errors, setErrors] = useState({});
@@ -27,7 +28,13 @@ const QuickCreateSubjectModal = ({ isOpen, onClose, onSave }) => {
         const newErrors = {};
         if (!formData.subjectName.trim()) newErrors.subjectName = "Name is required";
         if (!formData.subjectCode.trim()) newErrors.subjectCode = "Code is required";
-        if (!formData.board) newErrors.board = "Board is required";
+        if (!formData.board?.category) {
+            newErrors.board = "Board is required";
+        } else if (formData.board.category === "State Board") {
+            if (!formData.board.state || !formData.board.boardName) {
+                newErrors.board = "State and Board Name are required";
+            }
+        }
         return newErrors;
     };
 
@@ -61,7 +68,7 @@ const QuickCreateSubjectModal = ({ isOpen, onClose, onSave }) => {
             subjectName: "",
             subjectCode: "",
             subjectType: "Theory",
-            board: ""
+            board: { category: "", state: "", boardName: "" }
         });
         onClose();
     };
@@ -132,18 +139,14 @@ const QuickCreateSubjectModal = ({ isOpen, onClose, onSave }) => {
                     <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                         Board <span className="text-red-500">*</span>
                     </label>
-                    <select
-                        name="board"
+                    <BoardSelector
                         value={formData.board}
-                        onChange={handleChange}
-                        className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 ${errors.board ? 'border-red-500 ring-red-200' : 'border-gray-300 focus:ring-brand-500 dark:border-gray-600'} dark:bg-gray-700 dark:text-white`}
-                    >
-                        <option value="">Select Board</option>
-                        <option value="CBSE">CBSE</option>
-                        <option value="ICSE">ICSE</option>
-                        <option value="IGCSE">IGCSE</option>
-                        <option value="State Board">State Board</option>
-                    </select>
+                        onChange={(newBoardData) => {
+                            setFormData(prev => ({ ...prev, board: newBoardData }));
+                            if (errors.board) setErrors(prev => ({ ...prev, board: null }));
+                        }}
+                        errors={{ category: errors.board, state: errors.board, boardName: errors.board }}
+                    />
                     {errors.board && <p className="text-xs text-red-500 mt-1">{errors.board}</p>}
                 </div>
 

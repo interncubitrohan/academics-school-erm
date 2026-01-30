@@ -1,13 +1,18 @@
 import React, { useEffect } from "react";
 
+import BoardSelector from "../../../../components/common/BoardSelector";
+
 const StepExamBasicDetails = ({ formData, setFormData }) => {
 
     const handleChange = (e) => {
         const { name, value } = e.target;
-        setFormData(prev => ({
-            ...prev,
-            [name]: value
-        }));
+
+        if (name === "examName" || name === "examType" || name === "academicYear" || name === "term" || name === "examCode" || name === "description") {
+            setFormData(prev => ({
+                ...prev,
+                [name]: value
+            }));
+        }
     };
 
     // Auto-generate exam code logic
@@ -60,6 +65,19 @@ const StepExamBasicDetails = ({ formData, setFormData }) => {
                         <option value="Final">Final Exam</option>
                         <option value="Model">Model Exam</option>
                     </select>
+                </div>
+
+                {/* Board Selection */}
+                <div className="col-span-2">
+                    <BoardSelector
+                        value={formData.board}
+                        onChange={(newBoardData) => setFormData(prev => ({ ...prev, board: newBoardData }))}
+                        errors={{
+                            category: !formData.board?.category && "Board Category is required",
+                            // Only show these errors if validation triggered, currently simply handled by parent
+                            // For inline simple usage:
+                        }}
+                    />
                 </div>
 
                 {/* Academic Year */}

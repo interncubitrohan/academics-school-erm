@@ -1,6 +1,7 @@
 import React from "react";
+import BoardSelector from "../../../components/common/BoardSelector";
 
-const StepBasicInfo = ({ formData, handleChange, errors = {} }) => {
+const StepBasicInfo = ({ formData, setFormData, handleChange, errors = {} }) => {
     return (
         <div className="space-y-6">
             <h4 className="text-lg font-semibold text-gray-800 dark:text-white mb-4">
@@ -75,18 +76,11 @@ const StepBasicInfo = ({ formData, handleChange, errors = {} }) => {
                     <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                         Board
                     </label>
-                    <select
-                        name="board"
+                    <BoardSelector
                         value={formData.board}
-                        onChange={handleChange}
-                        className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500 dark:bg-gray-900 dark:border-gray-700 dark:text-white"
-                    >
-                        <option value="CBSE">CBSE</option>
-                        <option value="ICSE">ICSE</option>
-                        <option value="IGCSE">IGCSE</option>
-                        <option value="State">State Board</option>
-                        <option value="IB">IB</option>
-                    </select>
+                        onChange={(newBoard) => setFormData(prev => ({ ...prev, board: newBoard }))}
+                        errors={{ category: errors.board, state: errors.board, boardName: errors.board }}
+                    />
                 </div>
 
                 <div>

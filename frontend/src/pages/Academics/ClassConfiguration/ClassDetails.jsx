@@ -81,6 +81,14 @@ const ClassDetails = () => {
                                 <span className="flex items-center gap-1">
                                     <span className="font-medium text-gray-700 dark:text-gray-300">Class Teacher:</span> {classDetails.teacher}
                                 </span>
+                                <span className="hidden md:inline">•</span>
+                                <span className="flex items-center gap-1">
+                                    <span className="font-medium text-gray-700 dark:text-gray-300">Board:</span> {
+                                        typeof classDetails.board === 'object'
+                                            ? `${classDetails.board.category}${classDetails.board.state ? ` - ${classDetails.board.state}` : ''}`
+                                            : classDetails.board
+                                    }
+                                </span>
                             </div>
                         </div>
                         <div className="flex gap-2">

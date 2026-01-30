@@ -12,7 +12,6 @@ const SubjectTypeForm = ({
         isCompulsory: false,
         affectsPromotion: false,
         displayOrder: 0,
-        isDefault: false,
         status: "Active",
     });
 
@@ -171,11 +170,7 @@ const SubjectTypeForm = ({
                         name="affectsPromotion"
                         checked={formData.affectsPromotion}
                     />
-                    <ToggleSwitch
-                        label="Is Default"
-                        name="isDefault"
-                        checked={formData.isDefault}
-                    />
+
                 </div>
 
                 <div className="flex justify-end gap-3 mt-6">

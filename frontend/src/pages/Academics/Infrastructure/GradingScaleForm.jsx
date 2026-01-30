@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { FiSave, FiX } from "react-icons/fi";
 import GradeBandBuilder from "./GradeBandBuilder";
+import BoardSelector from "../../../components/common/BoardSelector";
 
 const GradingScaleForm = ({ onSave, onCancel, initialData }) => {
     const [formData, setFormData] = useState({
         scaleName: "",
-        board: "",
+        board: { category: "", state: "", boardName: "" },
         scaleType: "Percentage",
         applicableGrades: [],
         isDefault: false,
@@ -148,19 +149,11 @@ const GradingScaleForm = ({ onSave, onCancel, initialData }) => {
                         <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                             Board / Curriculum
                         </label>
-                        <select
-                            name="board"
+                        <BoardSelector
                             value={formData.board}
-                            onChange={handleChange}
-                            className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500 dark:bg-gray-900 dark:border-gray-700 dark:text-white"
-                        >
-                            <option value="">Select Board</option>
-                            <option value="CBSE">CBSE</option>
-                            <option value="ICSE">ICSE</option>
-                            <option value="State Board">State Board</option>
-                            <option value="IB">IB</option>
-                            <option value="Generic">Generic / Internal</option>
-                        </select>
+                            onChange={(newBoardData) => setFormData(prev => ({ ...prev, board: newBoardData }))}
+                            errors={{}}
+                        />
                     </div>
 
                     <div className="col-span-2 md:col-span-1">
