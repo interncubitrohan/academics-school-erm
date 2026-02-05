@@ -9,6 +9,7 @@ export const dummyApplications = [
       _id: "64f1b2c3e4b0a1a2b3c4d111",
       name: "Class 1"
     },
+    board: { category: "CBSE", state: "", boardName: "" },
     status: "draft",
     dateOfBirth: "2019-05-15T00:00:00.000Z",
     gender: "male",
@@ -35,6 +36,7 @@ export const dummyApplications = [
       _id: "64f1b2c3e4b0a1a2b3c4d222",
       name: "Class 5"
     },
+    board: { category: "State Board", state: "Maharashtra", boardName: "Maharashtra State Board" },
     status: "pending_admission_review",
     dateOfBirth: "2015-08-22T00:00:00.000Z",
     gender: "male",
@@ -61,6 +63,7 @@ export const dummyApplications = [
       _id: "64f1b2c3e4b0a1a2b3c4d333",
       name: "Class 9"
     },
+    board: { category: "ICSE", state: "", boardName: "" },
     status: "rejected_by_admission",
     dateOfBirth: "2011-03-10T00:00:00.000Z",
     gender: "female",
@@ -87,6 +90,7 @@ export const dummyApplications = [
       _id: "64f1b2c3e4b0a1a2b3c4d111",
       name: "Class 1"
     },
+    board: { category: "State Board", state: "Uttar Pradesh", boardName: "UP Board" },
     status: "pending_fee_structure",
     dateOfBirth: "2019-11-05T00:00:00.000Z",
     gender: "female",
@@ -113,6 +117,7 @@ export const dummyApplications = [
       _id: "64f1b2c3e4b0a1a2b3c4d222",
       name: "Class 5"
     },
+    board: { category: "IB", state: "", boardName: "" },
     status: "approved",
     dateOfBirth: "2015-01-30T00:00:00.000Z",
     gender: "male",
@@ -139,6 +144,7 @@ export const dummyApplications = [
       _id: "64f1b2c3e4b0a1a2b3c4d333",
       name: "Class 9"
     },
+    board: { category: "State Board", state: "Gujarat", boardName: "Gujarat Secondary and Higher Secondary Education Board" },
     status: "pending_admission_review",
     dateOfBirth: "2011-07-12T00:00:00.000Z",
     gender: "female",
@@ -165,6 +171,7 @@ export const dummyApplications = [
       _id: "64f1b2c3e4b0a1a2b3c4d111",
       name: "Class 1"
     },
+    board: { category: "CBSE", state: "", boardName: "" },
     status: "pending_principal_approval",
     dateOfBirth: "2019-02-20T00:00:00.000Z",
     gender: "male",

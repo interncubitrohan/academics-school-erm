@@ -36,8 +36,11 @@ const BoardSelector = ({ value, onChange, errors = {} }) => {
                     <option value="">Select Category</option>
                     <option value="CBSE">CBSE</option>
                     <option value="ICSE">ICSE</option>
+                    <option value="ISC">ISC</option>
+                    <option value="IB">IB</option>
                     <option value="State Board">State Board</option>
                     <option value="International">International</option>
+                    <option value="Other">Other</option>
                 </select>
                 {errors.category && <p className="text-xs text-red-500 mt-1">{errors.category}</p>}
             </div>

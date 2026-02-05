@@ -26,15 +26,21 @@ const ApplicationForm = ({ mode }) => {
         category: '',
         subCategory: '',
         religion: '',
+        religionSubCategory: '',
         bloodGroup: '',
         nationality: 'Indian',
         hasDisability: false,
         disabilityType: '',
         disabilityPercentage: '',
         achievements: [],
+        height: '',
+        weight: '',
+        healthIssues: '',
+        ongoingMedications: '',
 
         // Admission Details
         classOfAdmission: '',
+        board: { category: '', state: '', boardName: '' },
         dateOfJoining: '',
 
         // Transport & Hostel
@@ -92,11 +98,63 @@ const ApplicationForm = ({ mode }) => {
         alert('Draft saved successfully!');
     };
 
+
     const handleSubmit = () => {
+        // Generate application ID
+        const existingApps = JSON.parse(localStorage.getItem('applications') || '[]');
+        const year = new Date().getFullYear();
+        const appNumber = String(existingApps.length + 1).padStart(6, '0');
+        const applicationId = `ADM-${year}-${appNumber}`;
+
+        // Create complete application object
+        const submittedApplication = {
+            _id: `app_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`,
+            applicationId,
+            academicYear: formData.academicYear,
+            firstName: formData.firstName,
+            lastName: formData.lastName,
+            middleName: formData.middleName,
+            classOfAdmission: {
+                _id: `class_${Date.now()}`,
+                name: formData.classOfAdmission
+            },
+            board: formData.board,
+            status: 'submitted',
+            dateOfBirth: formData.dateOfBirth,
+            gender: formData.gender,
+            category: formData.category,
+            subCategory: formData.subCategory,
+            religion: formData.religion,
+            bloodGroup: formData.bloodGroup,
+            nationality: formData.nationality,
+            aadharNumber: formData.aadharNumber,
+            hasDisability: formData.hasDisability,
+            disabilityType: formData.disabilityType,
+            disabilityPercentage: formData.disabilityPercentage,
+            currentAddress: formData.currentAddress,
+            permanentAddress: formData.permanentAddress,
+            familyInfo: formData.familyInfo,
+            busNeeded: formData.busNeeded,
+            hostelNeeded: formData.hostelNeeded,
+            documents: formData.documents,
+            submittedAt: new Date().toISOString()
+        };
+
+        // Save to localStorage
+        const updatedApps = [...existingApps, submittedApplication];
+        localStorage.setItem('applications', JSON.stringify(updatedApps));
+
+        // Update form state
         setFormData(prev => ({ ...prev, status: 'submitted' }));
-        console.log('Application Submitted:', { ...formData, status: 'submitted' });
+
+        console.log('Application Submitted:', submittedApplication);
+
         if (mode === 'invite') {
             alert('Application submitted successfully! Thank you.');
+        } else {
+            alert(`Application submitted successfully! Application ID: ${applicationId}`);
+            // Navigate to applications list
+            window.location.href = '/admissions/list';
         }
     };
 

@@ -1,4 +1,5 @@
 import React from 'react';
+import BoardSelector from '../../../components/common/BoardSelector';
 
 const PersonalInfoStep = ({ formData, setFormData }) => {
 
@@ -46,6 +47,14 @@ const PersonalInfoStep = ({ formData, setFormData }) => {
                                 onChange={handleChange}
                                 placeholder="Select Class ID or Name"
                                 className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+                            />
+                        </div>
+
+                        <div className="mb-4.5">
+                            <BoardSelector
+                                value={formData.board}
+                                onChange={(newBoardData) => setFormData(prev => ({ ...prev, board: newBoardData }))}
+                                errors={{}}
                             />
                         </div>
                     </div>
@@ -227,6 +236,20 @@ const PersonalInfoStep = ({ formData, setFormData }) => {
                             </select>
                         </div>
 
+                        <div className="mb-4.5">
+                            <label className="mb-2.5 block text-black dark:text-white">
+                                Religion Sub-Category
+                            </label>
+                            <input
+                                type="text"
+                                name="religionSubCategory"
+                                value={formData.religionSubCategory || ''}
+                                onChange={handleChange}
+                                placeholder="e.g. Brahmin, Sunni, Jain"
+                                className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+                            />
+                        </div>
+
                         <div className="mb-4.5 flex flex-col gap-6 xl:flex-row">
                             <div className="w-full xl:w-1/2">
                                 <label className="mb-2.5 block text-black dark:text-white">
@@ -262,6 +285,73 @@ const PersonalInfoStep = ({ formData, setFormData }) => {
                                     className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
                                 />
                             </div>
+                        </div>
+                    </div>
+                </div>
+
+                {/* Health Information (Optional) */}
+                <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
+                    <div className="border-b border-stroke py-4 px-6.5 dark:border-strokedark">
+                        <h3 className="font-medium text-black dark:text-white">
+                            Health Information <span className="text-sm text-gray-500 dark:text-gray-400">(Optional)</span>
+                        </h3>
+                    </div>
+                    <div className="p-6.5">
+                        <div className="mb-4.5 flex flex-col gap-6 xl:flex-row">
+                            <div className="w-full xl:w-1/2">
+                                <label className="mb-2.5 block text-black dark:text-white">
+                                    Height (cm)
+                                </label>
+                                <input
+                                    type="number"
+                                    name="height"
+                                    value={formData.height || ''}
+                                    onChange={handleChange}
+                                    placeholder="e.g. 165"
+                                    className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+                                />
+                            </div>
+                            <div className="w-full xl:w-1/2">
+                                <label className="mb-2.5 block text-black dark:text-white">
+                                    Weight (kg)
+                                </label>
+                                <input
+                                    type="number"
+                                    name="weight"
+                                    value={formData.weight || ''}
+                                    onChange={handleChange}
+                                    placeholder="e.g. 55"
+                                    className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+                                />
+                            </div>
+                        </div>
+
+                        <div className="mb-4.5">
+                            <label className="mb-2.5 block text-black dark:text-white">
+                                Health Issues (if any)
+                            </label>
+                            <textarea
+                                rows={4}
+                                name="healthIssues"
+                                value={formData.healthIssues || ''}
+                                onChange={handleChange}
+                                placeholder="Describe any health issues or allergies"
+                                className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+                            ></textarea>
+                        </div>
+
+                        <div className="mb-4.5">
+                            <label className="mb-2.5 block text-black dark:text-white">
+                                Ongoing Medications (if any)
+                            </label>
+                            <textarea
+                                rows={4}
+                                name="ongoingMedications"
+                                value={formData.ongoingMedications || ''}
+                                onChange={handleChange}
+                                placeholder="List any ongoing medications"
+                                className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+                            ></textarea>
                         </div>
                     </div>
                 </div>

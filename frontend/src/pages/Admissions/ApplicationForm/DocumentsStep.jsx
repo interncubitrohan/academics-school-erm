@@ -18,6 +18,8 @@ const DocumentsStep = ({ formData, setFormData }) => {
         { key: 'signature', label: 'Student Signature', required: true },
         { key: 'previousMarksheet', label: 'Previous Marksheet (if applicable)', required: false },
         { key: 'transferCertificate', label: 'Transfer Certificate (if applicable)', required: false },
+        { key: 'conductCertificate', label: 'Conduct Certificate (if applicable)', required: false },
+        { key: 'studyCertificate', label: 'Study Certificate (if applicable)', required: false },
     ];
 
     return (
@@ -46,6 +48,25 @@ const DocumentsStep = ({ formData, setFormData }) => {
                             )}
                         </div>
                     ))}
+
+                    {/* Conditional Disability Certificate - Only show if hasDisability is true */}
+                    {formData.hasDisability && (
+                        <div className="flex flex-col gap-2">
+                            <label className="block text-black dark:text-white">
+                                Disability Certificate
+                            </label>
+                            <input
+                                type="file"
+                                onChange={(e) => handleFileChange('disabilityCertificate', e)}
+                                className="w-full cursor-pointer rounded-lg border-[1.5px] border-stroke bg-transparent font-medium outline-none transition file:mr-5 file:border-collapse file:cursor-pointer file:border-0 file:border-r file:border-solid file:border-stroke file:bg-whiter file:py-3 file:px-5 file:hover:bg-primary file:hover:bg-opacity-10 focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:file:border-form-strokedark dark:file:bg-white/30 dark:file:text-white dark:focus:border-primary"
+                            />
+                            {formData.documents?.disabilityCertificate && (
+                                <p className="text-sm text-success">
+                                    Selected: {formData.documents.disabilityCertificate.name}
+                                </p>
+                            )}
+                        </div>
+                    )}
                 </div>
             </div>
         </div>

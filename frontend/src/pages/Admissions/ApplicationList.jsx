@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { dummyApplications } from './data/dummyApplications';
 import ApplicationStatusBadge from './components/ApplicationStatusBadge';
 import { Link } from 'react-router';
@@ -19,8 +19,16 @@ const ApplicationList = () => {
     const [searchTerm, setSearchTerm] = useState('');
     const [statusFilter, setStatusFilter] = useState('');
     const [yearFilter, setYearFilter] = useState('');
+    const [allApplications, setAllApplications] = useState([]);
 
-    const filteredApplications = dummyApplications.filter(app => {
+    // Load applications from localStorage on mount
+    useEffect(() => {
+        const storedApps = JSON.parse(localStorage.getItem('applications') || '[]');
+        // Merge stored applications with dummy data (stored apps first to show newest)
+        setAllApplications([...storedApps.reverse(), ...dummyApplications]);
+    }, []);
+
+    const filteredApplications = allApplications.filter(app => {
         const matchesSearch =
             app.firstName.toLowerCase().includes(searchTerm.toLowerCase()) ||
             app.lastName.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -32,7 +40,7 @@ const ApplicationList = () => {
         return matchesSearch && matchesStatus && matchesYear;
     });
 
-    const uniqueYears = [...new Set(dummyApplications.map(app => app.academicYear))];
+    const uniqueYears = [...new Set(allApplications.map(app => app.academicYear))];
 
     return (
         <>
@@ -123,6 +131,9 @@ const ApplicationList = () => {
                                     Class
                                 </TableCell>
                                 <TableCell isHeader className="min-w-[120px] py-4 px-4 font-medium text-black dark:text-white">
+                                    Board
+                                </TableCell>
+                                <TableCell isHeader className="min-w-[120px] py-4 px-4 font-medium text-black dark:text-white">
                                     Academic Year
                                 </TableCell>
                                 <TableCell isHeader className="min-w-[120px] py-4 px-4 font-medium text-black dark:text-white">
@@ -154,6 +165,13 @@ const ApplicationList = () => {
                                         </TableCell>
                                         <TableCell className="border-b border-[#eee] py-5 px-4 dark:border-gray-700">
                                             <p className="text-black dark:text-white">
+                                                {app.board?.category === 'State Board'
+                                                    ? `${app.board.state} Board`
+                                                    : app.board?.category || 'N/A'}
+                                            </p>
+                                        </TableCell>
+                                        <TableCell className="border-b border-[#eee] py-5 px-4 dark:border-gray-700">
+                                            <p className="text-black dark:text-white">
                                                 {app.academicYear}
                                             </p>
                                         </TableCell>
@@ -170,7 +188,7 @@ const ApplicationList = () => {
                             ) : (
                                 <TableRow>
                                     <TableCell
-                                        colSpan={6}
+                                        colSpan={7}
                                         className="border-b border-[#eee] py-5 px-4 text-center dark:border-gray-700"
                                     >
                                         No applications found.
