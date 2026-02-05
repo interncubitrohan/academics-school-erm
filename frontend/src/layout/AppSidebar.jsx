@@ -32,6 +32,22 @@ const navItems = [
         ],
     },
     {
+        icon: <GridIcon />,
+        name: "Admissions",
+        subItems: [
+            { name: "Dashboard", path: "/admissions", pro: false },
+            { name: "Applications", path: "/admissions/list", pro: false },
+            { name: "New Application", path: "/admissions/new", pro: false },
+        ],
+    },
+    {
+        icon: <GridIcon />,
+        name: "Management",
+        subItems: [
+            { name: "Fee Structure", path: "/management/fee-structure", pro: false },
+        ],
+    },
+    {
         icon: <UserCircleIcon />,
         name: "User Profile",
         path: "/profile",

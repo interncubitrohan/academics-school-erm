@@ -18,6 +18,19 @@ import ExamCreateWizard from "./pages/Academics/Exams/ExamCreateWizard";
 import SubjectMappingPage from "./pages/Academics/ClassConfiguration/SubjectMappingPage";
 import EvaluationFramework from "./pages/Academics/Evaluation/EvaluationFramework";
 
+// Admissions Module
+import AdmissionDashboard from "./pages/Admissions/AdmissionDashboard";
+import ApplicationList from "./pages/Admissions/ApplicationList";
+import ApplicationDetail from "./pages/Admissions/ApplicationDetail";
+import ApplicationForm from "./pages/Admissions/ApplicationForm";
+
+// Management Module
+import FeeStructureDashboard from "./pages/Management/FeeStructure/FeeStructureDashboard";
+import FeeTemplateList from "./pages/Management/FeeStructure/FeeTemplateList";
+import FeeTemplateCreate from "./pages/Management/FeeStructure/FeeTemplateCreate";
+import FeeTemplateDetails from "./pages/Management/FeeStructure/FeeTemplateDetails";
+import FeeTemplateEdit from "./pages/Management/FeeStructure/FeeTemplateEdit";
+
 
 export default function App() {
     return (
@@ -46,6 +59,19 @@ export default function App() {
                         <Route path="/academics/exams/create" element={<ExamCreateWizard />} />
                         <Route path="/academics/classes/:classId/mapping" element={<SubjectMappingPage />} />
                         <Route path="/academics/evaluation/framework" element={<EvaluationFramework />} />
+
+                        {/* Admissions Module */}
+                        <Route path="/admissions" element={<AdmissionDashboard />} />
+                        <Route path="/admissions/list" element={<ApplicationList />} />
+                        <Route path="/admissions/new" element={<ApplicationForm />} />
+                        <Route path="/admissions/:id" element={<ApplicationDetail />} />
+
+                        {/* Management Module */}
+                        <Route path="/management/fee-structure" element={<FeeStructureDashboard />} />
+                        <Route path="/management/fee-structure/list" element={<FeeTemplateList />} />
+                        <Route path="/management/fee-structure/create" element={<FeeTemplateCreate />} />
+                        <Route path="/management/fee-structure/view/:id" element={<FeeTemplateDetails />} />
+                        <Route path="/management/fee-structure/edit/:id" element={<FeeTemplateEdit />} />
                     </Route>
 
                     {/* Fallback Route */}
