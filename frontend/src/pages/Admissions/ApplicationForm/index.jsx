@@ -10,8 +10,10 @@ import PageBreadcrumb from '../../../components/common/PageBreadCrumb';
 import PageMeta from '../../../components/common/PageMeta';
 import Button from '../../../components/ui/button/Button';
 
-const ApplicationForm = () => {
+const ApplicationForm = ({ mode }) => {
     const [activeStep, setActiveStep] = useState(0);
+    const [inviteToken, setInviteToken] = useState('');
+    const [invitePassword, setInvitePassword] = useState('');
     const [formData, setFormData] = useState({
         // Student Details
         academicYear: '2025-2026',
@@ -93,17 +95,108 @@ const ApplicationForm = () => {
     const handleSubmit = () => {
         setFormData(prev => ({ ...prev, status: 'submitted' }));
         console.log('Application Submitted:', { ...formData, status: 'submitted' });
+        if (mode === 'invite') {
+            alert('Application submitted successfully! Thank you.');
+        }
+    };
+
+    // Generate invite link and password
+    const generateInviteLink = () => {
+        const token = Math.random().toString(36).substring(2, 15) + Date.now().toString(36);
+        const password = Math.random().toString(36).substring(2, 10).toUpperCase();
+        setInviteToken(token);
+        setInvitePassword(password);
+    };
+
+    const copyToClipboard = (text, label) => {
+        navigator.clipboard.writeText(text).then(() => {
+            alert(`${label} copied to clipboard!`);
+        }).catch(() => {
+            alert('Failed to copy to clipboard');
+        });
     };
 
     return (
         <>
-            <PageMeta
-                title="New Application | School ERP"
-                description="Create a new student admission application"
-            />
-            <PageBreadcrumb pageTitle="New Application" />
+            {mode !== 'invite' && (
+                <>
+                    <PageMeta
+                        title="New Application | School ERP"
+                        description="Create a new student admission application"
+                    />
+                    <PageBreadcrumb pageTitle="New Application" />
+                </>
+            )}
 
             <div className="space-y-6">
+
+                {/* Invite Parent / Student Section - Admin Only */}
+                {mode !== 'invite' && (
+                    <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
+                        <div className="border-b border-stroke py-4 px-6.5 dark:border-strokedark">
+                            <h3 className="font-medium text-black dark:text-white">
+                                Invite Parent / Student to Fill Application
+                            </h3>
+                        </div>
+                        <div className="p-6.5">
+                            {/* Generate Button - Always Visible */}
+                            <div className="mb-6">
+                                <button
+                                    onClick={generateInviteLink}
+                                    type="button"
+                                    style={{ backgroundColor: '#3C50E0', color: '#FFFFFF' }}
+                                    className="w-full inline-flex items-center justify-center rounded-md py-4 px-6 text-center font-medium hover:bg-opacity-90 text-lg shadow-md"
+                                >
+                                    Generate Application Link
+                                </button>
+                            </div>
+
+                            {/* Show inputs and copy buttons only after generation */}
+                            {inviteToken && invitePassword && (
+                                <>
+                                    <div className="mb-4.5">
+                                        <label className="mb-2.5 block text-black dark:text-white">
+                                            Application Link
+                                        </label>
+                                        <input
+                                            type="text"
+                                            value={`${window.location.origin}/admission/apply/${inviteToken}?password=${encodeURIComponent(invitePassword)}`}
+                                            readOnly
+                                            className="w-full rounded border-[1.5px] border-stroke bg-gray py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+                                        />
+                                    </div>
+
+                                    <div className="mb-6">
+                                        <label className="mb-2.5 block text-black dark:text-white">
+                                            Temporary Password
+                                        </label>
+                                        <input
+                                            type="text"
+                                            value={invitePassword}
+                                            readOnly
+                                            className="w-full rounded border-[1.5px] border-stroke bg-gray py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+                                        />
+                                    </div>
+
+                                    <div className="flex flex-wrap gap-3">
+                                        <button
+                                            onClick={() => copyToClipboard(`${window.location.origin}/admission/apply/${inviteToken}?password=${encodeURIComponent(invitePassword)}`, 'Link')}
+                                            className="inline-flex items-center justify-center rounded-md border border-primary py-3 px-6 text-center font-medium text-primary hover:bg-opacity-90 lg:px-8 xl:px-10"
+                                        >
+                                            Copy Link
+                                        </button>
+                                        <button
+                                            onClick={() => copyToClipboard(invitePassword, 'Password')}
+                                            className="inline-flex items-center justify-center rounded-md border border-primary py-3 px-6 text-center font-medium text-primary hover:bg-opacity-90 lg:px-8 xl:px-10"
+                                        >
+                                            Copy Password
+                                        </button>
+                                    </div>
+                                </>
+                            )}
+                        </div>
+                    </div>
+                )}
 
                 {/* Stepper Header matches ExamCreateWizard */}
                 <div className="mb-8">
@@ -173,13 +266,15 @@ const ApplicationForm = () => {
 
                     {activeStep === steps.length - 1 ? (
                         <div className="flex gap-2">
-                            <Button
-                                variant="secondary"
-                                onClick={handleSaveDraft}
-                                disabled={!isDraft}
-                            >
-                                Save Draft
-                            </Button>
+                            {mode !== 'invite' && (
+                                <Button
+                                    variant="secondary"
+                                    onClick={handleSaveDraft}
+                                    disabled={!isDraft}
+                                >
+                                    Save Draft
+                                </Button>
+                            )}
                             <Button
                                 onClick={handleSubmit}
                                 disabled={!isDraft}
@@ -190,13 +285,15 @@ const ApplicationForm = () => {
                         </div>
                     ) : (
                         <div className="flex gap-2">
-                            <Button
-                                variant="secondary"
-                                onClick={handleSaveDraft}
-                                disabled={!isDraft}
-                            >
-                                Save Draft
-                            </Button>
+                            {mode !== 'invite' && (
+                                <Button
+                                    variant="secondary"
+                                    onClick={handleSaveDraft}
+                                    disabled={!isDraft}
+                                >
+                                    Save Draft
+                                </Button>
+                            )}
                             <Button
                                 onClick={handleNext}
                                 disabled={!isDraft}

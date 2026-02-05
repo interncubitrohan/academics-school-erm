@@ -23,6 +23,7 @@ import AdmissionDashboard from "./pages/Admissions/AdmissionDashboard";
 import ApplicationList from "./pages/Admissions/ApplicationList";
 import ApplicationDetail from "./pages/Admissions/ApplicationDetail";
 import ApplicationForm from "./pages/Admissions/ApplicationForm";
+import PublicInvitePage from "./pages/Admissions/PublicInvitePage";
 
 // Management Module
 import FeeStructureDashboard from "./pages/Management/FeeStructure/FeeStructureDashboard";
@@ -38,6 +39,9 @@ export default function App() {
             <Router>
                 <ScrollToTop />
                 <Routes>
+                    {/* Public Routes */}
+                    <Route path="/admission/apply/:inviteToken" element={<PublicInvitePage />} />
+
                     {/* Dashboard Layout */}
                     <Route element={<AppLayout />}>
                         <Route index path="/" element={<Home />} />
