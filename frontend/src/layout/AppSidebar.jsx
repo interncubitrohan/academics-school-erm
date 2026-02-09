@@ -44,9 +44,14 @@ const navItems = [
         icon: <GridIcon />,
         name: "Management",
         subItems: [
-            { name: "Fee Structure", path: "/management/fee-structure", pro: false },
+            { name: "Dashboard", path: "/management", pro: false },
+            { name: "Applications", path: "/management/applications", pro: false },
+            { name: "Fee Allocation", path: "/management/fee-allocation", pro: false },
         ],
     },
+
+
+
     {
         icon: <UserCircleIcon />,
         name: "User Profile",

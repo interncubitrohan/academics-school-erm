@@ -5,7 +5,6 @@ import PageMeta from '../../components/common/PageMeta';
 import WorkflowProgress from '../../components/admission/WorkflowProgress';
 import AdmissionReview from './AdmissionReview';
 import DepartmentProcessing from './DepartmentProcessing';
-import FeeStructureAssignment from './FeeStructureAssignment';
 import PrincipalApproval from './PrincipalApproval';
 import { dummyApplications } from './data/dummyApplications';
 import Button from '../../components/ui/button/Button';
@@ -82,9 +81,7 @@ const ApplicationDetail = () => {
                 </div>
 
                 {/* Conditional Rendering based on Status */}
-                {application.status === 'pending_fee_structure' ? (
-                    <FeeStructureAssignment application={application} />
-                ) : application.status === 'pending_principal_approval' ? (
+                {application.status === 'pending_principal_approval' ? (
                     <PrincipalApproval
                         application={application}
                         feeStructure={application.feeStructure}

@@ -26,11 +26,9 @@ import ApplicationForm from "./pages/Admissions/ApplicationForm";
 import PublicInvitePage from "./pages/Admissions/PublicInvitePage";
 
 // Management Module
-import FeeStructureDashboard from "./pages/Management/FeeStructure/FeeStructureDashboard";
-import FeeTemplateList from "./pages/Management/FeeStructure/FeeTemplateList";
-import FeeTemplateCreate from "./pages/Management/FeeStructure/FeeTemplateCreate";
-import FeeTemplateDetails from "./pages/Management/FeeStructure/FeeTemplateDetails";
-import FeeTemplateEdit from "./pages/Management/FeeStructure/FeeTemplateEdit";
+import ManagementHome from "./pages/Management/ManagementHome";
+import ApplicationsList from "./pages/Management/ApplicationsList";
+import FeeAllocation from "./pages/Management/FeeAllocation";
 
 
 export default function App() {
@@ -71,11 +69,12 @@ export default function App() {
                         <Route path="/admissions/:id" element={<ApplicationDetail />} />
 
                         {/* Management Module */}
-                        <Route path="/management/fee-structure" element={<FeeStructureDashboard />} />
-                        <Route path="/management/fee-structure/list" element={<FeeTemplateList />} />
-                        <Route path="/management/fee-structure/create" element={<FeeTemplateCreate />} />
-                        <Route path="/management/fee-structure/view/:id" element={<FeeTemplateDetails />} />
-                        <Route path="/management/fee-structure/edit/:id" element={<FeeTemplateEdit />} />
+                        <Route path="/management" element={<ManagementHome />} />
+                        <Route path="/management/applications" element={<ApplicationsList />} />
+                        <Route path="/management/fee-allocation" element={<FeeAllocation />} />
+
+
+
                     </Route>
 
                     {/* Fallback Route */}
