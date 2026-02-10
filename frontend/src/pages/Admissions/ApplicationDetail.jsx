@@ -6,7 +6,8 @@ import WorkflowProgress from '../../components/admission/WorkflowProgress';
 import AdmissionReview from './AdmissionReview';
 import DepartmentProcessing from './DepartmentProcessing';
 import PrincipalApproval from './PrincipalApproval';
-import { dummyApplications } from './data/dummyApplications';
+import FeeAllocation from '../Management/FeeAllocation';
+import { mockApplications } from '../../data/mockApplications';
 import Button from '../../components/ui/button/Button';
 
 const ApplicationDetail = () => {
@@ -26,7 +27,7 @@ const ApplicationDetail = () => {
             // but typical link would be /admissions/applications/:id
 
             // Let's assume passed param is _id for now
-            const foundApp = dummyApplications.find(app => app._id === id || app.applicationId === id);
+            const foundApp = mockApplications.find(app => app.applicationId === id);
 
             console.log('Found Application:', foundApp);
 
@@ -86,6 +87,8 @@ const ApplicationDetail = () => {
                         application={application}
                         feeStructure={application.feeStructure}
                     />
+                ) : application.status === 'pending_fee_structure' ? (
+                    <FeeAllocation application={application} />
                 ) : application.status === 'approved' || application.status === 'enrolled' ? (
                     <DepartmentProcessing application={application} />
                 ) : (

@@ -11,9 +11,8 @@ const AdmissionReview = ({ application }) => {
 
     // Simulate approval
     const handleApprove = () => {
-        // In real app, API call here
-        setStatus('pending_fee_structure');
-        alert('Application Approved! Status changed to pending_fee_structure');
+        application.status = "pending_fee_structure";
+        setStatus("pending_fee_structure");
     };
 
     // Simulate rejection

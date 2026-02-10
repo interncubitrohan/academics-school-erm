@@ -71,7 +71,7 @@ export default function App() {
                         {/* Management Module */}
                         <Route path="/management" element={<ManagementHome />} />
                         <Route path="/management/applications" element={<ApplicationsList />} />
-                        <Route path="/management/fee-allocation" element={<FeeAllocation />} />
+                        <Route path="/management/fee-allocation/:applicationId" element={<FeeAllocation />} />
 
 
 

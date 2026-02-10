@@ -1,9 +1,27 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
+import { useParams } from "react-router";
+import { mockApplications } from "../../data/mockApplications";
 
-export default function FeeAllocation() {
+export default function FeeAllocation({ application: propApplication }) {
+    const { applicationId } = useParams();
+
     // 1. STATE (REQUIRED)
     const [feeComponents, setFeeComponents] = useState([]);
     const [concession, setConcession] = useState({ type: "fixed", value: 0, reason: "" });
+
+    // Derived application
+    const application = propApplication || mockApplications.find(app => app.applicationId === applicationId);
+
+    // Local status state (initialized from application)
+    const [status, setStatus] = useState(application?.status);
+
+    useEffect(() => {
+        if (application?.status) {
+            setStatus(application.status);
+        }
+    }, [application]);
+
+    const isLocked = status === "pending_principal_approval" || status === "approved" || status === "enrolled";
 
     // 2. ADD FEE COMPONENT (UI + LOGIC)
     const addFeeComponent = () => {
@@ -31,6 +49,14 @@ export default function FeeAllocation() {
 
     const updateConcession = (field, value) => {
         setConcession(prev => ({ ...prev, [field]: value }));
+    };
+
+    // ACTION HANDLERS
+    const handleForwardToPrincipal = () => {
+        if (application) {
+            application.status = "pending_principal_approval";
+            setStatus("pending_principal_approval");
+        }
     };
 
     // CALCULATIONS
@@ -61,6 +87,11 @@ export default function FeeAllocation() {
             <div>
                 <h2 className="text-2xl font-bold text-gray-800 dark:text-white">Fee Allocation</h2>
                 <p className="text-sm text-gray-500 dark:text-gray-400">Allocate fee structure for the application</p>
+                {isLocked && (
+                    <div className="mt-2 p-3 bg-yellow-100 text-yellow-800 rounded-md text-sm border border-yellow-200">
+                        Application is currently under review by Principal or has been approved. Fee allocation is locked.
+                    </div>
+                )}
             </div>
 
             <div className="rounded-sm border border-gray-200 bg-white shadow-default dark:border-gray-700 dark:bg-gray-800">
@@ -73,19 +104,21 @@ export default function FeeAllocation() {
                     <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                         <div>
                             <p className="text-sm text-gray-600 dark:text-gray-400">Application ID</p>
-                            <p className="font-medium text-black dark:text-white">APP-2024-001</p>
+                            <p className="font-medium text-black dark:text-white">{application?.applicationId || '--'}</p>
                         </div>
                         <div>
                             <p className="text-sm text-gray-600 dark:text-gray-400">Student Name</p>
-                            <p className="font-medium text-black dark:text-white">Rahul Sharma</p>
+                            <p className="font-medium text-black dark:text-white">
+                                {application?.studentName || (application?.firstName && application?.lastName ? `${application.firstName} ${application.lastName}` : '--')}
+                            </p>
                         </div>
                         <div>
                             <p className="text-sm text-gray-600 dark:text-gray-400">Class</p>
-                            <p className="font-medium text-black dark:text-white">Class 10-A</p>
+                            <p className="font-medium text-black dark:text-white">{application?.classOfAdmission || application?.admissionClass || '--'}</p>
                         </div>
                         <div>
-                            <p className="text-sm text-gray-600 dark:text-gray-400">Status</p>
-                            <p className="font-medium text-black dark:text-white">Pending Fee Allocation</p>
+                            <p className="text-sm text-gray-600 dark:text-gray-400">Academic Year</p>
+                            <p className="font-medium text-black dark:text-white">{application?.academicYear || '--'}</p>
                         </div>
                     </div>
                 </div>
@@ -96,12 +129,14 @@ export default function FeeAllocation() {
                     <h3 className="font-medium text-black dark:text-white">
                         Fee Components
                     </h3>
-                    <button
-                        onClick={addFeeComponent}
-                        className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-center text-sm font-medium text-white hover:bg-opacity-90 transition-opacity"
-                    >
-                        + Add Fee Component
-                    </button>
+                    {!isLocked && (
+                        <button
+                            onClick={addFeeComponent}
+                            className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-center text-sm font-medium text-white hover:bg-opacity-90 transition-opacity"
+                        >
+                            + Add Fee Component
+                        </button>
+                    )}
                 </div>
                 <div className="p-6">
                     <div className="max-w-full overflow-x-auto">
@@ -141,14 +176,16 @@ export default function FeeAllocation() {
                                                     value={component.feeName}
                                                     onChange={(e) => updateFeeComponent(component.id, 'feeName', e.target.value)}
                                                     placeholder="Enter fee name"
-                                                    className="w-full rounded border border-gray-300 bg-transparent py-2 px-3 text-black outline-none transition focus:border-primary dark:border-gray-600 dark:text-white"
+                                                    disabled={isLocked}
+                                                    className="w-full rounded border border-gray-300 bg-transparent py-2 px-3 text-black outline-none transition focus:border-primary dark:border-gray-600 dark:text-white disabled:bg-gray-100 disabled:dark:bg-gray-700"
                                                 />
                                             </td>
                                             <td className="py-5 px-4">
                                                 <select
                                                     value={component.type}
                                                     onChange={(e) => updateFeeComponent(component.id, 'type', e.target.value)}
-                                                    className="w-full rounded border border-gray-300 bg-transparent py-2 px-3 text-black outline-none transition focus:border-primary dark:border-gray-600 dark:text-white"
+                                                    disabled={isLocked}
+                                                    className="w-full rounded border border-gray-300 bg-transparent py-2 px-3 text-black outline-none transition focus:border-primary dark:border-gray-600 dark:text-white disabled:bg-gray-100 disabled:dark:bg-gray-700"
                                                 >
                                                     <option value="tuition">Tuition</option>
                                                     <option value="books">Books</option>
@@ -164,7 +201,8 @@ export default function FeeAllocation() {
                                                     value={component.amount}
                                                     onChange={(e) => updateFeeComponent(component.id, 'amount', Number(e.target.value))}
                                                     placeholder="0"
-                                                    className="w-full rounded border border-gray-300 bg-transparent py-2 px-3 text-black outline-none transition focus:border-primary dark:border-gray-600 dark:text-white"
+                                                    disabled={isLocked}
+                                                    className="w-full rounded border border-gray-300 bg-transparent py-2 px-3 text-black outline-none transition focus:border-primary dark:border-gray-600 dark:text-white disabled:bg-gray-100 disabled:dark:bg-gray-700"
                                                 />
                                             </td>
                                             <td className="py-5 px-4">
@@ -172,13 +210,15 @@ export default function FeeAllocation() {
                                                     type="checkbox"
                                                     checked={component.isActive}
                                                     onChange={(e) => updateFeeComponent(component.id, 'isActive', e.target.checked)}
-                                                    className="h-5 w-5 rounded border-gray-300 accent-primary"
+                                                    disabled={isLocked}
+                                                    className="h-5 w-5 rounded border-gray-300 accent-primary disabled:opacity-50"
                                                 />
                                             </td>
                                             <td className="py-5 px-4">
                                                 <button
                                                     onClick={() => removeFeeComponent(component.id)}
-                                                    className="inline-flex items-center justify-center rounded-md bg-danger px-4 py-2 text-center font-medium text-white hover:bg-opacity-90 transition-opacity"
+                                                    disabled={isLocked}
+                                                    className="inline-flex items-center justify-center rounded-md bg-danger px-4 py-2 text-center font-medium text-white hover:bg-opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
                                                 >
                                                     Remove
                                                 </button>
@@ -209,7 +249,8 @@ export default function FeeAllocation() {
                                     <select
                                         value={concession.type}
                                         onChange={(e) => updateConcession('type', e.target.value)}
-                                        className="w-full rounded border border-gray-300 bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary dark:border-gray-600 dark:text-white"
+                                        disabled={isLocked}
+                                        className="w-full rounded border border-gray-300 bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary dark:border-gray-600 dark:text-white disabled:bg-gray-100 disabled:dark:bg-gray-700"
                                     >
                                         <option value="fixed">Fixed Amount</option>
                                         <option value="percentage">Percentage</option>
@@ -225,7 +266,7 @@ export default function FeeAllocation() {
                                         value={concession.value}
                                         onChange={(e) => updateConcession('value', Number(e.target.value))}
                                         placeholder="0"
-                                        disabled={concession.type === 'none'}
+                                        disabled={isLocked || concession.type === 'none'}
                                         className="w-full rounded border border-gray-300 bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary dark:border-gray-600 dark:text-white disabled:bg-gray-100 disabled:dark:bg-gray-700"
                                     />
                                 </div>
@@ -239,7 +280,8 @@ export default function FeeAllocation() {
                                     value={concession.reason}
                                     onChange={(e) => updateConcession('reason', e.target.value)}
                                     placeholder="Enter reason for concession"
-                                    className="w-full rounded border border-gray-300 bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary dark:border-gray-600 dark:text-white"
+                                    disabled={isLocked}
+                                    className="w-full rounded border border-gray-300 bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary dark:border-gray-600 dark:text-white disabled:bg-gray-100 disabled:dark:bg-gray-700"
                                 ></textarea>
                             </div>
                         </div>
@@ -272,11 +314,18 @@ export default function FeeAllocation() {
             </div>
 
             <div className="flex flex-wrap gap-4">
-                <button className="inline-flex items-center justify-center rounded-md bg-primary px-6 py-3 text-center font-medium text-white hover:bg-opacity-90 transition-opacity">
+                <button
+                    disabled={isLocked}
+                    className="inline-flex items-center justify-center rounded-md bg-primary px-6 py-3 text-center font-medium text-white hover:bg-opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
+                >
                     Save Fee Allocation
                 </button>
-                <button className="inline-flex items-center justify-center rounded-md bg-success px-6 py-3 text-center font-medium text-white hover:bg-opacity-90 transition-opacity">
-                    Forward to Principal
+                <button
+                    onClick={handleForwardToPrincipal}
+                    disabled={isLocked}
+                    className="inline-flex items-center justify-center rounded-md bg-success px-6 py-3 text-center font-medium text-white hover:bg-opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                    {status === "pending_principal_approval" ? "Sent to Principal" : "Forward to Principal"}
                 </button>
             </div>
         </div>
