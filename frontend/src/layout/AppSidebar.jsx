@@ -49,6 +49,14 @@ const navItems = [
             { name: "Fee Allocation", path: "/management/fee-allocation", pro: false },
         ],
     },
+    {
+        icon: <GridIcon />,
+        name: "Printing",
+        subItems: [
+            { name: "Print Request", path: "/printing/print-request", pro: false },
+            { name: "My Requests", path: "/printing/my-requests", pro: false },
+        ],
+    },
 
 
 

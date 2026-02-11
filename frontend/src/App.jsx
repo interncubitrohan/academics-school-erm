@@ -30,6 +30,11 @@ import ManagementHome from "./pages/Management/ManagementHome";
 import ApplicationsList from "./pages/Management/ApplicationsList";
 import FeeAllocation from "./pages/Management/FeeAllocation";
 
+// Printing Module
+import PrintRequest from "./pages/Printing/PrintRequest";
+import PrintRequestDetail from "./pages/Printing/PrintRequestDetail";
+import MyPrintRequests from "./pages/Printing/MyPrintRequests";
+
 
 export default function App() {
     return (
@@ -68,10 +73,17 @@ export default function App() {
                         <Route path="/admissions/new" element={<ApplicationForm />} />
                         <Route path="/admissions/:id" element={<ApplicationDetail />} />
 
+
                         {/* Management Module */}
                         <Route path="/management" element={<ManagementHome />} />
                         <Route path="/management/applications" element={<ApplicationsList />} />
                         <Route path="/management/fee-allocation/:applicationId" element={<FeeAllocation />} />
+
+                        {/* Printing Module */}
+                        <Route path="/printing/print-request" element={<PrintRequest />} />
+                        <Route path="/printing/print-request" element={<PrintRequest />} />
+                        <Route path="/printing/my-requests" element={<MyPrintRequests />} />
+                        <Route path="/printing/requests/:id" element={<PrintRequestDetail />} />
 
 
 
