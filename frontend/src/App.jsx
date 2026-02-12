@@ -35,10 +35,17 @@ import PrintRequest from "./pages/Printing/PrintRequest";
 import PrintRequestDetail from "./pages/Printing/PrintRequestDetail";
 import MyPrintRequests from "./pages/Printing/MyPrintRequests";
 
+// Purchase Module
+import PurchaseRequest from "./pages/Purchase/PurchaseRequest";
+import PrincipalPurchaseApproval from "./pages/Purchase/PrincipalPurchaseApproval";
+import PurchaseDepartmentDashboard from "./pages/Purchase/PurchaseDepartmentDashboard";
+import MyPurchaseRequests from "./pages/Purchase/MyPurchaseRequests";
+import { PurchaseProvider } from "./context/PurchaseContext";
+
 
 export default function App() {
     return (
-        <>
+        <PurchaseProvider>
             <Router>
                 <ScrollToTop />
                 <Routes>
@@ -85,6 +92,12 @@ export default function App() {
                         <Route path="/printing/my-requests" element={<MyPrintRequests />} />
                         <Route path="/printing/requests/:id" element={<PrintRequestDetail />} />
 
+                        {/* Purchase Module */}
+                        <Route path="/purchase/request" element={<PurchaseRequest />} />
+                        <Route path="/purchase/approval" element={<PrincipalPurchaseApproval />} />
+                        <Route path="/purchase/department-dashboard" element={<PurchaseDepartmentDashboard />} />
+                        <Route path="/purchase/my-requests" element={<MyPurchaseRequests />} />
+
 
 
                     </Route>
@@ -93,6 +106,7 @@ export default function App() {
                     <Route path="*" element={<NotFound />} />
                 </Routes>
             </Router>
-        </>
+        </PurchaseProvider>
     );
+
 }

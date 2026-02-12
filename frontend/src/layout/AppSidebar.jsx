@@ -7,6 +7,7 @@ import {
     GridIcon,
     HorizontaLDots,
     UserCircleIcon,
+    BoxCubeIcon,
 } from "../icons";
 import { useSidebar } from "../context/SidebarContext";
 import SidebarWidget from "./SidebarWidget";
@@ -55,6 +56,16 @@ const navItems = [
         subItems: [
             { name: "Print Request", path: "/printing/print-request", pro: false },
             { name: "My Requests", path: "/printing/my-requests", pro: false },
+        ],
+    },
+    {
+        icon: <BoxCubeIcon />,
+        name: "Purchase",
+        subItems: [
+            { name: "Purchase Request", path: "/purchase/request", pro: false },
+            { name: "Principal Approval", path: "/purchase/approval", pro: false },
+            { name: "Dept. Dashboard", path: "/purchase/department-dashboard", pro: false },
+            { name: "My Requests", path: "/purchase/my-requests", pro: false },
         ],
     },
 
