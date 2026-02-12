@@ -5,6 +5,7 @@ const PurchaseRequestForm = ({ onSubmit }) => {
     const [items, setItems] = useState([
         { id: Date.now(), name: '', quantity: '', description: '', file: null }
     ]);
+    const [department, setDepartment] = useState('');
     const [errors, setErrors] = useState({});
     const [submitted, setSubmitted] = useState(false);
 
@@ -44,6 +45,11 @@ const PurchaseRequestForm = ({ onSubmit }) => {
         const newErrors = {};
         let isValid = true;
 
+        if (!department.trim()) {
+            newErrors.department = "Department is required";
+            isValid = false;
+        }
+
         items.forEach(item => {
             if (!item.name.trim()) {
                 if (!newErrors[item.id]) newErrors[item.id] = {};
@@ -68,10 +74,13 @@ const PurchaseRequestForm = ({ onSubmit }) => {
     const handleSubmit = (e) => {
         e.preventDefault();
         if (validate()) {
-            const payload = items.map(({ id, ...rest }) => ({
-                ...rest,
-                status: 'requested'
-            }));
+            const payload = {
+                department,
+                items: items.map(({ id, ...rest }) => ({
+                    ...rest,
+                    status: 'requested'
+                }))
+            };
 
             if (onSubmit) {
                 onSubmit(payload);
@@ -85,6 +94,7 @@ const PurchaseRequestForm = ({ onSubmit }) => {
                 alert("Purchase Request Submitted Successfully! Check console for payload.");
                 setSubmitted(false);
                 setItems([{ id: Date.now(), name: '', quantity: '', description: '', file: null }]);
+                setDepartment('');
             }, 500);
         }
     };
@@ -97,6 +107,31 @@ const PurchaseRequestForm = ({ onSubmit }) => {
 
             <form onSubmit={handleSubmit}>
                 <div className="space-y-6">
+                    {/* Department Field */}
+                    <div>
+                        <label className="mb-1.5 block text-theme-sm font-medium text-gray-700 dark:text-gray-400">
+                            Department <span className="text-error-500">*</span>
+                        </label>
+                        <input
+                            type="text"
+                            value={department}
+                            onChange={(e) => {
+                                setDepartment(e.target.value);
+                                if (errors.department) {
+                                    setErrors(prev => ({ ...prev, department: null }));
+                                }
+                            }}
+                            className={`w-full rounded-lg border bg-transparent px-4 py-2.5 text-theme-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:outline-none focus:ring-1 dark:bg-gray-900 dark:text-white/90 ${errors.department
+                                ? 'border-error-500 focus:border-error-500 focus:ring-error-500/10'
+                                : 'border-gray-200 focus:border-brand-500 focus:ring-brand-500/10 dark:border-gray-700 dark:focus:border-brand-500'
+                                }`}
+                            placeholder="e.g. Printing Department"
+                        />
+                        {errors.department && (
+                            <p className="mt-1 text-xs text-error-500">{errors.department}</p>
+                        )}
+                    </div>
+
                     {items.map((item, index) => (
                         <div key={item.id} className="relative rounded-xl border border-gray-200 bg-gray-50 p-4 dark:border-gray-700 dark:bg-gray-800/50">
                             <div className="mb-4 flex items-center justify-between">

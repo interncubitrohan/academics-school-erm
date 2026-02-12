@@ -11,12 +11,12 @@ export const PurchaseProvider = ({ children }) => {
     // Initialize with mock data for demonstration
     const [requests, setRequests] = useState(mockPurchaseRequests);
 
-    const addRequest = (newRequestData) => {
+    const addRequest = (newRequestData, department) => {
         const newRequest = {
             id: Date.now(), // Simple unique ID
             requestId: `REQ-2024-${String(requests.length + 1).padStart(3, '0')}`,
             requester: "Current User", // Placeholder until auth is fully integrated
-            department: "IT Department", // Placeholder
+            department: department,
             requestDate: new Date().toLocaleDateString('en-CA'), // YYYY-MM-DD
             status: "requested",
             items: newRequestData, // Expecting array of items

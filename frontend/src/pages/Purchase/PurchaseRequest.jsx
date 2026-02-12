@@ -16,8 +16,8 @@ const PurchaseRequest = () => {
         }))
     );
 
-    const handleRequestSubmit = (newItems) => {
-        const newRequest = addRequest(newItems);
+    const handleRequestSubmit = ({ items, department }) => {
+        const newRequest = addRequest(items, department);
         setLastPayload(newRequest); // Show the full request object payload
     };
 
