@@ -1,5 +1,4 @@
 import React, { createContext, useContext, useState } from 'react';
-import { mockPurchaseRequests } from '../data/mockPurchaseRequests';
 
 const PurchaseContext = createContext();
 
@@ -8,8 +7,8 @@ export const usePurchase = () => {
 };
 
 export const PurchaseProvider = ({ children }) => {
-    // Initialize with mock data for demonstration
-    const [requests, setRequests] = useState(mockPurchaseRequests);
+    // Initialize with empty array
+    const [requests, setRequests] = useState([]);
 
     const addRequest = (newRequestData, department) => {
         const newRequest = {
@@ -61,10 +60,12 @@ export const PurchaseProvider = ({ children }) => {
                         ...req,
                         status: 'po_generated',
                         poDetails: {
-                            ...poData,
                             poNumber,
                             generatedDate: new Date().toISOString(),
-                            generatedBy: "Purchase-Dept-User-001" // Mock user
+                            generatedBy: "Purchase-Dept-User-001", // Mock user
+                            vendorDetails: poData.vendorDetails,
+                            items: poData.items, // Now contains unitPrice and total
+                            totals: poData.totals // subtotal, tax, grandTotal
                         },
                         statusHistory: [
                             ...(req.statusHistory || []),
@@ -72,7 +73,7 @@ export const PurchaseProvider = ({ children }) => {
                                 status: 'po_generated',
                                 date: new Date().toISOString(),
                                 by: "Purchase-Dept-User-001",
-                                remarks: `PO Generated: ${poNumber}`
+                                remarks: `PO Generated: ${poNumber} - Vendor: ${poData.vendorDetails.name}`
                             }
                         ]
                     };
@@ -115,10 +116,10 @@ export const PurchaseProvider = ({ children }) => {
             prevRequests.map(req => {
                 if (req.id === requestId) {
                     // Determine Status (Partial vs Full)
-                    const totalOrdered = req.poDetails.items.reduce((sum, item) => sum + item.quantity, 0);
+                    const totalOrdered = req.items.reduce((sum, item) => sum + Number(item.quantity), 0);
                     const totalReceived = grnData.items.reduce((sum, item) => sum + Number(item.receivedQuantity), 0);
 
-                    const newStatus = totalReceived < totalOrdered ? 'partially_received' : 'fully_received';
+                    const newStatus = totalReceived < totalOrdered ? 'partially_received' : 'goods_received';
 
                     return {
                         ...req,

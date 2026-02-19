@@ -4,6 +4,14 @@ import { Modal } from '../../components/ui/modal';
 import PurchaseRequestForm from './components/PurchaseRequestForm';
 import { usePurchase } from '../../context/PurchaseContext';
 import { FiEye, FiClock, FiCheckCircle, FiXCircle } from 'react-icons/fi';
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableHeader,
+    TableRow,
+} from "../../components/ui/table";
+import Badge from "../../components/ui/badge/Badge";
 
 const PurchaseRequest = () => {
     const { addRequest, requests } = usePurchase();
@@ -37,16 +45,16 @@ const PurchaseRequest = () => {
     };
 
     return (
-        <div className="mx-auto max-w-screen-2xl p-4 md:p-6 2xl:p-10">
-            <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-                <h2 className="text-2xl font-bold text-black dark:text-white">
+        <div className="space-y-6">
+            <div className="flex flex-col sm:flex-row justify-between items-center mb-4 gap-4">
+                <h2 className="text-xl font-semibold text-black dark:text-white">
                     Purchase Request
                 </h2>
 
                 <nav>
                     <ol className="flex items-center gap-2">
                         <li>
-                            <Link className="font-medium" to="/">Dashboard /</Link>
+                            <Link className="font-medium hover:text-primary" to="/">Dashboard /</Link>
                         </li>
                         <li className="font-medium text-primary">Purchase Request</li>
                     </ol>
@@ -57,58 +65,67 @@ const PurchaseRequest = () => {
                 <PurchaseRequestForm onSubmit={handleRequestSubmit} />
 
                 {lastPayload && (
-                    <div className="rounded-2xl border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-white/[0.03] lg:p-6">
+                    <div className="rounded-sm border border-gray-200 bg-white px-5 pt-6 pb-2.5 shadow-default dark:border-gray-700 dark:bg-gray-800 sm:px-7.5 xl:pb-6">
                         <h3 className="mb-5 text-lg font-semibold text-gray-800 dark:text-white/90">
                             Last Submitted Payload (JSON)
                         </h3>
-                        <pre className="overflow-x-auto rounded bg-gray-50 p-4 text-xs text-gray-800 dark:bg-gray-900 dark:text-gray-300">
+                        <pre className="overflow-x-auto rounded-lg bg-gray-50 p-4 text-xs text-black dark:bg-gray-900 dark:text-white">
                             {JSON.stringify(lastPayload, null, 2)}
                         </pre>
                     </div>
                 )}
 
                 {allItems.length > 0 && (
-                    <div className="rounded-2xl border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-white/[0.03] lg:p-6">
-                        <h3 className="mb-5 text-lg font-semibold text-gray-800 dark:text-white/90">
-                            Submitted Requests
-                        </h3>
-                        <div className="overflow-x-auto">
-                            <table className="min-w-full whitespace-nowrap text-left text-theme-sm dark:text-white/90">
-                                <thead className="border-b border-gray-200 text-gray-500 dark:border-gray-800 dark:text-gray-400">
-                                    <tr>
-                                        <th className="px-4 py-3 font-medium">Item Name</th>
-                                        <th className="px-4 py-3 font-medium">Quantity</th>
-                                        <th className="px-4 py-3 font-medium">Description</th>
-                                        <th className="px-4 py-3 font-medium">Status</th>
-                                        <th className="px-4 py-3 font-medium">Date</th>
-                                        <th className="px-4 py-3 font-medium">Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody className="divide-y divide-gray-200 dark:divide-gray-800">
+                    <div className="rounded-sm border border-gray-200 bg-white px-5 pt-6 pb-2.5 shadow-default dark:border-gray-700 dark:bg-gray-800 sm:px-7.5 xl:pb-1">
+                        <div className="mb-6">
+                            <h3 className="text-xl font-semibold text-gray-800 dark:text-white/90">
+                                Submitted Requests
+                            </h3>
+                        </div>
+                        <div className="max-w-full overflow-x-auto">
+                            <Table>
+                                <TableHeader>
+                                    <TableRow className="bg-gray-50 dark:bg-gray-700 text-left">
+                                        <TableCell isHeader className="px-4 py-4 font-medium text-black dark:text-white">Item Name</TableCell>
+                                        <TableCell isHeader className="px-4 py-4 font-medium text-black dark:text-white">Quantity</TableCell>
+                                        <TableCell isHeader className="px-4 py-4 font-medium text-black dark:text-white">Description</TableCell>
+                                        <TableCell isHeader className="px-4 py-4 font-medium text-black dark:text-white">Status</TableCell>
+                                        <TableCell isHeader className="px-4 py-4 font-medium text-black dark:text-white">Date</TableCell>
+                                        <TableCell isHeader className="px-4 py-4 font-medium text-black dark:text-white text-right">Action</TableCell>
+                                    </TableRow>
+                                </TableHeader>
+                                <TableBody>
                                     {allItems.map((req, index) => (
-                                        <tr key={`${req.id}-${index}`}>
-                                            <td className="px-4 py-3 text-gray-800 dark:text-white/90">{req.name}</td>
-                                            <td className="px-4 py-3 text-gray-800 dark:text-white/90">{req.quantity}</td>
-                                            <td className="px-4 py-3 text-gray-500 dark:text-gray-400 max-w-xs truncate">{req.description || '-'}</td>
-                                            <td className="px-4 py-3">
-                                                <span className="inline-flex items-center rounded-md bg-brand-50 px-2 py-1 text-xs font-medium text-brand-600 ring-1 ring-inset ring-brand-500/10 dark:bg-brand-500/10 dark:text-brand-400 dark:ring-brand-500/20">
+                                        <TableRow key={`${req.id}-${index}`} className="hover:bg-gray-50 dark:hover:bg-gray-700/50">
+                                            <TableCell className="px-4 py-4 border-b border-[#eee] dark:border-gray-700 text-black dark:text-white text-sm">{req.name}</TableCell>
+                                            <TableCell className="px-4 py-4 border-b border-[#eee] dark:border-gray-700 text-black dark:text-white text-sm">{req.quantity}</TableCell>
+                                            <TableCell className="px-4 py-4 border-b border-[#eee] dark:border-gray-700 text-gray-500 max-w-xs truncate text-sm">{req.description || '-'}</TableCell>
+                                            <TableCell className="px-4 py-4 border-b border-[#eee] dark:border-gray-700">
+                                                <Badge
+                                                    size="sm"
+                                                    color={
+                                                        req.status === 'approved' ? 'success' :
+                                                            req.status === 'rejected' ? 'danger' :
+                                                                'warning'
+                                                    }
+                                                >
                                                     {req.status}
-                                                </span>
-                                            </td>
-                                            <td className="px-4 py-3 text-gray-500 dark:text-gray-400">{req.submissionDate}</td>
-                                            <td className="px-4 py-3">
+                                                </Badge>
+                                            </TableCell>
+                                            <TableCell className="px-4 py-4 border-b border-[#eee] dark:border-gray-700 text-gray-500 text-sm">{new Date(req.submissionDate).toLocaleDateString()}</TableCell>
+                                            <TableCell className="px-4 py-4 border-b border-[#eee] dark:border-gray-700 text-right">
                                                 <button
                                                     onClick={() => handleViewDetails(req.originalRequest)}
-                                                    className="hover:text-primary text-gray-600 dark:text-gray-400"
+                                                    className="hover:text-primary text-gray-600 dark:text-gray-400 transition-colors"
                                                     title="View Audit Trail & Details"
                                                 >
                                                     <FiEye className="w-5 h-5" />
                                                 </button>
-                                            </td>
-                                        </tr>
+                                            </TableCell>
+                                        </TableRow>
                                     ))}
-                                </tbody>
-                            </table>
+                                </TableBody>
+                            </Table>
                         </div>
                     </div>
                 )}
@@ -117,7 +134,7 @@ const PurchaseRequest = () => {
             {/* Request Details & Audit Trail Modal */}
             <Modal isOpen={isModalOpen} onClose={handleCloseModal} className="max-w-3xl p-6">
                 {selectedRequest && (
-                    <div className="flex flex-col gap-6">
+                    <div className="space-y-6">
                         <div className="border-b border-gray-200 pb-4 dark:border-gray-700">
                             <h3 className="text-xl font-semibold text-black dark:text-white">
                                 Request Audit Trail: {selectedRequest.requestId}
@@ -149,8 +166,8 @@ const PurchaseRequest = () => {
                                 {(selectedRequest.status === 'approved' || selectedRequest.status === 'rejected') && (
                                     <div className="ml-6 relative">
                                         <span className={`absolute -left-[31px] flex h-8 w-8 items-center justify-center rounded-full ring-4 ring-white dark:ring-gray-900 ${selectedRequest.status === 'approved'
-                                                ? 'bg-green-100 dark:bg-green-900'
-                                                : 'bg-red-100 dark:bg-red-900'
+                                            ? 'bg-green-100 dark:bg-green-900'
+                                            : 'bg-red-100 dark:bg-red-900'
                                             }`}>
                                             {selectedRequest.status === 'approved' ? (
                                                 <FiCheckCircle className="h-4 w-4 text-green-600 dark:text-green-300" />
@@ -164,7 +181,7 @@ const PurchaseRequest = () => {
                                         <time className="block mb-2 text-xs font-normal leading-none text-gray-400 dark:text-gray-500">
                                             {selectedRequest.approvalDate ? new Date(selectedRequest.approvalDate).toLocaleString() : '-'}
                                         </time>
-                                        <div className="rounded-md border border-gray-200 bg-white p-3 text-sm text-gray-600 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300">
+                                        <div className="rounded-lg border border-gray-200 bg-white p-3 text-sm text-gray-600 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300">
                                             <p><span className="font-semibold">By:</span> {selectedRequest.approvedBy || selectedRequest.rejectedBy || 'Principal'}</p>
                                             <p className="mt-1"><span className="font-semibold">Remarks:</span> {selectedRequest.remarks}</p>
                                         </div>
@@ -176,23 +193,23 @@ const PurchaseRequest = () => {
                         {/* Item Details Summary */}
                         <div>
                             <h4 className="mb-3 font-semibold text-gray-800 dark:text-white">Items in Request</h4>
-                            <div className="overflow-x-auto rounded-lg border border-gray-200 dark:border-gray-700">
-                                <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-                                    <thead className="bg-gray-50 dark:bg-gray-800">
-                                        <tr>
-                                            <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Item</th>
-                                            <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Qty</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody className="bg-white divide-y divide-gray-200 dark:bg-gray-900 dark:divide-gray-700">
+                            <div className="max-w-full overflow-x-auto rounded-lg border border-gray-200 dark:border-gray-700">
+                                <Table>
+                                    <TableHeader>
+                                        <TableRow className="bg-gray-50 dark:bg-gray-800">
+                                            <TableCell isHeader className="px-4 py-2 text-left font-medium text-gray-500 uppercase text-xs">Item</TableCell>
+                                            <TableCell isHeader className="px-4 py-2 text-left font-medium text-gray-500 uppercase text-xs">Qty</TableCell>
+                                        </TableRow>
+                                    </TableHeader>
+                                    <TableBody>
                                         {selectedRequest.items.map((item, idx) => (
-                                            <tr key={idx}>
-                                                <td className="px-4 py-2 text-sm text-gray-900 dark:text-gray-200">{item.name}</td>
-                                                <td className="px-4 py-2 text-sm text-gray-900 dark:text-gray-200">{item.quantity}</td>
-                                            </tr>
+                                            <TableRow key={idx}>
+                                                <TableCell className="px-4 py-2 text-sm text-gray-900 dark:text-gray-200 border-b border-gray-100 dark:border-gray-700">{item.name}</TableCell>
+                                                <TableCell className="px-4 py-2 text-sm text-gray-900 dark:text-gray-200 border-b border-gray-100 dark:border-gray-700">{item.quantity}</TableCell>
+                                            </TableRow>
                                         ))}
-                                    </tbody>
-                                </table>
+                                    </TableBody>
+                                </Table>
                             </div>
                         </div>
 

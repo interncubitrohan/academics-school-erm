@@ -10,7 +10,7 @@ const AccountsDashboard = () => {
     // Filter for requests ready for payment
     // Status: invoice_received (standard), partially_received (if allowed), fully_received
     const paymentPendingRequests = safeRequests.filter(req =>
-        ['invoice_received', 'partially_received', 'fully_received'].includes(req.status)
+        ['invoice_received', 'partially_received', 'goods_received'].includes(req.status)
     );
 
     const completedPayments = safeRequests.filter(req =>

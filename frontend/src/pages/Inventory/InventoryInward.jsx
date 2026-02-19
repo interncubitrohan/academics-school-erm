@@ -17,7 +17,7 @@ const InventoryInward = () => {
     // Filter requests that are "fully_received" or "payment_completed" (assuming goods are there) 
     // but NOT "stock_updated"
     const pendingInwardRequests = (requests || []).filter(req =>
-        ['fully_received', 'payment_completed'].includes(req.status)
+        ['goods_received', 'payment_completed'].includes(req.status)
     );
 
     const handleOpenInward = (req) => {
