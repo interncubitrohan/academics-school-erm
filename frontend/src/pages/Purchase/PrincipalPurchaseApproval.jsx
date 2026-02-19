@@ -10,6 +10,7 @@ const PrincipalPurchaseApproval = () => {
     const [selectedRequest, setSelectedRequest] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [remark, setRemark] = useState('');
+    const [error, setError] = useState('');
 
     // Filter only "requested" status
     const pendingRequests = requests.filter(req => req.status === 'requested');
@@ -18,6 +19,7 @@ const PrincipalPurchaseApproval = () => {
     const handleView = (request) => {
         setSelectedRequest(request);
         setRemark(''); // Reset remark
+        setError('');
         setIsModalOpen(true);
     };
 
@@ -29,9 +31,14 @@ const PrincipalPurchaseApproval = () => {
     const handleDecision = (status) => {
         if (!selectedRequest) return;
 
+        if (!remark.trim()) {
+            setError('Remarks are mandatory for approval or rejection.');
+            return;
+        }
+
         updateRequestStatus(selectedRequest.id, status, remark);
         handleCloseModal();
-        alert(`Request ${status === 'approved' ? 'Approved' : 'Rejected'} successfully!`);
+        // alert(`Request ${status === 'approved' ? 'Approved' : 'Rejected'} successfully!`);
     };
 
     return (
@@ -166,14 +173,21 @@ const PrincipalPurchaseApproval = () => {
                         </div>
 
                         <div className="flex flex-col gap-2">
-                            <label className="text-sm font-medium text-gray-700 dark:text-gray-300">Remark / Reason</label>
+                            <label className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                                Remarks <span className="text-error-500">*</span>
+                            </label>
                             <textarea
                                 value={remark}
-                                onChange={(e) => setRemark(e.target.value)}
+                                onChange={(e) => {
+                                    setRemark(e.target.value);
+                                    if (e.target.value.trim()) setError('');
+                                }}
                                 rows="3"
-                                className="w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2 outline-none focus:border-primary dark:border-gray-600 dark:bg-gray-800"
-                                placeholder="Add a remark for approval or rejection..."
+                                className={`w-full rounded-lg border bg-transparent px-4 py-2 outline-none focus:border-primary dark:bg-gray-800 ${error ? 'border-error-500' : 'border-gray-300 dark:border-gray-600'
+                                    }`}
+                                placeholder="Mandatory remarks for approval or rejection..."
                             ></textarea>
+                            {error && <p className="text-sm text-error-500">{error}</p>}
                         </div>
 
                         <div className="flex justify-end gap-3 pt-4 border-t border-gray-200 dark:border-gray-700">

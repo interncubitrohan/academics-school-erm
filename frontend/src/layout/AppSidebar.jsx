@@ -9,6 +9,7 @@ import {
     UserCircleIcon,
     BoxCubeIcon,
 } from "../icons";
+import { FiDollarSign } from "react-icons/fi";
 import { useSidebar } from "../context/SidebarContext";
 import SidebarWidget from "./SidebarWidget";
 
@@ -66,6 +67,21 @@ const navItems = [
             { name: "Principal Approval", path: "/purchase/approval", pro: false },
             { name: "Dept. Dashboard", path: "/purchase/department-dashboard", pro: false },
             { name: "My Requests", path: "/purchase/my-requests", pro: false },
+        ],
+    },
+    {
+        icon: <FiDollarSign size={20} />,
+        name: "Finance",
+        subItems: [
+            { name: "Accounts Dashboard", path: "/finance/accounts-dashboard", pro: false },
+        ],
+    },
+    {
+        icon: <BoxCubeIcon />,
+        name: "Inventory",
+        subItems: [
+            { name: "Dashboard", path: "/inventory/dashboard", pro: false },
+            { name: "Inward Stock", path: "/inventory/inward", pro: false },
         ],
     },
 

@@ -40,72 +40,83 @@ import PurchaseRequest from "./pages/Purchase/PurchaseRequest";
 import PrincipalPurchaseApproval from "./pages/Purchase/PrincipalPurchaseApproval";
 import PurchaseDepartmentDashboard from "./pages/Purchase/PurchaseDepartmentDashboard";
 import MyPurchaseRequests from "./pages/Purchase/MyPurchaseRequests";
+import GoodsReconciliation from "./pages/Purchase/GoodsReconciliation";
+import AccountsDashboard from "./pages/Purchase/AccountsDashboard";
+import InventoryDashboard from "./pages/Inventory/InventoryDashboard";
+import InventoryInward from "./pages/Inventory/InventoryInward";
 import { PurchaseProvider } from "./context/PurchaseContext";
+import { InventoryProvider } from "./context/InventoryContext";
 
 
 export default function App() {
     return (
         <PurchaseProvider>
-            <Router>
-                <ScrollToTop />
-                <Routes>
-                    {/* Public Routes */}
-                    <Route path="/admission/apply/:inviteToken" element={<PublicInvitePage />} />
+            <InventoryProvider>
+                <Router>
+                    <ScrollToTop />
+                    <Routes>
+                        {/* Public Routes */}
+                        <Route path="/admission/apply/:inviteToken" element={<PublicInvitePage />} />
 
-                    {/* Dashboard Layout */}
-                    <Route element={<AppLayout />}>
-                        <Route index path="/" element={<Home />} />
+                        {/* Dashboard Layout */}
+                        <Route element={<AppLayout />}>
+                            <Route index path="/" element={<Home />} />
 
-                        {/* User Profile */}
-                        <Route path="/profile" element={<UserProfiles />} />
+                            {/* User Profile */}
+                            <Route path="/profile" element={<UserProfiles />} />
 
-                        {/* Academics Module */}
-                        <Route path="/academics" element={<Academics />} />
-                        <Route path="/academics/infrastructure/rooms" element={<Rooms />} />
-                        <Route path="/academics/infrastructure/subjects" element={<Subjects />} />
-                        <Route path="/academics/infrastructure/grading" element={<GradingSystems />} />
-                        <Route path="/academics/infrastructure/subject-types" element={<SubjectTypes />} />
-                        <Route path="/academics/class-configuration" element={<ClassConfiguration />} />
-                        <Route path="/academics/classes/:classId" element={<ClassDetails />} />
-                        <Route path="/academics/exams/schedule" element={<ExamScheduler />} />
-                        <Route path="/academics/exams/marks" element={<MarksEntry />} />
-                        <Route path="/academics/exams" element={<ExamList />} />
-                        <Route path="/academics/exams/create" element={<ExamCreateWizard />} />
-                        <Route path="/academics/classes/:classId/mapping" element={<SubjectMappingPage />} />
-                        <Route path="/academics/evaluation/framework" element={<EvaluationFramework />} />
+                            {/* Academics Module */}
+                            <Route path="/academics" element={<Academics />} />
+                            <Route path="/academics/infrastructure/rooms" element={<Rooms />} />
+                            <Route path="/academics/infrastructure/subjects" element={<Subjects />} />
+                            <Route path="/academics/infrastructure/grading" element={<GradingSystems />} />
+                            <Route path="/academics/infrastructure/subject-types" element={<SubjectTypes />} />
+                            <Route path="/academics/class-configuration" element={<ClassConfiguration />} />
+                            <Route path="/academics/classes/:classId" element={<ClassDetails />} />
+                            <Route path="/academics/exams/schedule" element={<ExamScheduler />} />
+                            <Route path="/academics/exams/marks" element={<MarksEntry />} />
+                            <Route path="/academics/exams" element={<ExamList />} />
+                            <Route path="/academics/exams/create" element={<ExamCreateWizard />} />
+                            <Route path="/academics/classes/:classId/mapping" element={<SubjectMappingPage />} />
+                            <Route path="/academics/evaluation/framework" element={<EvaluationFramework />} />
 
-                        {/* Admissions Module */}
-                        <Route path="/admissions" element={<AdmissionDashboard />} />
-                        <Route path="/admissions/list" element={<ApplicationList />} />
-                        <Route path="/admissions/new" element={<ApplicationForm />} />
-                        <Route path="/admissions/:id" element={<ApplicationDetail />} />
-
-
-                        {/* Management Module */}
-                        <Route path="/management" element={<ManagementHome />} />
-                        <Route path="/management/applications" element={<ApplicationsList />} />
-                        <Route path="/management/fee-allocation/:applicationId" element={<FeeAllocation />} />
-
-                        {/* Printing Module */}
-                        <Route path="/printing/print-request" element={<PrintRequest />} />
-                        <Route path="/printing/print-request" element={<PrintRequest />} />
-                        <Route path="/printing/my-requests" element={<MyPrintRequests />} />
-                        <Route path="/printing/requests/:id" element={<PrintRequestDetail />} />
-
-                        {/* Purchase Module */}
-                        <Route path="/purchase/request" element={<PurchaseRequest />} />
-                        <Route path="/purchase/approval" element={<PrincipalPurchaseApproval />} />
-                        <Route path="/purchase/department-dashboard" element={<PurchaseDepartmentDashboard />} />
-                        <Route path="/purchase/my-requests" element={<MyPurchaseRequests />} />
+                            {/* Admissions Module */}
+                            <Route path="/admissions" element={<AdmissionDashboard />} />
+                            <Route path="/admissions/list" element={<ApplicationList />} />
+                            <Route path="/admissions/new" element={<ApplicationForm />} />
+                            <Route path="/admissions/:id" element={<ApplicationDetail />} />
 
 
+                            {/* Management Module */}
+                            <Route path="/management" element={<ManagementHome />} />
+                            <Route path="/management/applications" element={<ApplicationsList />} />
+                            <Route path="/management/fee-allocation/:applicationId" element={<FeeAllocation />} />
 
-                    </Route>
+                            {/* Printing Module */}
+                            <Route path="/printing/print-request" element={<PrintRequest />} />
+                            <Route path="/printing/print-request" element={<PrintRequest />} />
+                            <Route path="/printing/my-requests" element={<MyPrintRequests />} />
+                            <Route path="/printing/requests/:id" element={<PrintRequestDetail />} />
 
-                    {/* Fallback Route */}
-                    <Route path="*" element={<NotFound />} />
-                </Routes>
-            </Router>
+                            {/* Purchase Module */}
+                            <Route path="/purchase/request" element={<PurchaseRequest />} />
+                            <Route path="/purchase/approval" element={<PrincipalPurchaseApproval />} />
+                            <Route path="/purchase/department-dashboard" element={<PurchaseDepartmentDashboard />} />
+                            <Route path="/purchase/goods-received/:id" element={<GoodsReconciliation />} />
+                            <Route path="/finance/accounts-dashboard" element={<AccountsDashboard />} />
+                            <Route path="/purchase/my-requests" element={<MyPurchaseRequests />} />
+
+                            {/* Inventory Module */}
+                            <Route path="/inventory/dashboard" element={<InventoryDashboard />} />
+                            <Route path="/inventory/inward" element={<InventoryInward />} />
+
+                        </Route>
+
+                        {/* Fallback Route */}
+                        <Route path="*" element={<NotFound />} />
+                    </Routes>
+                </Router>
+            </InventoryProvider>
         </PurchaseProvider>
     );
 
