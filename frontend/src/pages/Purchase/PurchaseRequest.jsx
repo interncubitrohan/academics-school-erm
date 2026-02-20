@@ -3,7 +3,10 @@ import { Link } from 'react-router';
 import { Modal } from '../../components/ui/modal';
 import PurchaseRequestForm from './components/PurchaseRequestForm';
 import { usePurchase } from '../../context/PurchaseContext';
-import { FiEye, FiClock, FiCheckCircle, FiXCircle } from 'react-icons/fi';
+import {
+    FiEye, FiClock, FiCheckCircle, FiXCircle, FiFile,
+    FiUploadCloud, FiBox, FiDollarSign
+} from 'react-icons/fi';
 import {
     Table,
     TableBody,
@@ -42,6 +45,18 @@ const PurchaseRequest = () => {
     const handleCloseModal = () => {
         setIsModalOpen(false);
         setSelectedRequest(null);
+    };
+
+    const statusConfig = {
+        requested: { icon: FiClock, color: 'text-blue-600', bg: 'bg-blue-100', label: 'Requested' },
+        approved: { icon: FiCheckCircle, color: 'text-green-600', bg: 'bg-green-100', label: 'Approved' },
+        rejected: { icon: FiXCircle, color: 'text-red-600', bg: 'bg-red-100', label: 'Rejected' },
+        po_generated: { icon: FiFile, color: 'text-purple-600', bg: 'bg-purple-100', label: 'PO Generated' },
+        invoice_received: { icon: FiUploadCloud, color: 'text-orange-600', bg: 'bg-orange-100', label: 'Invoice Received' },
+        goods_received: { icon: FiBox, color: 'text-teal-600', bg: 'bg-teal-100', label: 'Goods Received' },
+        partially_received: { icon: FiBox, color: 'text-teal-600', bg: 'bg-teal-100', label: 'Partially Received' },
+        payment_completed: { icon: FiDollarSign, color: 'text-green-600', bg: 'bg-green-100', label: 'Payment Completed' },
+        payment_rejected: { icon: FiXCircle, color: 'text-red-600', bg: 'bg-red-100', label: 'Payment Rejected' },
     };
 
     return (
@@ -139,66 +154,58 @@ const PurchaseRequest = () => {
                             <h3 className="text-xl font-semibold text-black dark:text-white">
                                 Request Audit Trail: {selectedRequest.requestId}
                             </h3>
+                            <p className="text-sm text-gray-500 mt-1">Department: {selectedRequest.department}</p>
                         </div>
 
                         {/* Audit Trail Section */}
-                        <div className="rounded-lg border border-gray-200 bg-gray-50 p-4 dark:border-gray-700 dark:bg-gray-800/50">
-                            <h4 className="mb-3 font-semibold text-gray-800 dark:text-white">Approval Workflow History</h4>
-                            <div className="relative border-l-2 border-gray-200 ml-3 dark:border-gray-700 space-y-6">
+                        <div className="rounded-lg border border-gray-200 bg-gray-50 p-6 dark:border-gray-700 dark:bg-gray-800/50">
+                            <h4 className="mb-6 font-semibold text-gray-800 dark:text-white border-b border-gray-200 dark:border-gray-700 pb-2">
+                                Activity Timeline
+                            </h4>
+                            <div className="relative border-l-2 border-gray-200 ml-3 dark:border-gray-700 space-y-8">
+                                {(selectedRequest.statusHistory || []).map((step, index) => {
+                                    const config = statusConfig[step.status] || statusConfig.requested;
+                                    const Icon = config.icon;
 
-                                {/* Step 1: Requested */}
-                                <div className="ml-6 relative">
-                                    <span className="absolute -left-[31px] flex h-8 w-8 items-center justify-center rounded-full bg-blue-100 ring-4 ring-white dark:bg-blue-900 dark:ring-gray-900">
-                                        <FiClock className="h-4 w-4 text-blue-600 dark:text-blue-300" />
-                                    </span>
-                                    <h5 className="flex items-center mb-1 text-sm font-semibold text-gray-900 dark:text-white">
-                                        Request Submitted
-                                    </h5>
-                                    <time className="block mb-2 text-xs font-normal leading-none text-gray-400 dark:text-gray-500">
-                                        {new Date(selectedRequest.requestDate).toLocaleDateString()}
-                                    </time>
-                                    <p className="text-sm font-normal text-gray-500 dark:text-gray-400">
-                                        Initiated by: {selectedRequest.requester}
-                                    </p>
-                                </div>
-
-                                {/* Step 2: Approval/Rejection Decision */}
-                                {(selectedRequest.status === 'approved' || selectedRequest.status === 'rejected') && (
-                                    <div className="ml-6 relative">
-                                        <span className={`absolute -left-[31px] flex h-8 w-8 items-center justify-center rounded-full ring-4 ring-white dark:ring-gray-900 ${selectedRequest.status === 'approved'
-                                            ? 'bg-green-100 dark:bg-green-900'
-                                            : 'bg-red-100 dark:bg-red-900'
-                                            }`}>
-                                            {selectedRequest.status === 'approved' ? (
-                                                <FiCheckCircle className="h-4 w-4 text-green-600 dark:text-green-300" />
-                                            ) : (
-                                                <FiXCircle className="h-4 w-4 text-red-600 dark:text-red-300" />
-                                            )}
-                                        </span>
-                                        <h5 className="flex items-center mb-1 text-sm font-semibold text-gray-900 dark:text-white capitalize">
-                                            Request {selectedRequest.status}
-                                        </h5>
-                                        <time className="block mb-2 text-xs font-normal leading-none text-gray-400 dark:text-gray-500">
-                                            {selectedRequest.approvalDate ? new Date(selectedRequest.approvalDate).toLocaleString() : '-'}
-                                        </time>
-                                        <div className="rounded-lg border border-gray-200 bg-white p-3 text-sm text-gray-600 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300">
-                                            <p><span className="font-semibold">By:</span> {selectedRequest.approvedBy || selectedRequest.rejectedBy || 'Principal'}</p>
-                                            <p className="mt-1"><span className="font-semibold">Remarks:</span> {selectedRequest.remarks}</p>
+                                    return (
+                                        <div key={index} className="ml-6 relative">
+                                            <span className={`absolute -left-[31px] flex h-8 w-8 items-center justify-center rounded-full ring-4 ring-white dark:ring-gray-900 ${config.bg} dark:bg-opacity-20`}>
+                                                <Icon className={`h-4 w-4 ${config.color}`} />
+                                            </span>
+                                            <h5 className="flex items-center mb-1 text-sm font-semibold text-gray-900 dark:text-white">
+                                                {config.label}
+                                            </h5>
+                                            <time className="block mb-2 text-xs font-normal leading-none text-gray-400 dark:text-gray-500">
+                                                {new Date(step.date).toLocaleString()}
+                                            </time>
+                                            <div className="text-sm font-normal text-gray-500 dark:text-gray-400 bg-white dark:bg-gray-800 p-3 rounded border border-gray-100 dark:border-gray-700 shadow-sm">
+                                                <div className="flex flex-col gap-1">
+                                                    <p><span className="font-medium text-gray-700 dark:text-gray-300">Action By:</span> {step.by || 'System'}</p>
+                                                    {step.remarks && (
+                                                        <p><span className="font-medium text-gray-700 dark:text-gray-300">Note:</span> {step.remarks}</p>
+                                                    )}
+                                                </div>
+                                            </div>
                                         </div>
-                                    </div>
+                                    );
+                                })}
+
+                                {(selectedRequest.statusHistory && selectedRequest.statusHistory.length === 0) && (
+                                    <div className="ml-6 text-gray-500 italic">No history available for this request.</div>
                                 )}
                             </div>
                         </div>
 
                         {/* Item Details Summary */}
                         <div>
-                            <h4 className="mb-3 font-semibold text-gray-800 dark:text-white">Items in Request</h4>
+                            <h4 className="mb-3 font-semibold text-gray-800 dark:text-white">Request Items</h4>
                             <div className="max-w-full overflow-x-auto rounded-lg border border-gray-200 dark:border-gray-700">
                                 <Table>
                                     <TableHeader>
                                         <TableRow className="bg-gray-50 dark:bg-gray-800">
-                                            <TableCell isHeader className="px-4 py-2 text-left font-medium text-gray-500 uppercase text-xs">Item</TableCell>
-                                            <TableCell isHeader className="px-4 py-2 text-left font-medium text-gray-500 uppercase text-xs">Qty</TableCell>
+                                            <TableCell isHeader className="px-4 py-2 text-left font-medium text-gray-500 uppercase text-xs">Item Name</TableCell>
+                                            <TableCell isHeader className="px-4 py-2 text-left font-medium text-gray-500 uppercase text-xs">Quantity</TableCell>
+                                            <TableCell isHeader className="px-4 py-2 text-left font-medium text-gray-500 uppercase text-xs">Description</TableCell>
                                         </TableRow>
                                     </TableHeader>
                                     <TableBody>
@@ -206,6 +213,7 @@ const PurchaseRequest = () => {
                                             <TableRow key={idx}>
                                                 <TableCell className="px-4 py-2 text-sm text-gray-900 dark:text-gray-200 border-b border-gray-100 dark:border-gray-700">{item.name}</TableCell>
                                                 <TableCell className="px-4 py-2 text-sm text-gray-900 dark:text-gray-200 border-b border-gray-100 dark:border-gray-700">{item.quantity}</TableCell>
+                                                <TableCell className="px-4 py-2 text-sm text-gray-500 dark:text-gray-400 border-b border-gray-100 dark:border-gray-700">{item.description || '-'}</TableCell>
                                             </TableRow>
                                         ))}
                                     </TableBody>

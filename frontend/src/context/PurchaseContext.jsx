@@ -19,7 +19,15 @@ export const PurchaseProvider = ({ children }) => {
             requestDate: new Date().toLocaleDateString('en-CA'), // YYYY-MM-DD
             status: "requested",
             items: newRequestData, // Expecting array of items
-            totalItems: newRequestData.reduce((sum, item) => sum + Number(item.quantity), 0)
+            totalItems: newRequestData.reduce((sum, item) => sum + Number(item.quantity), 0),
+            statusHistory: [
+                {
+                    status: 'requested',
+                    date: new Date().toISOString(),
+                    by: "Current User", // Placeholder
+                    remarks: "Request Created"
+                }
+            ]
         };
         setRequests([newRequest, ...requests]);
         return newRequest;
